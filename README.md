@@ -1,2 +1,65 @@
 # react-bunny
-All demos of React,Typescript,Redux,SASS,mock server,JWT Auth,Webpack 5,Autoprefixer,Eslint,Grid and Flexbox layout,Class component demo,Function component demo
+All examples of React,Typescript,Redux,SASS,mock server,JWT Auth,Webpack 5,Autoprefixer,Eslint,Grid and Flexbox layout responsive demos,Class component demo,Function component demo
+
+
+<h1 align="center">React-Bunny</h1>
+
+<div align="center">
+
+[React](https://reactjs.org/) components for faster and simpler web development.
+
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)]()
+[![CircleCI](https://img.shields.io/circleci/project/github/mui-org/material-ui/next.svg)](https://app.circleci.com/pipelines/github/zrwusa/react-bunny)
+[![Coverage Status](https://img.shields.io/codecov/c/github/mui-org/material-ui/next.svg)](https://codecov.io/gh/zrwusa/react-bunny)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=mui-org/material-ui)](https://dependabot.com)
+[![Crowdin](https://badges.crowdin.net/material-ui-docs/localized.svg)](https://crowdin.com/project/react-bunny)
+
+</div>
+
+## Installation
+For only frontend devSever
+```sh
+// with npm
+npm install
+npm start
+
+// with yarn
+yarn
+yarn start
+```
+
+For additional http-server RESTFul mock server with JWT auth at local
+```sh
+// with npm
+npm mock
+
+// with yarn
+yarn mock
+```
+
+For simulating a web server serving /build as a web at local
+```sh
+// with npm
+npm web
+
+// with yarn
+yarn web
+```
+
+
+
+
+
+<details>
+  <summary></summary>
+</details>
+
+
+Yes, it's really all you need to get started as you can see in this live and interactive demo:
+
+[![Edit Button](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/tender-meninsky-1pxqj)
+
+
+
+
+
