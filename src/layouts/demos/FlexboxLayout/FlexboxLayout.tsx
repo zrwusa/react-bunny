@@ -43,7 +43,7 @@ const FlexboxLayout: React.FunctionComponent<IProps> = ({title}) => {
                             <Link to="/demo-route-cate/2">Demo Route Cate B</Link>
                         </li>
                         <li>
-                            <Link to="/demo-fc-redux-hook">Demo FC Redux Hook 1</Link>
+                            <Link to="/demo-fc-redux-hook">Demo FC Redux Hook</Link>
                         </li>
                         <li>
                             <Link to="/demo-thunk-cc">Demo Thunk CC</Link>
