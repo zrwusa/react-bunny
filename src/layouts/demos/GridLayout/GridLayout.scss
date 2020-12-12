@@ -1,30 +1,31 @@
 @import "../../../common/include-media";
-
+@import "../../../common/variables";
 .grid-layout__container {
   display: grid;
   grid-template-columns: repeat(12, [col-start] 1fr);
-  gap: 2px;
+  gap: $panel-gap;
   margin: 0 auto;
 }
 
 .grid-layout__container > .grid-layout__panel {
   grid-column: col-start / span 12;
-  background-color: #ffec99;
-  padding: 1rem;
+  background-color: $panel-background-color;
+  padding: $panel-padding;
+  border:$border-with-thin solid $color-light-gray;
 }
 
 @mixin grid-layout-responsive-loose {
   .grid-layout__container > {
     .grid-layout__header {
-      height: 60px;
+      height: $header-height;
     }
 
     .grid-layout__footer {
-      height: 60px;
+      height: $footer-height;
     }
 
     .grid-layout__nav, .grid-layout__content {
-      height: calc(100vh - 124px);
+      height: calc(#{$screen-height} - #{$header-height} - #{$footer-height} - #{2*($panel-gap)});
     }
 
     .grid-layout__nav {
@@ -123,14 +124,14 @@
 }
 
 
-.demo-description {
-  color: coral;
-}
-
-.demo-home {
-  & > .demo-component__panel {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #666666;
-  }
-}
+//.demo-description {
+//  color: coral;
+//}
+//
+//.demo-home {
+//  & > .demo-component__panel {
+//    margin: 10px 0;
+//    padding: 10px;
+//    border: 1px solid #666666;
+//  }
+//}

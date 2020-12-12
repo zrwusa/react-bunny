@@ -148,7 +148,7 @@ function configFactory() {
             prodMode ? new CleanWebpackPlugin() : function () {
             },
             new HtmlWebpackPlugin({
-                title: "My-Site-Title",
+                title: "React-Bunny",
                 filename: "index.html",
                 template: "./src/index.html"
             }),

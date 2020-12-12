@@ -1,8 +1,6 @@
 @import "../../../common/include-media";
+@import "../../../common/variables";
 
-$panel-gap: 1px;
-$header-height: 60px;
-$footer-height: 60px;
 
 .flexbox-layout__container {
   display: flex;
@@ -13,9 +11,9 @@ $footer-height: 60px;
 .flexbox-layout__container > {
   .flexbox-layout-panel {
     flex: 1 100%;
-    background-color: #ffec99;
     padding: 10px;
     margin: $panel-gap;
+    border: solid $border-with-thin $color-light-gray;
   }
 
   .flexbox-layout__sidebar {
@@ -56,7 +54,7 @@ $footer-height: 60px;
     }
 
     .flexbox-layout__nav, .flexbox-layout__content, .flexbox-layout__ad {
-      height: calc(100vh - #{$header-height} - #{$footer-height} - #{6*$panel-gap});
+      height: calc(#{$screen-height} - #{$header-height} - #{$footer-height} - #{6*$panel-gap});
     }
   }
 }
