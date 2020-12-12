@@ -24,7 +24,7 @@ function configFactory() {
         devServer: devMode ? {
             contentBase: path.join(__dirname, buildPath),
             compress: false,
-            port: 4001,
+            port: 3006,
             hot: true,
             open: true, // "Google Chrome"
             historyApiFallback: true,
