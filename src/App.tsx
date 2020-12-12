@@ -9,7 +9,7 @@ interface IProps {
 }
 
 const App: React.FunctionComponent<IProps> = () => {
-    const flexboxLayout = true;
+    const flexboxLayout = false;
 
     return (
         flexboxLayout?<FlexboxLayout title={"Demo Flexbox Layout"} />:<GridLayout title={"Demo Grid Layout"} />

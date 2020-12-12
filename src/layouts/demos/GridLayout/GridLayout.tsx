@@ -24,16 +24,16 @@ const GridLayout: React.FunctionComponent<IProps> = ({title}) => {
     return (
         <Router>
             <div className={cs({"grid-layout__container": true, "grid-layout-with-side": false})}>
-                <header className="grid-layout__header grid-layout__panel"><h1 className={"demo-description"}>Header section</h1>
-                    <h1 className={"demo-description"}>{title}</h1></header>
+                <header className="grid-layout__header grid-layout__panel"><h1 className={"grid-layout__title--des"}>Header</h1>
+                    <h1 className={"grid-layout__title--des"}>{title}</h1></header>
                 <nav className="grid-layout__nav grid-layout__panel">
-                    <h1 className={"demo-description"}>Nav bar section</h1>
+                    <h1 className={"grid-layout__title--des"}>Nav bar</h1>
                     <ul className={"grid-layout__nav-root"}>
                         <li>
                             <Link to="/">Home</Link>
                         </li>
                         <li>
-                            <Link to="/demo-home">Demo home page</Link>
+                            <Link to="/demo-home">Demo Home</Link>
                         </li>
                         <li>
                             <Link to="/demo-route-cate/1">Demo Route Cate A</Link>
@@ -57,7 +57,7 @@ const GridLayout: React.FunctionComponent<IProps> = ({title}) => {
                 </nav>
 
                 <article className="grid-layout__content grid-layout__panel">
-                    <h1 className={"demo-description"}>Content section</h1>
+                    <h1 className={"grid-layout__title--des"}>Content</h1>
                     <Switch>
                         <Route path="/" exact component={Home}/>
                         <Route path="/demo-home" exact component={DemoHome}/>
@@ -74,7 +74,7 @@ const GridLayout: React.FunctionComponent<IProps> = ({title}) => {
                 {/*<div className="grid-layout__ad grid-layout__panel">Advertising section</div>*/}
 
                 <footer className="grid-layout__footer grid-layout__panel">
-                    <h1 className={"demo-description"}>Footer section</h1>
+                    <h1 className={"grid-layout__title--des"}>Footer</h1>
                 </footer>
             </div>
         </Router>

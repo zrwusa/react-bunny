@@ -29,6 +29,9 @@ api.interceptors.response.use(
         return response
     },
     async function (error) {
+        if(error.response===undefined){
+            console.warn(`[React Bunny Warn]Request failed,first do not forget to run the mock server in another terminal with command 'yarn mock'`)
+        }
         const originalRequest = error.config;
         if (error.response.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;
@@ -38,8 +41,11 @@ api.interceptors.response.use(
             axios.defaults.headers.common["Authorization"] = `Bearer ` + access_token;
             return api(originalRequest);
         }else if(error.response.status===401){
-            console.log(`跳转到登录页`);
+            console.warn(`Todo redirect to login page`);
+        }else {
         }
+
+
         return Promise.reject(error);
     });
 

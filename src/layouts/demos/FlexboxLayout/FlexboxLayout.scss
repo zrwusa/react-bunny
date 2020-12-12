@@ -13,7 +13,7 @@
     flex: 1 100%;
     padding: 10px;
     margin: $panel-gap;
-    border: solid $border-with-thin $color-light-gray;
+    border: solid $number-thin-a $color-light-gray;
   }
 
   .flexbox-layout__sidebar {
@@ -65,4 +65,9 @@
 
 @include media('<tablet', '>=phone', 'landscape') {
   @include flexbox-layout-responsive-loose;
+}
+
+.flexbox-layout__title--des {
+  color: $color-title-font;
+  margin: $number-thin-e 0;
 }

@@ -11,7 +11,7 @@
   grid-column: col-start / span 12;
   background-color: $panel-background-color;
   padding: $panel-padding;
-  border:$border-with-thin solid $color-light-gray;
+  border:$number-thin-a solid $color-light-gray;
 }
 
 @mixin grid-layout-responsive-loose {
@@ -124,14 +124,7 @@
 }
 
 
-//.demo-description {
-//  color: coral;
-//}
-//
-//.demo-home {
-//  & > .demo-component__panel {
-//    margin: 10px 0;
-//    padding: 10px;
-//    border: 1px solid #666666;
-//  }
-//}
+.grid-layout__title--des {
+  color: $color-title-font;
+  margin: $number-thin-e 0;
+}

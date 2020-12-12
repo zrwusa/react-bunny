@@ -55,7 +55,7 @@ class Login extends Component<IProps, IStates> {
             return <Redirect to={from} />
         }
         return (<div>
-            <h1 className={"demo-description"}>Page-Login</h1>
+            <h1 className={"demo-home__title--des"}>Login Page</h1>
             <Input value={this.state.email}
                    onChange={(e) =>
                        this.handleEmailChange(e.currentTarget.value)
@@ -67,6 +67,7 @@ class Login extends Component<IProps, IStates> {
                    }/>
             <Button onClick={this.handleThunk}>Login</Button>
             <span>{access_token}</span>
+            <p>This demo shows you how to use a Private Redirect Component to redirect from an unauthorized page to this Login Page.And after authorizing this will automatically redirect to original page.</p>
         </div>);
     }
 }

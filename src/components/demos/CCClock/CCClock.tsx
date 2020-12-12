@@ -41,7 +41,7 @@ class CCCLock extends Component<IProps, IStates> {
 
     render(): React.ReactNode {
         return (<div>
-            <h1 className={"demo-description"}>{this.props.title}</h1>
+            <h1 className={"demo-home__title--des"}>{this.props.title}</h1>
             <p>The current time is {this.state.time.toLocaleTimeString()}</p>
             <button onClick={this.handleStopClick.bind(this)}>Stop</button>
             <button onClick={this.handleGoClick.bind(this)}>Go</button>

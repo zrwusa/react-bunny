@@ -33,7 +33,7 @@ class Request extends Component<IProps, IStates> {
 
     render(): React.ReactNode {
         return (<div>
-            <h1 className={"demo-description"}>{this.props.title}</h1>
+            <h1 className={"demo-home__title--des"}>{this.props.title}</h1>
             <span>{this.state.name}</span>
             <button onClick={this.handleGetSomethingClick}>Click me to get employees</button>
             <ul>

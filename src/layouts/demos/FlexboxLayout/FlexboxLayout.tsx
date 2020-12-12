@@ -24,11 +24,11 @@ const FlexboxLayout: React.FunctionComponent<IProps> = ({title}) => {
         <Router>
             <div className="flexbox-layout__container">
                 <header className="flexbox-layout__header flexbox-layout-panel">
-                    <h1>Header section</h1>
-                    <h1>{title}</h1>
+                    <h1 className={"flexbox-layout__title--des"}>Header section</h1>
+                    <h1 className={"flexbox-layout__title--des"}>{title}</h1>
                 </header>
                 <nav className="flexbox-layout__sidebar flexbox-layout__nav flexbox-layout-panel">
-                    <h1>Nav bar section</h1>
+                    <h1 className={"flexbox-layout__title--des"}>Nav bar section</h1>
                     <ul>
                         <li>
                             <Link to="/">Home</Link>
@@ -57,7 +57,7 @@ const FlexboxLayout: React.FunctionComponent<IProps> = ({title}) => {
                     </ul>
                 </nav>
                 <article className="flexbox-layout__content flexbox-layout-panel">
-                    <h1>Content section</h1>
+                    <h1 className={"flexbox-layout__title--des"}>Content section</h1>
                     <Switch>
                         <Route path="/" exact component={Home}/>
                         <Route path="/demo-home" exact component={DemoHome}/>
@@ -70,10 +70,10 @@ const FlexboxLayout: React.FunctionComponent<IProps> = ({title}) => {
                 </article>
 
                 {/*<aside className="flexbox-layout__sidebar flexbox-layout__ad flexbox-layout-panel">*/}
-                {/*    <h1>Advertising section</h1>*/}
+                {/*    <h1 className={"flexbox-layout__title--des"} >Advertising section</h1>*/}
                 {/*</aside>*/}
                 <footer className="flexbox-layout__footer flexbox-layout-panel">
-                    <h1>Footer section</h1>
+                    <h1 className={"flexbox-layout__title--des"}>Footer section</h1>
                 </footer>
             </div>
         </Router>

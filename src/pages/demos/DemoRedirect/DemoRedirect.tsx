@@ -1,3 +1,4 @@
+import "./DemoRedirect.scss";
 import React, {Component} from "react";
 import {RouteComponentProps, Redirect} from "react-router-dom";
 import {StaticContext} from "react-router";
@@ -19,7 +20,7 @@ class DemoRedirect extends Component<IProps,IStates> {
             return <Redirect to={from} />
         }
         return (<div>
-            <h1 className={"demo-description"}>Page-DemoRedirect</h1>
+            <h1 className={"demo-redirect__title"}>Demo Redirect Page</h1>
             <p>If not login this page will redirect to login page,After login it will back redirect from login page to here.</p>
         </div>);
     }
