@@ -1,0 +1,24 @@
+.demo-image {
+  display: flex;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 5rem;
+  height: 5rem;
+  background-image: url('./demo-ts-react-webpack.png');
+  border: dashed 2px #999999;
+}
+
+@media (min-width: 500px) {
+  .demo-image {
+    background-image: url('./demo-autoprefix1.svg');
+  }
+}
+
+.demo-autoprefixer {
+  user-select: none;
+  color: brown;
+  transition: transform 1s
+}
+
+
