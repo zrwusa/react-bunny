@@ -1,5 +1,5 @@
 # react-bunny
-All examples of React,Typescript,Redux,SASS,mock server,JWT Auth,Webpack 5,Autoprefixer,Eslint,Grid and Flexbox layout responsive demos,Class component demo,Function component demo
+All examples of React,Typescript,Redux,SASS,mock server,JWT Auth,Webpack 5,Autoprefixer,Eslint,Grid and Flexbox layout responsive demos,Class component demo,Function component demo,CSS BEM,Media queries SASS variables
 
 
 <h1 align="center">React-Bunny</h1>
