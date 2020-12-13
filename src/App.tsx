@@ -1,5 +1,5 @@
-import {hot} from "react-hot-loader/root";
 import "./App.scss";
+import {hot} from "react-hot-loader/root";
 import React from "react";
 import GridLayout from "./layouts/demos/GridLayout";
 import FlexboxLayout from "./layouts/demos/FlexboxLayout";
@@ -21,7 +21,6 @@ import DemoRedirect from "./pages/demos/DemoRedirect";
 interface IProps {
     title?: string,
 }
-
 
 const App: React.FunctionComponent<IProps> = () => {
     const flexboxLayout = true;

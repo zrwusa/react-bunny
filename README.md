@@ -37,7 +37,10 @@ npm mock
 yarn mock
 ```
 
-For simulating a web server serving /build as a web at local
+For simulating a web server serving /build as a web at local.You can test you app as a real production env,and use a performance tool E.g. Lighthouse to test the performance.
+[![](https://raw.githubusercontent.com/zrwusa/assets/master/images/Screen%20Shot%202020-12-13%20at%2014.26.36.png)]
+
+[![](https://raw.githubusercontent.com/zrwusa/assets/master/images/Screen%20Shot%202020-12-13%20at%2014.27.37.png)]
 ```sh
 // with npm
 npm web
