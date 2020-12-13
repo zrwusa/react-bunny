@@ -13,7 +13,7 @@ function configFactory() {
         image: /\.(png|svg|jpg|jpeg|gif)$/i,
         sass: /\.s[ac]ss$/i,
     };
-    const buildPath = "build";
+    const buildPath = "public";
     const devMode = process.env.NODE_ENV === "development";
     const prodMode = process.env.NODE_ENV === "production";
 
