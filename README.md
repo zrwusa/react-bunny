@@ -50,9 +50,8 @@ yarn web
 ```
 
 
-
-
-
+Online
+[![Check deployed]()](https://react-bunny.vercel.app/)
 <details>
   <summary></summary>
 </details>
