@@ -16,8 +16,7 @@ export const PrivateRoute: React.FC<IProps> = props => {
     if (isAuth) {
         return <Route {...props} />;
     } else {
-        const renderComponent = () => <Redirect to={{pathname: props.redirectPath, state: { from: location }}}/>;
-        return <Route {...props} component={renderComponent}/>;
+        return <Route {...props} component={() => <Redirect to={{pathname: props.redirectPath, state: { from: location }}}/>}/>;
     }
 };
 

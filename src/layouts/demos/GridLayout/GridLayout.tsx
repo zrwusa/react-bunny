@@ -1,28 +1,15 @@
 import "./GridLayout.scss";
 import React from "react";
-import Home from "../../../pages/Home";
-import DemoHome from "../../../pages/demos/DemoHome";
-import Login from "../../../pages/Login";
-import DemoRoute from "../../../pages/demos/DemoRoute";
-import DemoFCReduxHook from "../../../pages/demos/DemoFCReduxHook";
-import {PrivateRoute} from "../../../components/PrivateRoute";
-import DemoThunkCC from "../../../pages/demos/DemoThunkCC";
-import DemoRedirect from "../../../pages/demos/DemoRedirect";
 import cs from 'classnames';
-import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
-// BrowserRouter or HashRouter.If BrowserRouter,
-// When developing configure the webpack config devServer "historyApiFallback: true".
-// When deploying the catch-all must be configured,/* to index.html,
-// In this case we use the http-server,just config "?" as catch-all config at the end of the starting script E.g. http-server -P http://localhost:8080? ./build/
-// More details visit link https://stackoverflow.com/a/36623117/14710617
+import { Link} from "react-router-dom";
+
 
 interface IProps {
     title?: string,
 }
 
-const GridLayout: React.FunctionComponent<IProps> = ({title}) => {
+const GridLayout: React.FunctionComponent<IProps> = ({title,children}) => {
     return (
-        <Router>
             <div className={cs({"grid-layout__container": true, "grid-layout-with-side": false})}>
                 <header className="grid-layout__header grid-layout__panel"><h1 className={"grid-layout__title--des"}>Header</h1>
                     <h1 className={"grid-layout__title--des"}>{title}</h1></header>
@@ -58,15 +45,7 @@ const GridLayout: React.FunctionComponent<IProps> = ({title}) => {
 
                 <article className="grid-layout__content grid-layout__panel">
                     <h1 className={"grid-layout__title--des"}>Content</h1>
-                    <Switch>
-                        <Route path="/" exact component={Home}/>
-                        <Route path="/demo-home" exact component={DemoHome}/>
-                        <Route path="/demo-route-cate/:id" component={DemoRoute}/>
-                        <Route path="/demo-fc-redux-hook" component={DemoFCReduxHook}/>
-                        <Route path="/login" exact component={Login}/>
-                        <Route path="/demo-thunk-cc" component={DemoThunkCC}/>
-                        <PrivateRoute path="/demo-redirect" component={DemoRedirect} redirectPath="login"/>
-                    </Switch>
+                    {children}
                 </article>
 
 
@@ -77,7 +56,6 @@ const GridLayout: React.FunctionComponent<IProps> = ({title}) => {
                     <h1 className={"grid-layout__title--des"}>Footer</h1>
                 </footer>
             </div>
-        </Router>
     );
 }
 
