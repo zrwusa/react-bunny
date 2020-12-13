@@ -8,7 +8,6 @@
   font-weight: bold;
 }
 
-.flexbox-layout__container > {
   .flexbox-layout-panel {
     flex: 1 100%;
     padding: 10px;
@@ -19,13 +18,13 @@
   .flexbox-layout__sidebar {
     flex: 1 0 0;
   }
-}
 
 @mixin flexbox-layout-responsive-loose {
-  .flexbox-layout__container > {
     .flexbox-layout__content {
       flex: 3;
       overflow-y: auto;
+      order: 2;
+
     }
 
     .flexbox-layout__nav {
@@ -33,9 +32,6 @@
       overflow-y: auto;
     }
 
-    .flexbox-layout__content {
-      order: 2;
-    }
 
     .flexbox-layout__ad {
       order: 3;
@@ -43,20 +39,17 @@
 
     .flexbox-layout__footer {
       order: 4;
+      height: $footer-height;
+
     }
 
     .flexbox-layout__header {
       height: $header-height;
     }
 
-    .flexbox-layout__footer {
-      height: $footer-height;
-    }
-
     .flexbox-layout__nav, .flexbox-layout__content, .flexbox-layout__ad {
       height: calc(#{$screen-height} - #{$header-height} - #{$footer-height} - #{6*$panel-gap});
     }
-  }
 }
 
 @include media('>=tablet') {

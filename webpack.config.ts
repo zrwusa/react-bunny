@@ -5,6 +5,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import {CleanWebpackPlugin} from "clean-webpack-plugin";
 import autoprefixer from "autoprefixer";
+import StylelintPlugin from "stylelint-webpack-plugin";
 
 function configFactory() {
     const ext = {
@@ -163,6 +164,10 @@ function configFactory() {
                     files: "./src/**/*.{ts,tsx}",
                 },
             }),
+            new StylelintPlugin({
+                context: "./src",
+                files: ["**/*.{scss,sass}"]
+            })
             // devMode?new webpack.HotModuleReplacementPlugin():function () {}
         ],
         target: devMode ? "web" : "browserslist", //default being 'browserlist' since 5.0.0-rc.1,Set to "web" when developing with react-hot-loader
