@@ -72,9 +72,8 @@ react-bunny-cli init product-name
 
 [CLI repository](https://github.com/zrwusa/react-bunny-cli)
 
-<div>
-Online[Check deployed](https://react-bunny.vercel.app/)
-</div>
+
+[Check online deployed](https://react-bunny.vercel.app/)
 
 
 
