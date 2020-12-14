@@ -3,8 +3,7 @@ React,Typescript,Webpack 5,Redux,SASS,Mock server,JWT Auth,Autoprefixer,Eslint,S
 
 
 
-<div align="center">
-
+<div>
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)]()
 [![CircleCI](https://img.shields.io/circleci/project/github/mui-org/material-ui/next.svg)](https://app.circleci.com/pipelines/github/zrwusa/react-bunny)
