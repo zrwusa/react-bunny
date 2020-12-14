@@ -1,4 +1,4 @@
-<h1 align="center">React-Bunny</h1>
+<h1>React-Bunny</h1>
 React,Typescript,Webpack 5,Redux,SASS,Mock server,JWT Auth,Autoprefixer,Eslint,Stylelint.
 
 
@@ -11,7 +11,8 @@ React,Typescript,Webpack 5,Redux,SASS,Mock server,JWT Auth,Autoprefixer,Eslint,S
 [![Coverage Status](https://img.shields.io/codecov/c/github/mui-org/material-ui/next.svg)](https://codecov.io/gh/zrwusa/react-bunny)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=mui-org/material-ui)](https://dependabot.com)
 [![Crowdin](https://badges.crowdin.net/material-ui-docs/localized.svg)](https://crowdin.com/project/react-bunny)
-Demos
+
+
 <table>
 <thead><tr><th>Name</th><th>Desc</th></tr></thead>
 <tbody>
