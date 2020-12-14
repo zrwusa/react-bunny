@@ -40,6 +40,7 @@ function configFactory(): webpack.Configuration {
             rules: [
                 {
                     test: ext.image,
+                    exclude: /node_modules/,
                     loader: "url-loader",
                     options: {
                         limit: 500,
@@ -65,7 +66,6 @@ function configFactory(): webpack.Configuration {
                     test: ext.sass,
                     exclude: /node_modules/,
                     use: [
-
                         {
                             loader: MiniCssExtractPlugin.loader, // for extracting not for minimizing
                             options: {
