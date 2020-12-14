@@ -1,6 +1,6 @@
 import "./FlexboxLayout.scss";
 import React from "react";
-import {Link} from "react-router-dom";
+import NavLinks from "../NavContent";
 
 interface IProps {
     title?: string,
@@ -15,32 +15,7 @@ const FlexboxLayout: React.FunctionComponent<IProps> = ({title, children}) => {
             </header>
             <nav className="flexbox-layout__sidebar flexbox-layout__nav flexbox-layout-panel">
                 <h1 className={"flexbox-layout__title--des"}>Nav bar section</h1>
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/demo-home">Demo home page</Link>
-                    </li>
-                    <li>
-                        <Link to="/demo-route-cate/1">Demo Route Cate A</Link>
-                    </li>
-                    <li>
-                        <Link to="/demo-route-cate/2">Demo Route Cate B</Link>
-                    </li>
-                    <li>
-                        <Link to="/demo-fc-redux-hook">Demo FC Redux Hook</Link>
-                    </li>
-                    <li>
-                        <Link to="/demo-thunk-cc">Demo Thunk CC</Link>
-                    </li>
-                    <li>
-                        <Link to="/demo-redirect">Demo Redirect</Link>
-                    </li>
-                    <li>
-                        <Link to="/login">Login</Link>
-                    </li>
-                </ul>
+                <NavLinks />
             </nav>
             <article className="flexbox-layout__content flexbox-layout-panel">
                 <h1 className={"flexbox-layout__title--des"}>Content section</h1>

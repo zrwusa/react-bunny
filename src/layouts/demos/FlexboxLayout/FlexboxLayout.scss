@@ -1,6 +1,10 @@
 @import "../../../common/include-media";
 @import "../../../common/variables";
 
+.flexbox-layout__title--des {
+  color: $color-title-font;
+  margin: $number-thin-e 0;
+}
 
 .flexbox-layout__container {
   display: flex;
@@ -60,7 +64,3 @@
   @include flexbox-layout-responsive-loose;
 }
 
-.flexbox-layout__title--des {
-  color: $color-title-font;
-  margin: $number-thin-e 0;
-}
