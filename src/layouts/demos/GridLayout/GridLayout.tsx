@@ -17,7 +17,7 @@ const GridLayout: React.FunctionComponent<IProps> = ({title,children}) => {
                     <h1 className={"grid-layout__title--des"}>Nav bar</h1>
                     <ul className={"grid-layout__nav-root"}>
                         <li>
-                            <Link to="/">Home</Link>
+                            <Link to="/">Home sync with Codesandbox</Link>
                         </li>
                         <li>
                             <Link to="/demo-home">Demo Home</Link>
