@@ -4,10 +4,10 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import {CleanWebpackPlugin} from "clean-webpack-plugin";
-import autoprefixer from "autoprefixer";
+import autoPreFixer from "autoprefixer";
 import StylelintPlugin from "stylelint-webpack-plugin";
 
-function configFactory() {
+function configFactory(): webpack.Configuration {
     const ext = {
         ts: /\.(ts|js)x?$/,
         js: /\.js$/,
@@ -18,7 +18,7 @@ function configFactory() {
     const devMode = process.env.NODE_ENV === "development";
     const prodMode = process.env.NODE_ENV === "production";
 
-    const config: webpack.Configuration = {
+    return {
         entry: "./src/index.tsx",
         mode: devMode ? "development" : prodMode ? "production" : "none",
         devtool: devMode ? "source-map" : false,
@@ -87,7 +87,7 @@ function configFactory() {
                             loader: "postcss-loader",
                             options: {
                                 postcssOptions: {
-                                    plugins: [autoprefixer()],
+                                    plugins: [autoPreFixer()],
                                 },
                                 sourceMap: devMode,
                             }
@@ -146,8 +146,7 @@ function configFactory() {
             },
         },
         plugins: [
-            prodMode ? new CleanWebpackPlugin() : function () {
-            },
+            prodMode ? new CleanWebpackPlugin() : Function(),
             new HtmlWebpackPlugin({
                 title: "React-Bunny",
                 filename: "index.html",
@@ -168,11 +167,10 @@ function configFactory() {
                 context: "./src",
                 files: ["**/*.{scss,sass}"]
             })
-            // devMode?new webpack.HotModuleReplacementPlugin():function () {}
+            // devMode?new webpack.HotModuleReplacementPlugin():Function()
         ],
         target: devMode ? "web" : "browserslist", //default being 'browserlist' since 5.0.0-rc.1,Set to "web" when developing with react-hot-loader
     };
-    return config;
 }
 
 export default configFactory;

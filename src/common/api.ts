@@ -37,9 +37,9 @@ api.interceptors.response.use(
             const access_token = "";
             axios.defaults.headers.common["Authorization"] = `Bearer ` + access_token;
             return api(originalRequest);
-        } else if (error.response.status === 401) {
+        }
+        else if (error.response.status === 401) {
             console.warn(`Todo redirect to login page`);
-        } else {
         }
 
 

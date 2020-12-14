@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {RouteComponentProps} from "react-router-dom"
 
-type IDProps = { id: string, };
+type IProps = { id: string, };
 type IStates = { name: string, }
 
-class DemoRoute extends Component<RouteComponentProps<IDProps>, IStates> {
-    constructor(props: RouteComponentProps<IDProps>) {
+class DemoRoute extends Component<RouteComponentProps<IProps>, IStates> {
+    constructor(props: RouteComponentProps<IProps>) {
         super(props);
-        console.log(props)
     }
 
     render(): React.ReactNode {

@@ -5,9 +5,11 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve",
-    "mock": "node ./src/mock/server.js",
+    "mock": "node src/mock/server.js",
     "build": "cross-env NODE_ENV=production webpack",
-    "web": "yarn build && http-server -P http://localhost:8080? ./public/"
+    "web": "yarn build && http-server -P http://localhost:8080? ./public/",
+    "lint": "eslint src --ext .ts,.tsx --ignore-pattern node_modules/",
+    "stylelint": "stylelint 'src/**/*.{scss,sass}'"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
