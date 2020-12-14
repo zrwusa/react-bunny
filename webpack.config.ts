@@ -120,30 +120,22 @@ function configFactory(): webpack.Configuration {
                 `...`, // For webpack@5 extend existing minimizers
             ],
             runtimeChunk: devMode ? "single" : undefined,
-            splitChunks: devMode ? {
+            splitChunks: {
                 chunks: "all",
                 maxInitialRequests: Infinity,
                 minSize: 0,
                 cacheGroups: {
                     vendor: {
                         test: /[\\/]node_modules[\\/]/,
-                        name(module: any) {
-                            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];                            // get the name node_modules/packageName
-                            return `npm.${packageName.replace('@', '')}`;                            // npm package names are URL-safe, but some servers don't like @ symbols
-                        },
+                        name: devMode ?
+                            (module: any) => {
+                                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];                            // get the name node_modules/packageName
+                                return `npm.${packageName.replace('@', '')}`;                            // npm package names are URL-safe, but some servers don't like @ symbols
+                            } :
+                            "vendor"
                     },
                 },
-            } : {
-                chunks: "all",
-                maxInitialRequests: Infinity,
-                minSize: 0,
-                cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name: "vendor",
-                    },
-                },
-            },
+            }
         },
         plugins: [
             prodMode ? new CleanWebpackPlugin() : Function(),
