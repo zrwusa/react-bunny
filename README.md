@@ -58,8 +58,23 @@ You can test you app as a real production env,and use a performance tool E.g. Li
 
 ![](https://raw.githubusercontent.com/zrwusa/assets/master/images/Screen%20Shot%202020-12-13%20at%2014.27.37.png)
 
-Online
-[Check deployed](https://react-bunny.vercel.app/)
+
+For CLI
+```sh
+// with npm
+npm install -g react-bunny-cli
+react-bunny-cli init product-name
+
+// with yarn
+yarn global add react-bunny-cli
+react-bunny-cli init product-name
+```
+
+[CLI repository](https://github.com/zrwusa/react-bunny-cli)
+
+<div>
+Online[Check deployed](https://react-bunny.vercel.app/)
+</div>
 
 
 
