@@ -1,17 +1,6 @@
 <h1>React-Bunny</h1>
 React,Typescript,Webpack 5,Redux,SASS,Mock server,JWT Auth,Autoprefixer,Eslint,Stylelint.
 
-
-
-<div>
-
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)]()
-[![CircleCI](https://img.shields.io/circleci/project/github/mui-org/material-ui/next.svg)](https://app.circleci.com/pipelines/github/zrwusa/react-bunny)
-[![Coverage Status](https://img.shields.io/codecov/c/github/mui-org/material-ui/next.svg)](https://codecov.io/gh/zrwusa/react-bunny)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=mui-org/material-ui)](https://dependabot.com)
-[![Crowdin](https://badges.crowdin.net/material-ui-docs/localized.svg)](https://crowdin.com/project/react-bunny)
-
-
 <table>
 <thead><tr><th>Name</th><th>Desc</th></tr></thead>
 <tbody>
@@ -22,6 +11,17 @@ React,Typescript,Webpack 5,Redux,SASS,Mock server,JWT Auth,Autoprefixer,Eslint,S
 <tr><td>CSS BEM</td><td>  </td></tr>
 <tr><td>Media queries SASS variables</td><td>  </td></tr>
 </tbody></table>
+
+<div>
+
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)]()
+[![CircleCI](https://img.shields.io/circleci/project/github/mui-org/material-ui/next.svg)](https://app.circleci.com/pipelines/github/zrwusa/react-bunny)
+[![Coverage Status](https://img.shields.io/codecov/c/github/mui-org/material-ui/next.svg)](https://codecov.io/gh/zrwusa/react-bunny)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=mui-org/material-ui)](https://dependabot.com)
+[![Crowdin](https://badges.crowdin.net/material-ui-docs/localized.svg)](https://crowdin.com/project/react-bunny)
+
+
+
 </div>
 
 ## Installation
