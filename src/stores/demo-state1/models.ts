@@ -1,4 +1,4 @@
-export interface IDemoState1 {
+export interface IDemoHelloState {
     name: string;
     order: number;
 }

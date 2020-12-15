@@ -4,17 +4,20 @@ import {RouteComponentProps, Redirect} from "react-router-dom";
 import {StaticContext} from "react-router";
 import {IRootState} from "../../stores/models";
 import {IThunkDispatch} from "../../stores/thunk";
-import {IReqLoginPayload} from "../../stores/user/payloads";
-import {loginAction} from "../../stores/user/actions";
+import {ILogoutPayload, IReqLoginPayload} from "../../stores/user/payloads";
+import {loginAction, logoutAction} from "../../stores/user/actions";
 import {connect} from "react-redux";
 
-const mapStateToProps = (rootState: IRootState) => ({access_token: rootState.user.access_token});
+const mapStateToProps = (rootState: IRootState) => ({access_token: rootState.userState.user.access_token});
 
 const mapDispatchToProps = (dispatch: IThunkDispatch) => ({
     loginAction: (data: IReqLoginPayload) => dispatch(loginAction(data)),
+    logoutAction: (data: ILogoutPayload) => dispatch(logoutAction(data)),
 });
 
-interface IPropsWithRouteProps extends RouteComponentProps<never, StaticContext, { from: { pathname: string } }> {title?: string}
+interface IPropsWithRouteProps extends RouteComponentProps<never, StaticContext, { from: { pathname: string } }> {
+    title?: string
+}
 
 type IProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & IPropsWithRouteProps;
 type IStates = { name: string, email: string, password: string, redirectToReferrer: boolean, }
@@ -30,7 +33,8 @@ class Login extends Component<IProps, IStates> {
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.handleThunk = this.handleThunk.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleEmailChange(value: string): void {
@@ -41,18 +45,24 @@ class Login extends Component<IProps, IStates> {
         this.setState({password: value});
     }
 
-    handleThunk(): void {
-        this.props.loginAction(this.state)
+    handleLogin(): void {
+        const {email, password} = this.state
+        this.props.loginAction({email, password})
             .then(() => {
                 this.setState({redirectToReferrer: true})
             });
+    }
+
+    handleLogout(): void {
+        const {email} = this.state
+        this.props.logoutAction({email});
     }
 
     render(): React.ReactNode {
         const {from} = this.props.location.state ? this.props.location.state : {from: {pathname: ""}};
         const {access_token} = this.props;
         if (this.state.redirectToReferrer && from.pathname !== "") {
-            return <Redirect to={from} />
+            return <Redirect to={from}/>
         }
         return (<div>
             <h1 className={"demo-home__title--des"}>Login Page</h1>
@@ -65,9 +75,12 @@ class Login extends Component<IProps, IStates> {
                    onChange={(e) =>
                        this.handlePasswordChange(e.currentTarget.value)
                    }/>
-            <Button onClick={this.handleThunk}>Login</Button>
+            <Button onClick={this.handleLogin}>Login</Button>
+            <Button onClick={this.handleLogout}>Logout</Button>
+
             <span>{access_token}</span>
-            <p>This demo shows you how to use a Private Redirect Component to redirect from an unauthorized page to this Login Page.And after authorizing this will automatically redirect to original page.</p>
+            <p>This demo shows you how to use a Private Redirect Component to redirect from an unauthorized page to this Login Page.And after
+                authorizing this will automatically redirect to original page.</p>
         </div>);
     }
 }

@@ -32,6 +32,11 @@ function isAuthenticated({email, password}){
   return userdb.users.findIndex(user => user.email === email && user.password === password) !== -1
 }
 
+// Get user info
+function getUserInfo({email, password}){
+  return userdb.users.find(user => user.email === email && user.password === password)
+}
+
 // Register New User
 server.post('/auth/register', (req, res) => {
   console.log("register endpoint called; request body:");
@@ -51,7 +56,7 @@ fs.readFile(`${__dirname}/users.json`, (err, data) => {
       const message = err
       res.status(status).json({status, message})
       return
-    };
+    }
 
     // Get current users data
     var data = JSON.parse(data.toString());
@@ -88,9 +93,13 @@ server.post('/auth/login', (req, res) => {
     res.status(status).json({status, message})
     return
   }
+
+  const userInfo = getUserInfo({email, password})
+  console.log('userInfo',userInfo)
+
   const access_token = createToken({email, password})
   console.log("Access Token:" + access_token);
-  res.status(200).json({access_token})
+  res.status(200).json({"user":{nickname:userInfo.nickname,access_token}})
 })
 
 server.use(/^(?!\/auth).*$/,  (req, res, next) => {

@@ -30,7 +30,7 @@ export const demoThunkFailAction: (payload: AxiosError) => IDemoThunkFailAction 
     };
 };
 
-export const demoThunkSuccessOrFailAction = (data: IReqDemoThunkPayload): IThunkResult<Promise<void>> => (dispatch) => {
+export const demoThunkAction = (data: IReqDemoThunkPayload): IThunkResult<Promise<void>> => (dispatch) => {
     const retPromise = api.post(`/demo_thunks`, data)
         .then((res) => {
             dispatch(demoThunkSuccessAction(res.data))

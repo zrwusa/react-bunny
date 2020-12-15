@@ -1,6 +1,10 @@
+export interface IUser {
+    access_token: string,
+    email:string,
+    nickname:string,
+}
 export interface IUserState {
-    name: string;
-    access_token: string;
+    user: IUser;
     isValid: boolean;
     fetching: boolean,
     fetched: boolean,

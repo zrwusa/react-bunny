@@ -1,6 +1,7 @@
 import "./FlexboxLayout.scss";
 import React from "react";
 import NavLinks from "../NavContent";
+import Header from "./Header";
 
 interface IProps {
     title?: string,
@@ -9,10 +10,7 @@ interface IProps {
 const FlexboxLayout: React.FunctionComponent<IProps> = ({title, children}) => {
     return (
         <div className="flexbox-layout__container">
-            <header className="flexbox-layout__header flexbox-layout-panel">
-                <h1 className={"flexbox-layout__title--des"}>Header section</h1>
-                <h1 className={"flexbox-layout__title--des"}>{title}</h1>
-            </header>
+            <Header title={title} />
             <nav className="flexbox-layout__sidebar flexbox-layout__nav flexbox-layout-panel">
                 <h1 className={"flexbox-layout__title--des"}>Nav bar section</h1>
                 <NavLinks />

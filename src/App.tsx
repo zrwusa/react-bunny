@@ -24,7 +24,7 @@ interface IProps {
 }
 
 const App: React.FunctionComponent<IProps> = () => {
-    const flexboxLayout = false;
+    const flexboxLayout = true;
     const Content = <Switch>
         <Route path="/" exact component={Home}/>
         <Route path="/demo-home" exact component={DemoHome}/>

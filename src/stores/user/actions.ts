@@ -5,36 +5,25 @@ import api from "../../common/api";
 import {IThunkResult} from "../thunk";
 import {AxiosError} from "axios";
 
-export interface ILoginSuccessAction {
+
+interface ILoginSuccessAction {
     type: EUser.LOGIN_SUCCESS;
     payload: ILoginSuccessPayload;
 }
 
-export const loginSuccessAction: (payload: ILoginSuccessPayload) => ILoginSuccessAction = (payload) => {
+const loginSuccessAction: (payload: ILoginSuccessPayload) => ILoginSuccessAction = (payload) => {
     return {
         type: EUser.LOGIN_SUCCESS,
         payload: payload,
     };
 };
 
-export interface ILogoutAction {
-    type: EUser.LOGOUT;
-    payload: ILogoutPayload;
-}
-
-export const logoutAction: (payload: ILogoutPayload) => ILogoutAction = (payload) => {
-    return {
-        type: EUser.LOGOUT,
-        payload: payload,
-    };
-};
-
-export interface ILoginFailedAction {
+interface ILoginFailedAction {
     type: EUser.LOGIN_FAILED;
     payload: AxiosError;
 }
 
-export const loginFailedAction: (payload: AxiosError) => ILoginFailedAction = (payload) => {
+const loginFailedAction: (payload: AxiosError) => ILoginFailedAction = (payload) => {
     return {
         type: EUser.LOGIN_FAILED,
         payload: payload,
@@ -51,4 +40,16 @@ export const loginAction = (data: IReqLoginPayload): IThunkResult<Promise<void>>
         });
 };
 
-export type UserAction = ILoginSuccessAction | ILoginFailedAction | ILogoutAction;
+interface ILogoutAction {
+    type: EUser.LOGOUT;
+    payload: ILogoutPayload;
+}
+
+export const logoutAction: (payload: ILogoutPayload) => ILogoutAction = (payload) => {
+    return {
+        type: EUser.LOGOUT,
+        payload: payload,
+    };
+};
+
+export type UserAction = ILoginSuccessAction | ILoginFailedAction | ILogoutAction ;

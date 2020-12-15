@@ -9,8 +9,7 @@ import StylelintPlugin from "stylelint-webpack-plugin";
 
 function configFactory(): webpack.Configuration {
     const ext = {
-        ts: /\.(ts|js)x?$/,
-        js: /\.js$/,
+        ts: /\.(ts)x?$/,
         image: /\.(png|svg|jpg|jpeg|gif)$/i,
         sass: /\.s[ac]ss$/i,
     };

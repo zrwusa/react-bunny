@@ -2,6 +2,7 @@ import "./GridLayout.scss";
 import React from "react";
 import cs from 'classnames';
 import NavLinks from "../NavContent";
+import Header from "./Header";
 
 interface IProps {
     title?: string,
@@ -10,10 +11,7 @@ interface IProps {
 const GridLayout: React.FunctionComponent<IProps> = ({title,children}) => {
     return (
             <div className={cs({"grid-layout__container": true, "grid-layout-with-side": false})}>
-                <header className="grid-layout__header grid-layout__panel">
-                    <h1 className={"grid-layout__title--des"}>Header</h1>
-                    <h1 className={"grid-layout__title--des"}>{title}</h1>
-                </header>
+                <Header title={title}/>
                 <nav className="grid-layout__nav grid-layout__panel">
                     <h1 className={"grid-layout__title--des"}>Nav bar</h1>
                     <NavLinks />

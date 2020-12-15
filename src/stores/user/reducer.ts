@@ -4,8 +4,7 @@ import {UserAction} from "./actions";
 // import {ILoginSuccessPayload} from "./payloads";
 
 export const initialState: IUserState = {
-    access_token: "",
-    name: "name default",
+    user: {email:"",access_token:"",nickname:""},
     isValid: false,
     fetching: false,
     fetched: false,
@@ -29,10 +28,13 @@ export function userReducer(state: IUserState = initialState, {type, payload}: U
             };
         }
         case EUser.LOGOUT: {
-            debugger
             return {
                 ...state,
-                ...payload,
+                user:{
+                    access_token:"",
+                    email:"",
+                    nickname:""
+                },
             };
         }
         default:

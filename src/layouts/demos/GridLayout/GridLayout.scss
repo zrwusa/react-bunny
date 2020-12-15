@@ -23,6 +23,9 @@
 @mixin grid-layout-responsive-loose {
   .grid-layout__header {
     height: $header-height;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .grid-layout__footer {
