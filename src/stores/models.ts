@@ -1,8 +1,8 @@
 
-import {IDemoHelloState,IDemoState2} from "./demo-state1/models";
+import {IDemoHelloState,IDemoState2} from "./demo-hello/models";
 import {IUserState} from "./user/models";
 import {IDemoThunk} from "./demo-thunk/models";
-export * from "./demo-state1/models";
+export * from "./demo-hello/models";
 export * from "./demo-thunk/models";
 export * from "./user/models";
 export interface IRootState {

@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, combineReducers } from "redux";
-import {demoHelloStateReducer} from "./demo-state1";
+import {demoHelloStateReducer} from "./demo-hello";
 import {userReducer} from "./user";
 import thunkMiddleware from 'redux-thunk';
 import {demoThunkReducer} from "./demo-thunk";
