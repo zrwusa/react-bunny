@@ -4,14 +4,14 @@ import {RouteComponentProps, Redirect} from "react-router-dom";
 import {StaticContext} from "react-router";
 import {IRootState} from "../../stores/models";
 import {IThunkDispatch} from "../../stores/thunk";
-import {IReqGetAuthPayload} from "../../stores/user/payloads";
-import {getAuthFillOrClear} from "../../stores/user/actions";
+import {IReqLoginPayload} from "../../stores/user/payloads";
+import {loginAction} from "../../stores/user/actions";
 import {connect} from "react-redux";
 
 const mapStateToProps = (rootState: IRootState) => ({access_token: rootState.user.access_token});
 
 const mapDispatchToProps = (dispatch: IThunkDispatch) => ({
-    getAuthFillOrClear: (data: IReqGetAuthPayload) => dispatch(getAuthFillOrClear(data)),
+    loginAction: (data: IReqLoginPayload) => dispatch(loginAction(data)),
 });
 
 interface IPropsWithRouteProps extends RouteComponentProps<never, StaticContext, { from: { pathname: string } }> {title?: string}
@@ -42,7 +42,7 @@ class Login extends Component<IProps, IStates> {
     }
 
     handleThunk(): void {
-        this.props.getAuthFillOrClear(this.state)
+        this.props.loginAction(this.state)
             .then(() => {
                 this.setState({redirectToReferrer: true})
             });

@@ -2,7 +2,7 @@ import axios from "axios";
 import store from "../stores";
 const isDevServerProxy = false;
 const api = axios.create({baseURL: isDevServerProxy ? `http://localhost:3006/api` : `http://localhost:4006`});
-
+import history from "./history";
 // Request interceptor for API calls
 api.interceptors.request.use(
     async config => {
@@ -40,6 +40,7 @@ api.interceptors.response.use(
         }
         else if (error.response.status === 401) {
             console.warn(`Todo redirect to login page`);
+            history.push('/login');
         }
 
 

@@ -3,7 +3,7 @@ import {hot} from "react-hot-loader/root";
 import React from "react";
 import GridLayout from "./layouts/demos/GridLayout";
 import FlexboxLayout from "./layouts/demos/FlexboxLayout";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {Router, Route, Switch} from "react-router-dom";
 // BrowserRouter or HashRouter.If BrowserRouter,
 // When developing configure the webpack config devServer "historyApiFallback: true".
 // When deploying the catch-all must be configured,/* to index.html,
@@ -17,6 +17,7 @@ import Login from "./pages/Login/Login";
 import DemoThunkCC from "./pages/demos/DemoThunkCC";
 import {PrivateRoute} from "./components/PrivateRoute";
 import DemoRedirect from "./pages/demos/DemoRedirect";
+import history from "./common/history";
 
 interface IProps {
     title?: string,
@@ -34,7 +35,7 @@ const App: React.FunctionComponent<IProps> = () => {
         <PrivateRoute path="/demo-redirect" component={DemoRedirect} redirectPath="login"/>
     </Switch>
 
-    return (<Router>
+    return (<Router history={history}>
         {flexboxLayout ?
             <FlexboxLayout title={"Demo Flexbox Layout"}>{Content}</FlexboxLayout>
             : <GridLayout title={"Demo Grid Layout"}>{Content}</GridLayout>}

@@ -1,43 +1,54 @@
 import {EUser} from "./constants";
-import {IFillAuthPayload, IReqGetAuthPayload} from "./payloads";
+import {ILoginSuccessPayload, ILogoutPayload, IReqLoginPayload} from "./payloads";
 
 import api from "../../common/api";
 import {IThunkResult} from "../thunk";
 import {AxiosError} from "axios";
 
-export interface IFillAuthAction {
-    type: EUser.FILL_AUTH;
-    payload: IFillAuthPayload;
+export interface ILoginSuccessAction {
+    type: EUser.LOGIN_SUCCESS;
+    payload: ILoginSuccessPayload;
 }
 
-export const fillAuthAction: (payload: IFillAuthPayload) => IFillAuthAction = (payload) => {
+export const loginSuccessAction: (payload: ILoginSuccessPayload) => ILoginSuccessAction = (payload) => {
     return {
-        type: EUser.FILL_AUTH,
+        type: EUser.LOGIN_SUCCESS,
         payload: payload,
     };
 };
 
-export interface IGetAuthErrorAction {
-    type: EUser.GET_AUTH_ERROR;
+export interface ILogoutAction {
+    type: EUser.LOGOUT;
+    payload: ILogoutPayload;
+}
+
+export const logoutAction: (payload: ILogoutPayload) => ILogoutAction = (payload) => {
+    return {
+        type: EUser.LOGOUT,
+        payload: payload,
+    };
+};
+
+export interface ILoginFailedAction {
+    type: EUser.LOGIN_FAILED;
     payload: AxiosError;
 }
 
-export const getAuthErrorAction: (payload: AxiosError) => IGetAuthErrorAction = (payload) => {
+export const loginFailedAction: (payload: AxiosError) => ILoginFailedAction = (payload) => {
     return {
-        type: EUser.GET_AUTH_ERROR,
+        type: EUser.LOGIN_FAILED,
         payload: payload,
     };
 };
 
-export const getAuthFillOrClear = (data:IReqGetAuthPayload): IThunkResult<Promise<void>> => (dispatch) => {
-    const retPromise = api.post(`/auth/login`, data)
+export const loginAction = (data: IReqLoginPayload): IThunkResult<Promise<void>> => (dispatch) => {
+    return api.post(`/auth/login`, data)
         .then((res) => {
-            dispatch(fillAuthAction(res.data))
+            dispatch(loginSuccessAction(res.data))
         })
-        .catch((err:AxiosError) => {
-            dispatch(getAuthErrorAction(err))
+        .catch((err: AxiosError) => {
+            dispatch(loginFailedAction(err))
         });
-    return retPromise;
 };
 
-export type UserAction = IFillAuthAction | IGetAuthErrorAction;
+export type UserAction = ILoginSuccessAction | ILoginFailedAction | ILogoutAction;
