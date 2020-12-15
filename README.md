@@ -1,6 +1,8 @@
 <h1>React-Bunny</h1>
+
 React,Typescript,Webpack 5,Redux,SASS,Mock server,JWT Auth,Autoprefixer,Eslint,Stylelint.
 
+I know you don't want a complicated project, what you want is a collection of samples based on cutting-edge technology.Your happy use is my goal！
 <table>
 <thead><tr><th>Name</th><th>Desc</th></tr></thead>
 <tbody>
