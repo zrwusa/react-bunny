@@ -1,6 +1,6 @@
 export interface IReqLoginPayload {
     email: string;
-    password:string;
+    password: string;
 }
 
 export interface ILoginSuccessPayload {

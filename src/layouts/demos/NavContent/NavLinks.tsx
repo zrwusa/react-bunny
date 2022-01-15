@@ -1,10 +1,10 @@
-import "./NavLinks.scss";
-import React from "react";
-import {Link} from "react-router-dom";
+import './NavLinks.scss';
+import React from 'react';
+import {Link} from 'react-router-dom';
 
 const NavLinks: React.FunctionComponent = () => {
     return (
-        <ul className={"grid-layout__nav-root"}>
+        <ul className={'grid-layout__nav-root'}>
             <li>
                 <Link to="/">Home</Link>
             </li>
@@ -27,10 +27,13 @@ const NavLinks: React.FunctionComponent = () => {
                 <Link to="/demo-redirect">Demo Redirect</Link>
             </li>
             <li>
+                <Link to="/algorithm">Algorithm</Link>
+            </li>
+            <li>
                 <Link to="/login">Login</Link>
             </li>
         </ul>
     );
-}
+};
 
 export default NavLinks;

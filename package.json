@@ -1,5 +1,5 @@
 {
-  "name": "react-funny",
+  "name": "react-bunny",
   "version": "0.6.0",
   "main": "index.tsx",
   "license": "MIT",
@@ -84,5 +84,12 @@
     "> 1%",
     "iOS 7",
     "last 3 iOS versions"
-  ]
+  ],
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@qiwi/deep-proxy": "^1.8.3",
+    "@types/lodash": "^4.14.178",
+    "lodash": "^4.17.21",
+    "svgs": "^4.2.0"
+  }
 }

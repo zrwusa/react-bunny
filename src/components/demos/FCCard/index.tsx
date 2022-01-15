@@ -1,2 +1,2 @@
-export { default } from "./FCCard";
-export * from "./FCCard";
+export {default} from './FCCard';
+export * from './FCCard';

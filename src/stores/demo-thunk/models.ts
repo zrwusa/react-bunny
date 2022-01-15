@@ -1,5 +1,5 @@
 export type IDemoThunk = {
-    id:number,
+    id: number,
     text: string,
 };
 

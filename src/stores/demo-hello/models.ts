@@ -14,8 +14,8 @@ export interface IDemoState2 {
 
 export type IDemoEmployee = {
     first_name: string,
-    last_name:string,
-    email:string
+    last_name: string,
+    email: string
 };
 
 

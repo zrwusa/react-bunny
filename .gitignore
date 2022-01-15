@@ -1,6 +1,10 @@
 .idea/
 node_modules/
-yarn.lock
 note.txt
 build/
 public/
+.DS_Store
+
+yarn-error.log
+tsconfig.tsbuildinfo
+

@@ -1,9 +1,9 @@
-import {EUser} from "./constants";
-import {ILoginSuccessPayload, ILogoutPayload, IReqLoginPayload} from "./payloads";
+import {EUser} from './constants';
+import {ILoginSuccessPayload, ILogoutPayload, IReqLoginPayload} from './payloads';
 
-import api from "../../common/api";
-import {IThunkResult} from "../thunk";
-import {AxiosError} from "axios";
+import api from '../../common/api';
+import {IThunkResult} from '../thunk';
+import {AxiosError} from 'axios';
 
 
 interface ILoginSuccessAction {
@@ -33,10 +33,10 @@ const loginFailedAction: (payload: AxiosError) => ILoginFailedAction = (payload)
 export const loginAction = (data: IReqLoginPayload): IThunkResult<Promise<void>> => (dispatch) => {
     return api.post(`/auth/login`, data)
         .then((res) => {
-            dispatch(loginSuccessAction(res.data))
+            dispatch(loginSuccessAction(res.data));
         })
         .catch((err: AxiosError) => {
-            dispatch(loginFailedAction(err))
+            dispatch(loginFailedAction(err));
         });
 };
 

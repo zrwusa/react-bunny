@@ -1,2 +1,2 @@
-export { default } from "./DemoRedirect";
-export * from "./DemoRedirect";
+export {default} from './DemoRedirect';
+export * from './DemoRedirect';

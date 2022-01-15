@@ -1,23 +1,24 @@
-import "./App.scss";
-import {hot} from "react-hot-loader/root";
-import React from "react";
-import GridLayout from "./layouts/demos/GridLayout";
-import FlexboxLayout from "./layouts/demos/FlexboxLayout";
-import {Router, Route, Switch} from "react-router-dom";
+import './App.scss';
+import {hot} from 'react-hot-loader/root';
+import React from 'react';
+import GridLayout from './layouts/demos/GridLayout';
+import FlexboxLayout from './layouts/demos/FlexboxLayout';
+import {Route, Router, Switch} from 'react-router-dom';
 // BrowserRouter or HashRouter.If BrowserRouter,
 // When developing configure the webpack config devServer "historyApiFallback: true".
 // When deploying the catch-all must be configured,/* to index.html,
 // In this case we use the http-server,just config "?" as catch-all config at the end of the starting script E.g. http-server -P http://localhost:8080? ./build/
 // More details visit link https://stackoverflow.com/a/36623117/14710617
-import Home from "./pages/Home";
-import DemoHome from "./pages/demos/DemoHome";
-import DemoRoute from "./pages/demos/DemoRoute";
-import DemoFCReduxHook from "./pages/demos/DemoFCReduxHook";
-import Login from "./pages/Login/Login";
-import DemoThunkCC from "./pages/demos/DemoThunkCC";
-import {PrivateRoute} from "./components/PrivateRoute";
-import DemoRedirect from "./pages/demos/DemoRedirect";
-import history from "./common/history";
+import Home from './pages/Home';
+import DemoHome from './pages/demos/DemoHome';
+import DemoRoute from './pages/demos/DemoRoute';
+import DemoFCReduxHook from './pages/demos/DemoFCReduxHook';
+import Login from './pages/Login/Login';
+import DemoThunkCC from './pages/demos/DemoThunkCC';
+import {PrivateRoute} from './components/PrivateRoute';
+import DemoRedirect from './pages/demos/DemoRedirect';
+import history from './common/history';
+import {AlgorithmScreen} from './pages/Algorithm';
 
 interface IProps {
     title?: string,
@@ -32,14 +33,15 @@ const App: React.FunctionComponent<IProps> = () => {
         <Route path="/demo-fc-redux-hook" component={DemoFCReduxHook}/>
         <Route path="/login" exact component={Login}/>
         <Route path="/demo-thunk-cc" component={DemoThunkCC}/>
+        <Route path="/algorithm" component={AlgorithmScreen}/>
         <PrivateRoute path="/demo-redirect" component={DemoRedirect} redirectPath="login"/>
-    </Switch>
+    </Switch>;
 
     return (<Router history={history}>
         {flexboxLayout ?
-            <FlexboxLayout title={"Demo Flexbox Layout"}>{Content}</FlexboxLayout>
-            : <GridLayout title={"Demo Grid Layout"}>{Content}</GridLayout>}
+            <FlexboxLayout title={'Demo Flexbox Layout'}>{Content}</FlexboxLayout>
+            : <GridLayout title={'Demo Grid Layout'}>{Content}</GridLayout>}
     </Router>);
-}
+};
 
 export default hot(App);

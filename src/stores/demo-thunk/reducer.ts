@@ -1,9 +1,9 @@
-import {EDemoThunkAction} from "./constants";
-import {IDemoThunk} from "./models";
-import {IDemoThunkAction} from "./actions";
+import {EDemoThunkAction} from './constants';
+import {IDemoThunk} from './models';
+import {IDemoThunkAction} from './actions';
 
 export const initialState: IDemoThunk = {
-    text: "text default",
+    text: 'text default',
     id: 0,
 };
 

@@ -1,7 +1,7 @@
-import * as React from "react";
-import {Redirect, Route, RouteProps} from "react-router";
-import {useLocation} from "react-router-dom";
-import store from "../../stores";
+import * as React from 'react';
+import {Redirect, Route, RouteProps} from 'react-router';
+import {useLocation} from 'react-router-dom';
+import store from '../../stores';
 
 export interface IProps extends RouteProps {
     redirectPath: string;
@@ -16,7 +16,8 @@ export const PrivateRoute: React.FC<IProps> = props => {
     if (isAuth) {
         return <Route {...props} />;
     } else {
-        return <Route {...props} component={() => <Redirect to={{pathname: props.redirectPath, state: { from: location }}}/>}/>;
+        return <Route {...props}
+                      component={() => <Redirect to={{pathname: props.redirectPath, state: {from: location}}}/>}/>;
     }
 };
 

@@ -1,7 +1,7 @@
-import React, {Component, MouseEvent} from "react";
+import React, {Component, MouseEvent} from 'react';
 
-type IProps = {title: string,}
-type IStates = {time: Date,intervalID: ReturnType<typeof setInterval>,}
+type IProps = { title: string, }
+type IStates = { time: Date, intervalID: ReturnType<typeof setInterval>, }
 
 class CCCLock extends Component<IProps, IStates> {
 
@@ -22,6 +22,7 @@ class CCCLock extends Component<IProps, IStates> {
         event.preventDefault();
         this.go();
     }
+
     handleStopClick(event: MouseEvent): void {
         event.preventDefault();
         clearInterval(this.state.intervalID);
@@ -41,11 +42,12 @@ class CCCLock extends Component<IProps, IStates> {
 
     render(): React.ReactNode {
         return (<div>
-            <h1 className={"demo-home__title--des"}>{this.props.title}</h1>
+            <h1 className={'demo-home__title--des'}>{this.props.title}</h1>
             <p>The current time is {this.state.time.toLocaleTimeString()}</p>
             <button onClick={this.handleStopClick.bind(this)}>Stop</button>
             <button onClick={this.handleGoClick.bind(this)}>Go</button>
         </div>);
     }
 }
-export default CCCLock
+
+export default CCCLock;

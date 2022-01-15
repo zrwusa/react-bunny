@@ -1,2 +1,2 @@
-export { default } from "./CCClock";
-export * from "./CCClock";
+export {default} from './CCClock';
+export * from './CCClock';

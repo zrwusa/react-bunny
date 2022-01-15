@@ -1,9 +1,8 @@
-import {EDemoThunkAction} from "./constants";
-import {IDemoThunkSuccessPayload, IReqDemoThunkPayload} from "./payloads";
-import {AxiosError} from "axios";
-import {IThunkResult} from "../thunk";
-import api from "../../common/api";
-
+import {EDemoThunkAction} from './constants';
+import {IDemoThunkSuccessPayload, IReqDemoThunkPayload} from './payloads';
+import {AxiosError} from 'axios';
+import {IThunkResult} from '../thunk';
+import api from '../../common/api';
 
 
 export interface IDemoThunkSuccessAction {
@@ -33,13 +32,13 @@ export const demoThunkFailAction: (payload: AxiosError) => IDemoThunkFailAction 
 export const demoThunkAction = (data: IReqDemoThunkPayload): IThunkResult<Promise<void>> => (dispatch) => {
     const retPromise = api.post(`/demo_thunks`, data)
         .then((res) => {
-            dispatch(demoThunkSuccessAction(res.data))
+            dispatch(demoThunkSuccessAction(res.data));
         })
         .catch((err: AxiosError) => {
-            dispatch(demoThunkFailAction(err))
+            dispatch(demoThunkFailAction(err));
         });
     return retPromise;
 };
 
 
-export type IDemoThunkAction =  IDemoThunkSuccessAction | IDemoThunkFailAction;
+export type IDemoThunkAction = IDemoThunkSuccessAction | IDemoThunkFailAction;

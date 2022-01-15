@@ -1,2 +1,2 @@
-export { default } from "./NavLinks";
-export * from "./NavLinks";
+export {default} from './NavLinks';
+export * from './NavLinks';

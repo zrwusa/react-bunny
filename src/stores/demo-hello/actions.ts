@@ -1,5 +1,5 @@
-import {EDemoHelloStateAction} from "./constants";
-import {IDemoHelloStateAction1Payload, IDemoHelloStateAction2Payload} from "./payloads";
+import {EDemoHelloStateAction} from './constants';
+import {IDemoHelloStateAction1Payload, IDemoHelloStateAction2Payload} from './payloads';
 
 export interface IDemoHelloStateAction1 {
     type: EDemoHelloStateAction.ACTION_ONE;
@@ -12,7 +12,7 @@ export interface IDemoHelloStateAction2 {
 }
 
 export const demoHelloStateAction1: (payload: IDemoHelloStateAction1Payload) => IDemoHelloStateAction1 = (payload) => {
-    console.log("demoHelloStateAction1 Action Creator");
+    console.log('demoHelloStateAction1 Action Creator');
     return {
         type: EDemoHelloStateAction.ACTION_ONE,
         payload: payload,
@@ -20,7 +20,7 @@ export const demoHelloStateAction1: (payload: IDemoHelloStateAction1Payload) => 
 };
 
 export const demoHelloStateAction2: (payload: IDemoHelloStateAction2Payload) => IDemoHelloStateAction2 = (payload) => {
-    console.log("demoHelloStateAction2 Action Creator");
+    console.log('demoHelloStateAction2 Action Creator');
     return {
         type: EDemoHelloStateAction.ACTION_TWO,
         payload: payload,

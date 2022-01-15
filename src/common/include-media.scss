@@ -34,8 +34,6 @@ $im-no-media-breakpoint: 'desktop' !default;
 $im-no-media-expressions: ('screen', 'portrait', 'landscape') !default;
 
 
-
-
 @function im-log($message) {
   @if feature-exists('at-error') {
     @error $message;
@@ -48,13 +46,11 @@ $im-no-media-expressions: ('screen', 'portrait', 'landscape') !default;
 }
 
 
-
 @mixin log($message) {
   @if im-log($message) {
     /* foo */
   }
 }
-
 
 
 @function noop() {
@@ -90,7 +86,6 @@ $im-no-media-expressions: ('screen', 'portrait', 'landscape') !default;
 }
 
 
-
 ///
 /// Get operator of an expression
 ///
@@ -112,7 +107,6 @@ $im-no-media-expressions: ('screen', 'portrait', 'landscape') !default;
   // Sass 3.3, change this line in `@if im-log(..) {}` instead.
   $_: im-log('No operator found in `#{$expression}`.');
 }
-
 
 
 @function get-expression-dimension($expression, $operator) {
@@ -162,7 +156,6 @@ $im-no-media-expressions: ('screen', 'portrait', 'landscape') !default;
 
   @return $value;
 }
-
 
 
 @function parse-expression($expression) {
@@ -235,7 +228,6 @@ $im-no-media-expressions: ('screen', 'portrait', 'landscape') !default;
 }
 
 
-
 @function to-length($value, $unit) {
   $units: ('px': 1px, 'cm': 1cm, 'mm': 1mm, '%': 1%, 'ch': 1ch, 'pc': 1pc, 'in': 1in, 'em': 1em, 'rem': 1rem, 'pt': 1pt, 'ex': 1ex, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax);
 
@@ -271,7 +263,8 @@ $im-no-media-expressions: ('screen', 'portrait', 'landscape') !default;
   } @else if ($im-media-support and length($conditions) > 0) {
     @media #{unquote(parse-expression(nth($conditions, 1)))} {
       // Recursive call
-      @include media(slice($conditions, 2)...) {
+      @include media(slice($conditions, 2)
+      ...) {
         @content;
       }
     }

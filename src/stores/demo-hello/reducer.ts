@@ -1,9 +1,9 @@
-import {EDemoHelloStateAction} from "./constants";
-import {IDemoHelloState} from "./models";
-import {IDemoHelloStateAction} from "./actions";
+import {EDemoHelloStateAction} from './constants';
+import {IDemoHelloState} from './models';
+import {IDemoHelloStateAction} from './actions';
 
 export const initialState: IDemoHelloState = {
-    name: "name default",
+    name: 'name default',
     order: 0,
 };
 

@@ -1,14 +1,14 @@
-import {EUser} from "./constants";
-import {IUserState} from "./models";
-import {UserAction} from "./actions";
+import {EUser} from './constants';
+import {IUserState} from './models';
+import {UserAction} from './actions';
 // import {ILoginSuccessPayload} from "./payloads";
 
 export const initialState: IUserState = {
-    user: {email:"",access_token:"",nickname:""},
+    user: {email: '', access_token: '', nickname: ''},
     isValid: false,
     fetching: false,
     fetched: false,
-    error:"errors default"
+    error: 'errors default'
 };
 
 export function userReducer(state: IUserState = initialState, {type, payload}: UserAction): IUserState {
@@ -24,16 +24,16 @@ export function userReducer(state: IUserState = initialState, {type, payload}: U
         case EUser.LOGIN_FAILED: {
             return {
                 ...state,
-                error:JSON.stringify(payload),
+                error: JSON.stringify(payload),
             };
         }
         case EUser.LOGOUT: {
             return {
                 ...state,
-                user:{
-                    access_token:"",
-                    email:"",
-                    nickname:""
+                user: {
+                    access_token: '',
+                    email: '',
+                    nickname: ''
                 },
             };
         }
