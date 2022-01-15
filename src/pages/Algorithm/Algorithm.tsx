@@ -182,12 +182,16 @@ export function AlgorithmScreen() {
                         <button onClick={() => _letterCombinations()}>
                             <span>Letter Combinations</span>
                         </button>
-                        <input value={parenthesisInput} onChange={() => setParenthesisInput}/>
+                        <input value={parenthesisInput} onChange={(e) => {
+                            setParenthesisInput(e.target.value);
+                        }}/>
                         <button onClick={_parenthesisInput}>
                             <span>Parenthesis Check</span>
                         </button>
                         <input value={lengthOfLongestSubstringValue}
-                               onChange={() => setLengthOfLongestSubstringValue}/>
+                               onChange={(e) => {
+                                   setLengthOfLongestSubstringValue(e.target.value);
+                               }}/>
                         <button onClick={_lengthOfLongestSubstring}>
                             <span>Length Of Longest Substring</span>
                         </button>

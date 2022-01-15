@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {TreeNode} from '../../types';
-import Svg, {Circle, Defs, G, Line, Path, Rect, Text as SVGText, TSpan} from 'svgs';
 import {BinaryTree, BinaryTreeNode} from '../../utils/data-structures/binary-tree';
 import {Coordinate, getDirectionVector} from '../../utils/algorithms';
 import {
@@ -24,6 +23,15 @@ export interface VividAlgorithmProps<T> {
 
 export const VividAlgorithm = function <T extends { [key in string]: any }>(props: VividAlgorithmProps<T>) {
     const {data, referenceData, relatedNodeKey, relatedRouteKey, isDebug = false} = props;
+
+    const textFillColor = '#333333';
+    const textFillActiveColor = '#ffeeff';
+    const circleFillColor = '#f0f0f0';
+    const circleFillActiveColor = '#3489ab';
+    const rectStrokeColor = '#bbbbbb';
+    const arrowColor = '#3fbb3f';
+    const lineStrokeColor = '#bbbbbb';
+    const lineStrokeWidth = 1;
 
     let relatedNode: TreeNode<any> | undefined;
     let relatedBinaryNode: BinaryTreeNode<any> | undefined;
@@ -82,21 +90,21 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
         if (delta === undefined) delta = 0;
         const {src, dest} = getPointsByDelta(from, to, delta);
 
-        return <G>
-            <Defs>
-                {/*<Marker*/}
-                {/*    id="Triangle"*/}
-                {/*    viewBox="0 0 10 10"*/}
-                {/*    refX="0"*/}
-                {/*    refY="5"*/}
-                {/*    markerWidth="4"*/}
-                {/*    markerHeight="3"*/}
-                {/*    orient="auto"*/}
-                {/*>*/}
-                {/*    <Path d="M 0 0 L 10 5 L 0 10 z" fill={arrowColor} stroke={arrowColor}/>*/}
-                {/*</Marker>*/}
-            </Defs>
-            <Path
+        return <g>
+            <defs>
+                <marker
+                    id="Triangle"
+                    viewBox="0 0 10 10"
+                    refX="0"
+                    refY="5"
+                    markerWidth="4"
+                    markerHeight="3"
+                    orient="auto"
+                >
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill={arrowColor} stroke={arrowColor}/>
+                </marker>
+            </defs>
+            <path
                 d={`M ${src.x} ${src.y} L ${dest.x} ${dest.y}`}
                 fill={arrowColor}
                 stroke={arrowColor}
@@ -105,20 +113,20 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
             />
             {
                 weight !== undefined && weight !== null
-                    ? <SVGText
+                    ? <text
                         strokeWidth={1}
                         fontSize={'12px'}
-                        fill={'#aabbcc'}
+                        fill={textFillColor}
                         fontWeight={100}
-                        stroke={'#aabbcc'}
+                        stroke={textFillColor}
                         x={src.x + (dest.x - src.x) / 2 + (src.x > dest.x ? 10 : -10)}
                         y={src.y + (dest.y - src.y) / 2 + (src.y > dest.y ? 3 : -3)}
                         textAnchor="middle"
-                    >{weight}</SVGText>
+                    >{weight}</text>
                     : null
             }
 
-        </G>;
+        </g>;
     };
 
     const VividString: React.FC<{ data: string }> = ({data}) => {
@@ -131,42 +139,41 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
 
 
     const VividTree: React.FC<{ data: TreeNode<any> }> = ({data}) => {
-        return (<Svg>
+        return (<svg {...svgWithHeight}>
 
                 <VividTreeRecursive node={data} level={1} index={0} familyLength={1} parentX={0} parentY={0}
                                     maxHeight={data.getHeight()}/>
-            </Svg>
+            </svg>
         );
     };
 
     const VividBinaryTree: React.FC<{ node: BinaryTreeNode<any> | null, maxHeight?: number }> = ({node, maxHeight}) => {
         return (
-            <Svg>
+            <svg {...svgWithHeight}>
                 {node
                     ? <VividBinaryTreeRecursive node={node} level={1} index={0} familyLength={1}
                                                 maxHeight={maxHeight}/>
                     : null
                 }
-            </Svg>
+            </svg>
 
         );
     };
 
     const VividGraph: React.FC<{ data: AbstractGraph<AbstractVertex, AbstractEdge> }> = ({data}) => {
-        return (<Svg>
+        return (<svg {...svgWithHeight}>
                 {
                     data
                         ? <VividGraphDrawer graph={data}/>
                         : null
                 }
-            </Svg>
+            </svg>
         );
     };
 
     const matrixPanelWidth = 360;
     const matrixRectStrokeWidth = 1;
     const arrowCut = 0.3;
-    const arrowColor = '#33ff22';
 
     const VividMatrix: React.FC<{ data: Array<Array<any>> }> = ({data}) => {
         const rowCount = data?.length;
@@ -178,22 +185,22 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
         const matrixHeight = rectSize * rowCount;
 
         return (
-            <Svg>
-                <G>
+            <svg {...svgWithHeight}>
+                <g>
                     {data.map((row, i) => {
                         return row.map((col, j) => {
                             const colKey = i + '-' + j.toString();
                             const isActive = (relatedMatrixCell?.y === i && relatedMatrixCell?.x === j);
-                            return <Rect
+                            return <rect
                                 key={colKey}
                                 x={j * rectSize}
                                 y={i * rectSize}
                                 width={rectSize}
                                 height={rectSize}
-                                stroke={'#bbbbbb'}
+                                stroke={rectStrokeColor}
                                 strokeDasharray={`${rectSize},${rectSize * 2},${rectSize}`}
                                 strokeWidth={matrixRectStrokeWidth}
-                                fill={isActive ? '#3489ab' : '#abbbbb'}
+                                fill={isActive ? circleFillActiveColor : circleFillColor}
                             />;
                         });
                     })}
@@ -203,16 +210,16 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                         return row.map((col, j) => {
                             const colKey = 'text-' + i + '-' + j.toString();
                             const isActive = (relatedMatrixCell?.y === i && relatedMatrixCell?.x === j);
-                            return <SVGText
+                            return <text
                                 key={colKey}
                                 strokeWidth={1}
                                 fontSize={12}
-                                fill={isActive ? '#ffeeff' : '#aabbcc'}
+                                fill={isActive ? textFillActiveColor : textFillColor}
                                 fontWeight={100}
                                 x={(j + 0.5) * rectSize}
                                 y={(i + 0.5) * rectSize}
                                 textAnchor="middle"
-                            >{data[i][j].toString()}</SVGText>;
+                            >{data[i][j].toString()}</text>;
                         });
                     })}
                     {
@@ -238,31 +245,40 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                             })
                             : null
                     }
-                </G>
-            </Svg>
+                </g>
+            </svg>
 
         );
     };
 
-    const treePanelWidth = 500;
-    const treePanelHeight = 500;
+    const treePanelWidth = 1000;
+    const treePanelHeight = 400;
     const strokeWidth = 2;
     const levelOffset = 60;
     const circleR = 20;
     const nodeSpace = 40;
     const fontSize = 12;
     const fontOffsetY = fontSize / 3;
+    const svgWithHeight = {width: 1000, height: 400};
 
 
-    const VividTreeRecursive: React.FC<{ node: TreeNode<any>, level: number, index: number, familyLength: number, parentX?: number, parentY?: number, maxHeight?: number }> = ({
-                                                                                                                                                                                   node,
-                                                                                                                                                                                   level = 1,
-                                                                                                                                                                                   index = 0,
-                                                                                                                                                                                   familyLength = 1,
-                                                                                                                                                                                   parentX,
-                                                                                                                                                                                   parentY,
-                                                                                                                                                                                   maxHeight
-                                                                                                                                                                               }) => {
+    const VividTreeRecursive: React.FC<{
+        node: TreeNode<any>,
+        level: number,
+        index: number,
+        familyLength: number,
+        parentX?: number,
+        parentY?: number,
+        maxHeight?: number
+    }> = ({
+              node,
+              level = 1,
+              index = 0,
+              familyLength = 1,
+              parentX,
+              parentY,
+              maxHeight
+          }) => {
         if (!node) {
             return null;
         }
@@ -285,10 +301,12 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
 
         const isActive = node.id === relatedNode?.id;
         return (
-            <G key={node.id}>
+            <g key={node.id}>
                 {
                     level > 1
-                        ? <Line x1={parentX} y1={parentY} x2={offsetX} y2={offsetY}/>
+                        ? <line x1={parentX} y1={parentY} x2={offsetX} y2={offsetY}
+                                stroke={lineStrokeColor}
+                                strokeWidth={lineStrokeWidth}/>
                         : null
                 }
                 {node.children
@@ -302,31 +320,39 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                                                                                       maxHeight={maxHeight}/>)
                     : null
                 }
-                <Circle r={circleR} cx={offsetX} cy={offsetY}
-                        fill={isActive ? '#3489ab' : '#afafaf'}/>
-                <SVGText
+                <circle r={circleR} cx={offsetX} cy={offsetY}
+                        fill={isActive ? circleFillActiveColor : circleFillColor}/>
+                <text
                     strokeWidth={1}
-                    fill={isActive ? '#ffeeff' : '#aabbcc'}
-                    stroke={isActive ? '#ffeeff' : '#aabbcc'}
+                    fill={isActive ? textFillActiveColor : textFillColor}
+                    stroke={isActive ? textFillActiveColor : textFillColor}
                     fontSize={fontSize}
                     fontWeight={100}
                     x={offsetX}
                     y={offsetY + fontOffsetY}
                     textAnchor="middle"
-                >{node.name || node.id}</SVGText>
-            </G>
+                >{node.name || node.id}</text>
+            </g>
         );
     };
 
-    const VividBinaryTreeRecursive: React.FC<{ node: BinaryTreeNode<any>, level: number, index: number, familyLength: number, parentX?: number, parentY?: number, maxHeight?: number }> = ({
-                                                                                                                                                                                               node,
-                                                                                                                                                                                               level = 1,
-                                                                                                                                                                                               index = 0,
-                                                                                                                                                                                               familyLength = 1,
-                                                                                                                                                                                               parentX,
-                                                                                                                                                                                               parentY,
-                                                                                                                                                                                               maxHeight
-                                                                                                                                                                                           }) => {
+    const VividBinaryTreeRecursive: React.FC<{
+        node: BinaryTreeNode<any>,
+        level: number,
+        index: number,
+        familyLength: number,
+        parentX?: number,
+        parentY?: number,
+        maxHeight?: number
+    }> = ({
+              node,
+              level = 1,
+              index = 0,
+              familyLength = 1,
+              parentX,
+              parentY,
+              maxHeight
+          }) => {
         if (!node) {
             return null;
         }
@@ -345,10 +371,11 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
 
         const isActive = node.id === relatedBinaryNode?.id;
         return (
-            <G key={node.id}>
+            <g key={node.id}>
                 {
                     level > 1
-                        ? <Line x1={parentX} y1={parentY} x2={offsetX} y2={offsetY}/>
+                        ? <line x1={parentX} y1={parentY} x2={offsetX} y2={offsetY} stroke={lineStrokeColor}
+                                strokeWidth={lineStrokeWidth}/>
                         : null
                 }
                 {
@@ -367,25 +394,25 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                                                   maxHeight={maxHeight}/>
                         : null
                 }
-                <Circle r={circleR} cx={offsetX} cy={offsetY}
-                        fill={isActive ? '#3489ab' : '#afafaf'}/>
-                <SVGText
+                <circle r={circleR} cx={offsetX} cy={offsetY}
+                        fill={isActive ? circleFillActiveColor : circleFillColor}/>
+                <text
                     fill="none"
-                    stroke={isActive ? '#ffeeff' : '#aabbcc'}
+                    stroke={isActive ? textFillActiveColor : textFillColor}
                     fontSize={fontSize}
                     fontWeight={1}
                     x={offsetX}
                     y={offsetY + fontOffsetY}
                     textAnchor="middle"
                 >
-                    <TSpan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</TSpan>
-                    <TSpan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.count}</TSpan>
+                    <tspan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</tspan>
+                    <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.count}</tspan>
 
-                    <TSpan x={offsetX}
-                           y={offsetY + fontOffsetY + 2 * fontSize + 4}>{node.allLesserSum}</TSpan>
+                    <tspan x={offsetX}
+                           y={offsetY + fontOffsetY + 2 * fontSize + 4}>{node.allLesserSum}</tspan>
 
-                </SVGText>
-            </G>
+                </text>
+            </g>
         );
     };
 
@@ -407,29 +434,29 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
             i++;
         });
         return (
-            <G>
+            <g>
                 {
                     [...vertices].map(([id, vertex]) => {
                         const coordinate = coordsMap.get(vertex);
                         return (
                             coordinate
-                                ? <G key={vertex.id}>
-                                    <Circle key={vertex.id} r={circleR}
+                                ? <g key={vertex.id}>
+                                    <circle key={vertex.id} r={circleR}
                                             cx={coordinate.x}
                                             cy={coordinate.y}
-                                            fill={'#3489ab'}/>
-                                    <SVGText key={vertex.id + 'id'}
-                                             fill="none"
-                                             stroke={'#aabbcc'}
-                                             fontSize={fontSize}
-                                             fontWeight={1}
-                                             x={coordinate.x}
-                                             y={coordinate.y + fontOffsetY}
-                                             textAnchor="middle"
+                                            fill={circleFillActiveColor}/>
+                                    <text key={vertex.id + 'id'}
+                                          fill="none"
+                                          stroke={textFillColor}
+                                          fontSize={fontSize}
+                                          fontWeight={1}
+                                          x={coordinate.x}
+                                          y={coordinate.y + fontOffsetY}
+                                          textAnchor="middle"
                                     >
-                                        <TSpan x={coordinate.x} y={coordinate.y + fontOffsetY}>{vertex.id}</TSpan>
-                                    </SVGText>
-                                </G>
+                                        <tspan x={coordinate.x} y={coordinate.y + fontOffsetY}>{vertex.id}</tspan>
+                                    </text>
+                                </g>
                                 : null
                         );
                     })}
@@ -442,11 +469,12 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                                 const v2Coordinate = coordsMap.get(ends[1]);
                                 if (v1Coordinate && v2Coordinate) {
                                     const {src, dest} = getPointsByDelta(v1Coordinate, v2Coordinate, circleR);
-                                    return <G key={edge.hashCode}>
-                                        <Line
+                                    return <g key={edge.hashCode}>
+                                        <line
                                             x1={src.x} y1={src.y} x2={dest.x}
-                                            y2={dest.y}/>
-                                    </G>;
+                                            y2={dest.y} stroke={lineStrokeColor}
+                                            strokeWidth={lineStrokeWidth}/>
+                                    </g>;
                                 }
                             }
                         } else if (graph instanceof DirectedGraph) {
@@ -468,7 +496,7 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                         }
                     })
                 }
-            </G>
+            </g>
         );
     };
 

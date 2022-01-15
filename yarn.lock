@@ -8560,11 +8560,6 @@ rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
-rip-out@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/rip-out/-/rip-out-1.0.0.tgz#d622a7b607e1cdadc8b079bf9fb3da42c13b98e3"
-  integrity sha1-1iKntgfhza3IsHm/n7PaQsE7mOM=
-
 run-parallel@^1.1.9:
   version "1.1.10"
   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.1.10.tgz#60a51b2ae836636c81377df16cb107351bcd13ef"
@@ -9388,14 +9383,6 @@ svgo@^1.0.0:
     stable "^0.1.8"
     unquote "~1.1.1"
     util.promisify "~1.0.0"
-
-svgs@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/svgs/-/svgs-4.2.0.tgz#4e228f7f29f78a31cef45702d4120988a6a6d38d"
-  integrity sha512-CEIXX7gjwyv7XtgeQQlHiB8TTQeJ1QtoRvz2kkmnyFYfuj1a4PwdwiooTa+OvXrGorCJEMpr7+9EJ6lfjtY/AQ==
-  dependencies:
-    prop-types "^15.7.2"
-    rip-out "^1.0.0"
 
 symbol-observable@1.2.0, symbol-observable@^1.2.0:
   version "1.2.0"
