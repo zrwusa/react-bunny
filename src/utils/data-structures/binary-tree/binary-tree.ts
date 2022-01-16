@@ -4,6 +4,7 @@ export type DFSOrderPattern = 'in' | 'pre' | 'post';
 export type BinaryTreeNodeId = number;
 export type FamilyPosition = 0 | 1 | 2;
 export type BinaryTreeDeletedResult<T> = { deleted: BinaryTreeNode<T> | null, needBalanced: BinaryTreeNode<T> | null };
+export type ResultsByTypeItem<T> = T | null | BinaryTreeNode<T> | number | BinaryTreeNodeId;
 export type ResultsByType<T> = Array<T | null> | BinaryTreeNode<T> [] | number[] | BinaryTreeNodeId[];
 
 export interface I_BinaryTree<T> {
@@ -483,7 +484,6 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'count'): number[];
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'allLesserSum'): number[]; // TODO in BinaryTree not implemented
-
     /**
      * Time complexity is O(n)
      * Space complexity of Iterative DFS equals to recursive DFS which is O(n) because of the stack
@@ -530,6 +530,89 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
             }
         }
         return this._getResultByPropertyName(nodeOrPropertyName);
+    }
+
+    levelIterative(node: BinaryTreeNode<T> | null): BinaryTreeNodeId[];
+    levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
+    levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'val'): (T | null)[];
+    levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
+    levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'count'): number[];
+    levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'allLesserSum'): number[];
+    levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName ?: NodeOrPropertyName): ResultsByType<T> {
+        nodeOrPropertyName = nodeOrPropertyName || 'id';
+        node = node || this._root;
+        if (!node) {
+            return [];
+        }
+        this._resetResults();
+        const queue: BinaryTreeNode<T>[] = [];
+
+        queue.push(node);
+        while (queue.length > 0) {
+            const cur = queue.shift();
+            if (cur) {
+                this._pushByPropertyName(cur, nodeOrPropertyName);
+                if (cur.left) {
+                    queue.push(cur.left);
+                }
+                if (cur.right) {
+                    queue.push(cur.right);
+                }
+            }
+        }
+        return this._getResultByPropertyName(nodeOrPropertyName);
+    }
+
+    listLevels(node: BinaryTreeNode<T> | null): BinaryTreeNodeId[][];
+    listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[][];
+    listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'val'): (T | null)[][];
+    listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[][];
+    listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'count'): number[][];
+    listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'allLesserSum'): number[][];
+    listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: NodeOrPropertyName): ResultsByTypeItem<T>[][] {
+        nodeOrPropertyName = nodeOrPropertyName || 'id';
+        node = node || this._root;
+        if (!node) {
+            return [];
+        }
+        const levelsNodes: ResultsByTypeItem<T>[][] = [];
+
+        const _recursive = (node: BinaryTreeNode<T>, level: number) => {
+            if (!levelsNodes[level]) {
+                levelsNodes[level] = [];
+            }
+            switch (nodeOrPropertyName) {
+                case 'id':
+                    levelsNodes[level].push(node.id);
+                    break;
+                case 'val':
+                    levelsNodes[level].push(node.val);
+                    break;
+                case 'node':
+                    levelsNodes[level].push(node);
+                    break;
+                case 'count':
+                    levelsNodes[level].push(node.count);
+                    break;
+                case 'allLesserSum':
+                    levelsNodes[level].push(node.allLesserSum);
+                    break;
+                default:
+                    levelsNodes[level].push(node.id);
+                    break;
+            }
+
+            if (node.left) {
+                _recursive(node.left, level + 1);
+            }
+            if (node.right) {
+                _recursive(node.right, level + 1);
+            }
+        };
+
+        _recursive(node, 0);
+
+        return levelsNodes;
     }
 
     getPredecessor(node: BinaryTreeNode<T>): BinaryTreeNode<T> {

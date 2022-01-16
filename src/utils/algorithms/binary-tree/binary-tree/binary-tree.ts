@@ -50,6 +50,36 @@ export async function testBinaryTree(arr: number[], proxyHandler?: TProxyHandler
     console.log('DFSIterative, pre', proxyVariables.binaryTree.DFSIterative('pre'));
 
     await wait(time1);
+    console.log('levelIterative, node', proxyVariables.binaryTree.levelIterative(null, 'node'));
+
+    await wait(time1);
+    console.log('levelIterative, id', proxyVariables.binaryTree.levelIterative(null, 'id'));
+
+    await wait(time1);
+    console.log('levelIterative, val', proxyVariables.binaryTree.levelIterative(null, 'val'));
+
+    await wait(time1);
+    console.log('levelIterative, count', proxyVariables.binaryTree.levelIterative(null, 'count'));
+
+    await wait(time1);
+    console.log('levelIterative, allLesserSum', proxyVariables.binaryTree.levelIterative(null, 'allLesserSum'));
+
+    await wait(time1);
+    console.log('listLevels, node', proxyVariables.binaryTree.listLevels(null, 'node'));
+
+    await wait(time1);
+    console.log('listLevels, id', proxyVariables.binaryTree.listLevels(null, 'id'));
+
+    await wait(time1);
+    console.log('listLevels, val', proxyVariables.binaryTree.listLevels(null, 'val'));
+
+    await wait(time1);
+    console.log('listLevels, count', proxyVariables.binaryTree.listLevels(null, 'count'));
+
+    await wait(time1);
+    console.log('listLevels, allLesserSum', proxyVariables.binaryTree.listLevels(null, 'allLesserSum'));
+
+    await wait(time1);
     console.log('morris, in, node', proxyVariables.binaryTree.morris('in', 'node'));
 
     await wait(time1);
@@ -92,9 +122,8 @@ export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?
         proxyVariables.binaryTree.insert(i + 1, rest[i]);
     }
 
-    console.log(proxyVariables.binaryTree);
-
     const root = proxyVariables.binaryTree.root;
+
     if (root) {
         return symmetricHelper(root.left, root.right);
     } else {
@@ -110,6 +139,8 @@ export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?
             return left.val === right.val && symmetricHelper(left.left, right.right) && symmetricHelper(left.right, right.left);
         }
     }
+
+
 }
 
 const runTestSymmetricTree = async () => {
