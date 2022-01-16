@@ -134,14 +134,15 @@ export abstract class Heap<T extends number | HeapNode<V>, V> {
     }
 
     poll(): T | null {
-        let res;
+        // TODO after no-non-null-assertion not ensure the logic
+        let res: T | null;
         if (this.size() > 1) {
             this._swap(0, this._nodes.length - 1);
-            res = this._nodes.pop()!;
+            res = this._nodes.pop() || null;
             this.heapifyDown(0);
         } else {
             if (this.size() === 1) {
-                res = this._nodes.pop()!;
+                res = this._nodes.pop() || null;
             } else {
                 res = null;
             }

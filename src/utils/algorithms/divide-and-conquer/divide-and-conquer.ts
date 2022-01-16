@@ -143,8 +143,11 @@ const countSmallerBITPlagiarized = (nums: number[]): number[] => {
     // O(log(n))
     const bit = new BinaryIndexedTree(nums.length);
     nums.reverse().forEach((num) => {
-        ans.push(bit.getPrefixSum(ranks.get(num)! - 1));
-        bit.update(ranks.get(num)!, 1);
+        const numRank = ranks.get(num);
+        if (numRank !== undefined) {
+            ans.push(bit.getPrefixSum(numRank - 1));
+            bit.update(numRank, 1);
+        }
     });
 
     return ans.reverse();
@@ -167,8 +170,11 @@ const countSmallerBIT = function (nums: number[]): number[] {
 
     for (let i = 0; i < reversed.length; i++) {
         const numRank = ranks.get(reversed[i]);
-        ans.push(tree.getPrefixSum(numRank! - 1));
-        tree.update(numRank!, 1);
+        // TODO after no-non-null-assertion not ensure the logic
+        if (numRank !== undefined) {
+            ans.push(tree.getPrefixSum(numRank - 1));
+            tree.update(numRank, 1);
+        }
     }
 
     return ans.reverse();

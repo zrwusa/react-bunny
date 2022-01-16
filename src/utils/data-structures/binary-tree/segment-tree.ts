@@ -107,11 +107,17 @@ export class SegmentTree {
             }
             const mid = cur.start + Math.floor((cur.end - cur.start) / 2);
             if (index <= mid) {
-                dfs(cur.left!, index, sum, val);
+                if (cur.left) {
+                    dfs(cur.left, index, sum, val);
+                }
             } else {
-                dfs(cur.right!, index, sum, val);
+                if (cur.right) {
+                    dfs(cur.right, index, sum, val);
+                }
             }
-            cur.sum = cur.left!.sum + cur.right!.sum;
+            if (cur.left && cur.right) {
+                cur.sum = cur.left.sum + cur.right.sum;
+            }
         };
 
         dfs(root, index, sum);
@@ -129,11 +135,28 @@ export class SegmentTree {
             }
             const mid = cur.start + Math.floor((cur.end - cur.start) / 2);
             if (j <= mid) {
-                return dfs(cur.left!, i, j);
+                // TODO after no-non-null-assertion not ensure the logic
+                if (cur.left) {
+                    return dfs(cur.left, i, j);
+                } else {
+                    return NaN;
+                }
             } else if (i > mid) {
-                return dfs(cur.right!, i, j);
+                // TODO after no-non-null-assertion not ensure the logic
+                if (cur.right) {
+                    // TODO after no-non-null-assertion not ensure the logic
+                    return dfs(cur.right, i, j);
+
+                } else {
+                    return NaN;
+                }
             } else {
-                return dfs(cur.left!, i, mid) + dfs(cur.right!, mid + 1, j);
+                // TODO after no-non-null-assertion not ensure the logic
+                if (cur.left && cur.right) {
+                    return dfs(cur.left, i, mid) + dfs(cur.right, mid + 1, j);
+                } else {
+                    return NaN;
+                }
             }
         };
         return dfs(root, indexA, indexB);

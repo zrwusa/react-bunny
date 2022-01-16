@@ -31,7 +31,22 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
     const rectStrokeColor = '#bbbbbb';
     const arrowColor = '#3fbb3f';
     const lineStrokeColor = '#bbbbbb';
+
+    const matrixPanelWidth = 360;
+    const matrixRectStrokeWidth = 1;
+    const arrowCut = 0.3;
+
+    const treePanelWidth = 700;
+    const treePanelHeight = 400;
+    const svgWithHeight = {width: 700, height: 400};
+
     const lineStrokeWidth = 1;
+    const strokeWidth = 2;
+    const levelOffset = 60;
+    const circleR = 20;
+    const nodeSpace = 40;
+    const fontSize = 12;
+    const fontOffsetY = fontSize / 3;
 
     let relatedNode: TreeNode<any> | undefined;
     let relatedBinaryNode: BinaryTreeNode<any> | undefined;
@@ -171,9 +186,6 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
         );
     };
 
-    const matrixPanelWidth = 360;
-    const matrixRectStrokeWidth = 1;
-    const arrowCut = 0.3;
 
     const VividMatrix: React.FC<{ data: Array<Array<any>> }> = ({data}) => {
         const rowCount = data?.length;
@@ -251,16 +263,6 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
         );
     };
 
-    const treePanelWidth = 1000;
-    const treePanelHeight = 400;
-    const strokeWidth = 2;
-    const levelOffset = 60;
-    const circleR = 20;
-    const nodeSpace = 40;
-    const fontSize = 12;
-    const fontOffsetY = fontSize / 3;
-    const svgWithHeight = {width: 1000, height: 400};
-
 
     const VividTreeRecursive: React.FC<{
         node: TreeNode<any>,
@@ -295,8 +297,10 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
             offsetX = space - circleR;
             offsetY = (level - 1) * levelOffset + circleR + strokeWidth;
         } else {
-            offsetX = parentX! - (familyLength / 2) * levelNodeSpace + (index + 0.5) * levelNodeSpace;
-            offsetY = (level - 1) * levelOffset + circleR + strokeWidth;
+            if(parentX !== undefined) {
+                offsetX = parentX - (familyLength / 2) * levelNodeSpace + (index + 0.5) * levelNodeSpace;
+                offsetY = (level - 1) * levelOffset + circleR + strokeWidth;
+            }
         }
 
         const isActive = node.id === relatedNode?.id;
@@ -365,8 +369,10 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
             offsetX = space - circleR;
             offsetY = (level - 1) * levelOffset + circleR + strokeWidth;
         } else {
-            offsetX = parentX! - ((index < 1) ? levelNodeSpace : -levelNodeSpace);
-            offsetY = (level - 1) * levelOffset + circleR + strokeWidth;
+            if (parentX !== undefined) {
+                offsetX = parentX - ((index < 1) ? levelNodeSpace : -levelNodeSpace);
+                offsetY = (level - 1) * levelOffset + circleR + strokeWidth;
+            }
         }
 
         const isActive = node.id === relatedBinaryNode?.id;
@@ -396,22 +402,26 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                 }
                 <circle r={circleR} cx={offsetX} cy={offsetY}
                         fill={isActive ? circleFillActiveColor : circleFillColor}/>
-                <text
-                    fill="none"
-                    stroke={isActive ? textFillActiveColor : textFillColor}
-                    fontSize={fontSize}
-                    fontWeight={1}
-                    x={offsetX}
-                    y={offsetY + fontOffsetY}
-                    textAnchor="middle"
-                >
-                    <tspan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</tspan>
-                    <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.count}</tspan>
+                {
+                    offsetY !== undefined
+                    ? <text
+                        fill="none"
+                        stroke={isActive ? textFillActiveColor : textFillColor}
+                        fontSize={fontSize}
+                        fontWeight={1}
+                        x={offsetX}
+                        y={offsetY + fontOffsetY}
+                        textAnchor="middle"
+                    >
+                        <tspan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</tspan>
+                        <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.count}</tspan>
 
-                    <tspan x={offsetX}
-                           y={offsetY + fontOffsetY + 2 * fontSize + 4}>{node.allLesserSum}</tspan>
+                        <tspan x={offsetX}
+                               y={offsetY + fontOffsetY + 2 * fontSize + 4}>{node.allLesserSum}</tspan>
 
-                </text>
+                    </text>
+                    : null
+                }
             </g>
         );
     };

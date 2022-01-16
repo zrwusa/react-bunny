@@ -395,10 +395,15 @@ function criticalConnections(n: number, connections: number[][]): number[][] {
                 }
                 const childLow = lowMap.get(neighbor);
                 const curLow = lowMap.get(cur);
-                lowMap.set(cur, Math.min(curLow!, childLow!));
 
-                if (childLow! > dfnMap.get(cur)!) {
-                    bridges.push([cur, neighbor]);
+                if (curLow !== undefined && childLow !== undefined) {
+                    lowMap.set(cur, Math.min(curLow, childLow));
+                }
+                const curFromDnfMap = dfnMap.get(cur);
+                if (childLow !== undefined && curFromDnfMap !== undefined) {
+                    if (childLow > curFromDnfMap) {
+                        bridges.push([cur, neighbor]);
+                    }
                 }
             }
         }

@@ -18,14 +18,24 @@ import {SinglyLinkedListNode} from '../../data-structures/linked-list';
 export function findKthLargestMinHeap(nums: number[], k: number): number {
     const heap = new MinHeap<number, number>([]);
     for (const i of nums) {
-        if (heap.size() < k || i >= heap.peek()!) {
-            heap.insert(i);
+        // TODO after no-non-null-assertion not ensure the logic
+        const peek = heap.peek();
+        if (peek) {
+            if (heap.size() < k || i >= peek) {
+                heap.insert(i);
+            }
         }
+
         if (heap.size() > k) {
             heap.poll();
         }
     }
-    return heap!.peek()!;
+    const peek = heap.peek();
+    if (peek) {
+        return peek;
+    } else {
+        return NaN;
+    }
 }
 
 const runAllFindKthLargest = async () => {
@@ -49,23 +59,30 @@ function mergeKLists(lists: SinglyLinkedListNode[]): SinglyLinkedListNode | null
     if (heap.size() < 1) {
         return null;
     }
-
-    const ans: SinglyLinkedListNode | null = heap.poll()!.val!;
-    ans.prev = null;
-    if (ans.next) {
-        heap.insert(new HeapNode(ans.next.value, ans.next));
-    }
-    let prev: SinglyLinkedListNode = ans;
-    while (!heap.isEmpty()) {
-        const cur = heap.poll()!.val!;
-        cur.prev = prev;
-        prev.next = cur;
-        prev = prev.next;
-        if (cur.next) {
-            heap.insert(new HeapNode(cur.next.value, cur.next));
+    // TODO after no-non-null-assertion not ensure the logic
+    const polled = heap.poll();
+    const ans: SinglyLinkedListNode | null = polled ? polled.val : null;
+    if (ans) {
+        ans.prev = null;
+        if (ans.next) {
+            heap.insert(new HeapNode(ans.next.value, ans.next));
         }
-    }
+        let prev: SinglyLinkedListNode = ans;
+        while (!heap.isEmpty()) {
+            // TODO after no-non-null-assertion not ensure the logic
+            const polled = heap.poll();
+            const cur = polled ? polled.val : null;
+            if (cur) {
+                cur.prev = prev;
+                prev.next = cur;
+                prev = prev.next;
+                if (cur.next) {
+                    heap.insert(new HeapNode(cur.next.value, cur.next));
+                }
+            }
+        }
 
+    }
     return ans;
 }
 
@@ -99,15 +116,26 @@ function topKFrequent(nums: number[], k: number): number[] {
             heap.insert(node);
         } else if (heap.size() === k) {
             const peek = heap.peek();
-            if (peek!.id < entry[1]) {
-                heap.poll();
-                heap.insert(node);
+            // TODO after no-non-null-assertion not ensure the logic
+            if (peek) {
+                if (peek.id < entry[1]) {
+                    heap.poll();
+                    heap.insert(node);
+                }
             }
         }
 
     }
 
-    return heap.toArray().map(item => item.val![0]);
+    return heap.toArray().map(item => {
+        const val = item.val;
+        // TODO after no-non-null-assertion not ensure the logic
+        if (val) {
+            return val[0];
+        } else {
+            return NaN;
+        }
+    });
 }
 
 function topKFrequentByBucket(nums: number[], k: number): number[] {
@@ -177,19 +205,38 @@ class MedianFinder {
         const leftSize = this._leftHeap.size();
         const rightSize = this._rightHeap.size();
         if (leftSize - rightSize >= 2) {
-            this._rightHeap.insert(this._leftHeap.poll()!);
+            // TODO after no-non-null-assertion not ensure the logic
+            const leftPolled = this._leftHeap.poll();
+            if (leftPolled) {
+                this._rightHeap.insert(leftPolled);
+            }
         } else if (rightSize > leftSize) {
-            this._leftHeap.insert(this._rightHeap.poll()!);
+            // TODO after no-non-null-assertion not ensure the logic
+            const rightPolled = this._rightHeap.poll();
+            if (rightPolled) {
+                this._leftHeap.insert(rightPolled);
+            }
         }
     }
 
     findMedian(): number {
         const leftSize = this._leftHeap.size();
         const rightSize = this._rightHeap.size();
+        // TODO after no-non-null-assertion not ensure the logic
+        const leftPeek = this._leftHeap.peek();
+        const rightPeek = this._rightHeap.peek();
         if (leftSize > rightSize) {
-            return this._leftHeap.peek()!;
+            if (leftPeek) {
+                return leftPeek;
+            } else {
+                return NaN;
+            }
         } else {
-            return (this._leftHeap.peek()! + this._rightHeap.peek()!) / 2;
+            if (leftPeek && rightPeek) {
+                return (leftPeek + rightPeek) / 2;
+            } else {
+                return NaN;
+            }
         }
     }
 }
@@ -234,32 +281,58 @@ function reorganizeString(s: string): string {
         heap.insert(new HeapNode<[string, number]>(entry[1], entry));
     }
     let ans: string = '';
-    if (heap.peek()!.val![1] > Math.ceil(s.length / 2)) {
+    // TODO after no-non-null-assertion not ensure the logic
+    const peek = heap.peek();
+    const peekVal = peek ? peek.val : null;
+    if (peek && peekVal) {
+        if (peekVal[1] > Math.ceil(s.length / 2)) {
 
-    } else {
-        const conveyor: string[][] = [];
-        const peek = heap.poll();
-        for (let i = 0; i < peek!.id; i++) {
-            conveyor.push([peek!.val![0]]);
-        }
-        let processCount = 0;
-        while (heap.size() > 0) {
-            const peek1 = heap.poll();
-            const count = peek1!.id;
-            for (let j = 0; j < count; j++) {
-                processCount++;
-                const cur = conveyor.shift();
-                cur!.push(peek1!.val![0]);
-                conveyor.push(cur!);
+        } else {
+            const conveyor: string[][] = [];
+            // TODO after no-non-null-assertion not ensure the logic
+            const polled = heap.poll();
+            if (polled) {
+                for (let i = 0; i < polled.id; i++) {
+                    const polledVal = polled.val;
+                    // TODO after no-non-null-assertion not ensure the logic
+                    if (polledVal) {
+                        conveyor.push([polledVal[0]]);
+                    }
+                }
             }
-        }
-        const needOrderedCount = conveyor.length - processCount % conveyor.length;
+            let processCount = 0;
+            while (heap.size() > 0) {
+                const polled1 = heap.poll();
+                if (polled1) {
+                    const count = polled1.id;
+                    for (let j = 0; j < count; j++) {
+                        processCount++;
+                        // TODO after no-non-null-assertion not ensure the logic
+                        const cur = conveyor.shift();
+                        if (cur !== undefined) {
+                            const polled1Val = polled1.val;
+                            if (polled1Val) {
+                                cur.push(polled1Val[0]);
+                            }
+                            conveyor.push(cur);
+                        }
+                    }
+                }
 
-        for (let m = 0; m < needOrderedCount; m++) {
-            conveyor.push(conveyor.shift()!);
+            }
+            const needOrderedCount = conveyor.length - processCount % conveyor.length;
+
+            for (let m = 0; m < needOrderedCount; m++) {
+                // TODO after no-non-null-assertion not ensure the logic
+                const conveyorShifted = conveyor.shift();
+                if (conveyorShifted !== undefined) {
+                    conveyor.push(conveyorShifted);
+                }
+            }
+            ans = conveyor.join().replaceAll(',', '');
         }
-        ans = conveyor.join().replaceAll(',', '');
     }
+
     return ans;
 }
 
@@ -288,12 +361,16 @@ class KthLargest {
             this._heap.insert(val);
 
         } else if (size === this._k) {
-            if (val > this._heap.peek()!) {
+            // TODO after no-non-null-assertion not ensure the logic
+            const peek = this._heap.peek();
+            if (peek && val > peek) {
                 this._heap.poll();
                 this._heap.insert(val);
             }
+
         }
-        return this._heap.peek()!;
+        // TODO after no-non-null-assertion not ensure the logic
+        return this._heap.peek() || NaN;
     }
 }
 

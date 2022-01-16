@@ -424,29 +424,32 @@ export const ladderLengthPlagiarized = function (beginWord: string, endWord: str
         while (queue.length) {
             // console.log(queue)
             const ele = queue.shift();
-            map[ele!] = true;
-            const eleChar = ele!.split('');
-            for (let i = 0; i < wordList.length; i++) {
-                let count = 0;
-                const wordChar = wordList[i].split('');
-                for (let j = 0; j < eleChar.length; j++) {
-                    if (wordChar[j] !== eleChar[j]) {
-                        count++;
-                        if (count == 2) {
-                            break;
+            if (ele !== undefined) {
+                map[ele] = true;
+                const eleChar = ele.split('');
+                for (let i = 0; i < wordList.length; i++) {
+                    let count = 0;
+                    const wordChar = wordList[i].split('');
+                    for (let j = 0; j < eleChar.length; j++) {
+                        if (wordChar[j] !== eleChar[j]) {
+                            count++;
+                            if (count == 2) {
+                                break;
+                            }
+                        }
+                    }
+                    if (count == 1) {
+                        if (wordList[i] == endWord) {
+                            return level + 1;
+                        }
+                        if (!map[wordList[i]]) {
+                            diffByOne.push(wordList[i]);
+                            map[wordList[i]] = true;
                         }
                     }
                 }
-                if (count == 1) {
-                    if (wordList[i] == endWord) {
-                        return level + 1;
-                    }
-                    if (!map[wordList[i]]) {
-                        diffByOne.push(wordList[i]);
-                        map[wordList[i]] = true;
-                    }
-                }
             }
+
         }
         if (diffByOne.length) {
             queue = [...queue, ...diffByOne];
@@ -470,12 +473,15 @@ export const ladderLengthBFS = function (beginWord: string, endWord: string, wor
         const top = queue.shift();
 
         for (const word of wordList) {
-            if (isOneDiffOrdered(word, top!) && !wordListSet.has(word)) {
-                if (word === endWord) {
-                    return level + 1;
+            // TODO after no-non-null-assertion not ensure the logic
+            if (top !== undefined) {
+                if (isOneDiffOrdered(word, top) && !wordListSet.has(word)) {
+                    if (word === endWord) {
+                        return level + 1;
+                    }
+                    wordListSet.add(word);
+                    tempQueue.push(word);
                 }
-                wordListSet.add(word);
-                tempQueue.push(word);
             }
         }
 
@@ -514,12 +520,15 @@ export const ladderLengthTwoWayBFS = function (beginWord: string, endWord: strin
         const top = queue1.shift();
 
         for (const word of wordList) {
-            if (isOneDiffOrderedPieced(word, top!) && !set1.has(word)) {
-                if (set2.has(word)) {
-                    return level + 1;
+            // TODO after no-non-null-assertion not ensure the logic
+            if (top !== undefined) {
+                if (isOneDiffOrderedPieced(word, top) && !set1.has(word)) {
+                    if (set2.has(word)) {
+                        return level + 1;
+                    }
+                    set1.add(word);
+                    tempQueue.push(word);
                 }
-                set1.add(word);
-                tempQueue.push(word);
             }
         }
 
@@ -570,11 +579,14 @@ export const updateMatrix = (mat: number[][]): number[][] => {
 
         const directions: Direction[] = ['up', 'down', 'left', 'right'];
         for (const direction of directions) {
-            const destination = fourthQuadrantMove(top!, direction, mat);
-            if (destination) {
-                if (costMat[destination.y][destination.x] === Infinity) {
-                    costMat[destination.y][destination.x] = cost + 1;
-                    tempQueue.push(destination);
+            // TODO after no-non-null-assertion not ensure the logic
+            if (top !== undefined) {
+                const destination = fourthQuadrantMove(top, direction, mat);
+                if (destination) {
+                    if (costMat[destination.y][destination.x] === Infinity) {
+                        costMat[destination.y][destination.x] = cost + 1;
+                        tempQueue.push(destination);
+                    }
                 }
             }
         }
@@ -614,11 +626,14 @@ export const updateMatrixByIndex = (mat: number[][]): number[][] => {
 
         const directions: Direction[] = ['up', 'down', 'left', 'right'];
         for (const direction of directions) {
-            const destination = fourthQuadrantMoveByIndex(top!, direction, mat);
-            if (destination) {
-                if (costMat[destination[0]][destination[1]] === Infinity) {
-                    costMat[destination[0]][destination[1]] = cost + 1;
-                    tempQueue.push(destination);
+            // TODO after no-non-null-assertion not ensure the logic
+            if (top !== undefined) {
+                const destination = fourthQuadrantMoveByIndex(top, direction, mat);
+                if (destination) {
+                    if (costMat[destination[0]][destination[1]] === Infinity) {
+                        costMat[destination[0]][destination[1]] = cost + 1;
+                        tempQueue.push(destination);
+                    }
                 }
             }
         }
@@ -686,7 +701,7 @@ export async function cutOffTree(forest: number[][], proxyHandler?: TProxyHandle
         let level = 0;
         let tempQueue: Coordinate[] = [];
         const visited: { [key in string]: boolean } = {};
-        visited[hashFunction(from!)] = true;
+        visited[hashFunction(from)] = true;
         const parents: { [key in string]: Coordinate } = {};
 
         while (queue.length > 0) {
@@ -695,25 +710,33 @@ export async function cutOffTree(forest: number[][], proxyHandler?: TProxyHandle
 
 
             for (const direction of directions) {
-                const destination = fourthQuadrantMove(front!, direction, forest, (d) => {
-                    return forest[d.y][d.x] === 0;
-                });
+                // TODO after no-non-null-assertion not ensure the logic
+                if (front !== undefined) {
+                    const destination = fourthQuadrantMove(front, direction, forest, (d) => {
+                        return forest[d.y][d.x] === 0;
+                    });
 
-                if (destination && !visited[hashFunction(destination)]) {
-                    visited[hashFunction(destination!)] = true;
-                    parents[hashFunction(destination)] = front!;
-                    if (destination.y === to.y && destination.x === to.x) {
-                        if (proxyVariables) proxyVariables.cur = destination;
-                        await wait(100);
+                    if (destination && !visited[hashFunction(destination)]) {
+                        // TODO after no-non-null-assertion not ensure the logic
+                        visited[hashFunction(destination)] = true;
+                        parents[hashFunction(destination)] = front;
+                        if (destination.y === to.y && destination.x === to.x) {
+                            if (proxyVariables) proxyVariables.cur = destination;
+                            await wait(100);
 
-                        const route = getRouteByParentsHash(parents, to, hashFunction);
-                        proxyVariables!.route.push(route);
+                            const route = getRouteByParentsHash(parents, to, hashFunction);
+                            // TODO after no-non-null-assertion not ensure the logic
+                            if (proxyVariables !== undefined) {
+                                proxyVariables.route.push(route);
+                            }
 
-                        return level + 1;
-                    } else {
-                        tempQueue.push(destination);
+                            return level + 1;
+                        } else {
+                            tempQueue.push(destination);
+                        }
                     }
                 }
+
             }
 
             if (queue.length === 0) {
@@ -781,16 +804,19 @@ function cutOffTreeByIndex(forest: number[][]): number {
         visited[hashFunction(from)] = true;
         while (queue.length > 0) {
             const front = queue.shift();
-            for (const direction of directions) {
-                const destination = fourthQuadrantMoveByIndex(front!, direction, forest, (d) => {
-                    return forest[d[0]][d[1]] === 0;
-                });
-                if (destination && !visited[destination[0].toString() + ',' + destination[1].toString()]) {
-                    if (forest[destination[0]][destination[1]] === forest[to[0]][to[1]]) {
-                        return level + 1;
-                    } else {
-                        visited[destination[0].toString() + ',' + destination[1].toString()] = true;
-                        tempQueue.push(destination);
+            // TODO after no-non-null-assertion not ensure the logic
+            if (front !== undefined) {
+                for (const direction of directions) {
+                    const destination = fourthQuadrantMoveByIndex(front, direction, forest, (d) => {
+                        return forest[d[0]][d[1]] === 0;
+                    });
+                    if (destination && !visited[destination[0].toString() + ',' + destination[1].toString()]) {
+                        if (forest[destination[0]][destination[1]] === forest[to[0]][to[1]]) {
+                            return level + 1;
+                        } else {
+                            visited[destination[0].toString() + ',' + destination[1].toString()] = true;
+                            tempQueue.push(destination);
+                        }
                     }
                 }
             }

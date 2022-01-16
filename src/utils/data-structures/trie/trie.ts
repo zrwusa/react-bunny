@@ -62,7 +62,11 @@ export class Trie {
         const search = (node: TrieNode, word: string) => {
             if (node.keys.size !== 0) {
                 for (const letter of node.keys.keys()) {
-                    search(node.keys.get(letter)!, word.concat(letter));
+                    // TODO after no-non-null-assertion not ensure the logic
+                    const letterNode = node.keys.get(letter);
+                    if (letterNode !== undefined) {
+                        search(letterNode, word.concat(letter));
+                    }
                 }
                 if (node.isEnd) {
                     words.push(word);

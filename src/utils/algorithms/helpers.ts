@@ -370,10 +370,12 @@ export const getRouteByParentsHash = (parents: { [key in string]: Coordinate }, 
     const value: Coordinate[] = [leaf];
     while (value.length > 0) {
         const cur = value.shift();
-        const curParent = parents[hashFunction(cur!)];
-        if (curParent) {
-            value.push(curParent);
-            route.push(curParent);
+        if (cur !== undefined) {
+            const curParent = parents[hashFunction(cur)];
+            if (curParent) {
+                value.push(curParent);
+                route.push(curParent);
+            }
         }
     }
     return route.reverse();

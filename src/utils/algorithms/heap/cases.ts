@@ -9,7 +9,10 @@ export const findKthLargestCase9: [number[], number] = [[938, 936, 818, 781, 255
 const arraysToLinkedLists = (arrays: number[][]): SinglyLinkedListNode[] => {
     const linkedLists: SinglyLinkedListNode[] = [];
     for (const list of arrays) {
-        linkedLists.push(SinglyLinkedList.from(list)!.head!);
+        const head = SinglyLinkedList.from(list).head;
+        if (head) {
+            linkedLists.push(head);
+        }
     }
     return linkedLists;
 };

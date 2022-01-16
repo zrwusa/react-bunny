@@ -4,7 +4,7 @@
   "main": "index.tsx",
   "license": "MIT",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve",
+    "dev": "cross-env NODE_ENV=development webpack serve",
     "mock": "node src/mock/server.js",
     "build": "cross-env NODE_ENV=production webpack",
     "web": "yarn build && http-server -P http://localhost:8080? ./public/",

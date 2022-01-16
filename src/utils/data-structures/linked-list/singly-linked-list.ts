@@ -169,10 +169,13 @@ export class SinglyLinkedList<NodeData = any> {
         const stopAt = asc ? index : this.length - index - 1;
         const nextNode = asc ? 'next' : 'prev';
         let currentNode = asc ? this.head : this.tail;
+        // TODO after no-non-null-assertion not ensure the logic
         for (let currentIndex = 0; currentIndex < stopAt; currentIndex++) {
-            currentNode = currentNode![nextNode];
+            if (currentNode) {
+                currentNode = currentNode[nextNode];
+            }
         }
-        return currentNode!;
+        return currentNode || undefined;
     }
 
     /**
@@ -438,7 +441,10 @@ export class SinglyLinkedList<NodeData = any> {
                         split.data = current.data;
                         current.data = temp;
                     }
-                    split = split.next!;
+                    // TODO after no-non-null-assertion not ensure the logic
+                    if (split.next) {
+                        split = split.next;
+                    }
                 }
                 current = current.next;
             }

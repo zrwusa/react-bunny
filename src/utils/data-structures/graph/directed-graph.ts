@@ -85,23 +85,28 @@ export class DirectedGraph<V extends DirectedVertex, E extends DirectedEdge> ext
             return false;
         }
 
-        const srcVertex = this.getVertex(edge.src)!;
-        const srcOutEdges = this._outEdgeMap.get(srcVertex);
-        if (srcOutEdges) {
-            srcOutEdges.push(edge);
-        } else {
-            this._outEdgeMap.set(srcVertex, [edge]);
-        }
+        const srcVertex = this.getVertex(edge.src);
+        const destVertex = this.getVertex(edge.dest);
 
-        const destVertex = this.getVertex(edge.dest)!;
-        const destInEdges = this._inEdgeMap.get(destVertex);
-        if (destInEdges) {
-            destInEdges.push(edge);
-        } else {
-            this._inEdgeMap.set(destVertex, [edge]);
-        }
+        // TODO after no-non-null-assertion not ensure the logic
+        if (srcVertex && destVertex) {
+            const srcOutEdges = this._outEdgeMap.get(srcVertex);
+            if (srcOutEdges) {
+                srcOutEdges.push(edge);
+            } else {
+                this._outEdgeMap.set(srcVertex, [edge]);
+            }
 
-        return true;
+            const destInEdges = this._inEdgeMap.get(destVertex);
+            if (destInEdges) {
+                destInEdges.push(edge);
+            } else {
+                this._inEdgeMap.set(destVertex, [edge]);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     removeEdgeBetween(srcOrId: V | VertexId, destOrId: V | VertexId): E | null {
@@ -292,8 +297,11 @@ export class DirectedGraph<V extends DirectedVertex, E extends DirectedEdge> ext
         if (vertex) {
             const outEdges = this.outgoingEdgesOf(vertex);
             for (const outEdge of outEdges) {
-                const neighbor = this.getVertex(outEdge.dest)!;
-                neighbors.push(neighbor);
+                const neighbor = this.getVertex(outEdge.dest);
+                // TODO after no-non-null-assertion not ensure the logic
+                if (neighbor) {
+                    neighbors.push(neighbor);
+                }
             }
         }
         return neighbors;

@@ -40,25 +40,34 @@ export function AlgorithmScreen() {
 
     const proxyFactory = (setVars: React.Dispatch<React.SetStateAction<{ [p: string]: unknown } | undefined>>) => {
         return ({value, key, DEFAULT}: THandlerContext<any>) => {
-            setVars(prevState => ({...prevState, [key!.toString()]: value}));
+            if (key !== undefined) {
+                setVars(prevState => ({...prevState, [key.toString()]: value}));
+            }
             return DEFAULT;
         };
     };
 
     const _binaryTreeInorderTraversal = async () => {
-        await binaryTreeInorderTraversal(binaryTree.root!, ({value, key, DEFAULT}) => {
-            console.log(key, value);
-            setBinaryTreeInorderTraversalVariables(prevState => ({...prevState, [key!.toString()]: value}));
-            return DEFAULT;
-        });
+        if (binaryTree.root) {
+            await binaryTreeInorderTraversal(binaryTree.root, ({value, key, DEFAULT}) => {
+                if (key !== undefined) {
+                    console.log(key, value);
+                    setBinaryTreeInorderTraversalVariables(prevState => ({...prevState, [key.toString()]: value}));
+                }
+                return DEFAULT;
+            });
+        }
+
     };
 
     const [DFSVariables, setDFSVariables] = useState<{ [key in string]: TreeNode<number> }>();
 
     const handleDFS = async (type: OrderType) => {
         await DFS(treeData, type, ({value, key, DEFAULT}) => {
-            // console.log(key, value);
-            setDFSVariables(prevState => ({...prevState, [key!.toString()]: value}));
+            if (key !== undefined) {
+                // console.log(key, value);
+                setDFSVariables(prevState => ({...prevState, [key.toString()]: value}));
+            }
             return DEFAULT;
         });
     };
@@ -66,8 +75,10 @@ export function AlgorithmScreen() {
     const [BFSVariables, setBFSVariables] = useState<{ [key in string]: TreeNode<number> }>();
     const handleBFS = async () => {
         console.log(await BFS(treeData, ({value, key, DEFAULT}) => {
-            console.log(key, value);
-            setBFSVariables(prevState => ({...prevState, [key!.toString()]: value}));
+            if (key !== undefined) {
+                console.log(key, value);
+                setBFSVariables(prevState => ({...prevState, [key.toString()]: value}));
+            }
             return DEFAULT;
         }));
     };
@@ -75,8 +86,10 @@ export function AlgorithmScreen() {
     const [letterCombinationsVariables, setLetterCombinationsVariables] = useState<{ [key in string]: string }>();
     const _letterCombinations = async () => {
         console.log(await letterCombinations('29', ({value, key, DEFAULT}) => {
-            console.log(key, value);
-            setLetterCombinationsVariables(prevState => ({...prevState, [key!.toString()]: value}));
+            if (key !== undefined) {
+                console.log(key, value);
+                setLetterCombinationsVariables(prevState => ({...prevState, [key.toString()]: value}));
+            }
             return DEFAULT;
         }));
     };

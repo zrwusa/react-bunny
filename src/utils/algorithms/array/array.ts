@@ -89,16 +89,27 @@ class NumArray {
 
     constructor(nums: number[]) {
         for (let i = 0; i < nums.length; i++) {
-            this._cache.set(i, i === 0 ? nums[0] : this._cache.get(i - 1)! + nums[i]);
+            const prev = this._cache.get(i - 1);
+            if (prev !== undefined) {
+                this._cache.set(i, i === 0 ? nums[0] : prev + nums[i]);
+            }
+
         }
     }
 
     sumRange(left: number, right: number): number {
+        const cachedRight = this._cache.get(right);
+        const cachedLeftPrev = this._cache.get(left - 1);
         if (left > 0) {
-            return this._cache.get(right)! - this._cache.get(left - 1)!;
+            if (cachedRight !== undefined && cachedLeftPrev !== undefined) {
+                return cachedRight - cachedLeftPrev;
+            }
         } else {
-            return this._cache.get(right)!;
+            if (cachedRight !== undefined) {
+                return cachedRight;
+            }
         }
+        return 0;
     }
 }
 

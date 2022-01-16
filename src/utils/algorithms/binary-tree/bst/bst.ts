@@ -82,20 +82,25 @@ function recoverTree(root: BSTNode<number> | null): void {
             }
         }
 
-        if (prev && prev.val! > cur.val!) {
-            if (!firstBad) {
-                firstBad = prev;
-                secondBad = cur;
-            } else {
-                secondBad = cur;
+        if (prev) {
+            if (prev.val !== null && cur.val !== null && prev.val > cur.val) {
+                if (!firstBad) {
+                    firstBad = prev;
+                    secondBad = cur;
+                } else {
+                    secondBad = cur;
+                }
             }
+
         }
 
         prev = cur;
         cur = cur.right;
     }
-
-    swap(firstBad!, secondBad!);
+    // TODO after no-non-null-assertion not ensure the logic
+    if (firstBad && secondBad) {
+        swap(firstBad, secondBad);
+    }
 }
 
 // 108  Convert Sorted Array to Binary Search Tree ★★★				build BST

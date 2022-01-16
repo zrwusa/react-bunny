@@ -241,11 +241,13 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
                         return cost;
                     }
                     // TODO consider optimizing to AbstractGraph
-                    const neighbors = this.getNeighbors(cur!);
-                    for (const neighbor of neighbors) {
-                        if (!visited.has(neighbor)) {
-                            visited.set(neighbor, true);
-                            queue.push(neighbor);
+                    if (cur !== undefined) {
+                        const neighbors = this.getNeighbors(cur);
+                        for (const neighbor of neighbors) {
+                            if (!visited.has(neighbor)) {
+                                visited.set(neighbor, true);
+                                queue.push(neighbor);
+                            }
                         }
                     }
                 }
@@ -387,10 +389,16 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
                     if (!seen.has(neighbor)) {
                         const edge = this.getEdge(cur, neighbor);
                         if (edge) {
-                            if (edge.weight + distMap.get(cur)! < distMap.get(neighbor)!) {
-                                distMap.set(neighbor, edge.weight + distMap.get(cur)!);
-                                preMap.set(neighbor, cur);
+                            const curFromMap = distMap.get(cur);
+                            const neighborFromMap = distMap.get(neighbor);
+                            // TODO after no-non-null-assertion not ensure the logic
+                            if (curFromMap !== undefined && neighborFromMap !== undefined) {
+                                if (edge.weight + curFromMap < neighborFromMap) {
+                                    distMap.set(neighbor, edge.weight + curFromMap);
+                                    preMap.set(neighbor, cur);
+                                }
                             }
+
                         }
                     }
                 }
@@ -706,17 +714,25 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
                     }
                     const childLow = lowMap.get(neighbor);
                     const curLow = lowMap.get(cur);
-                    lowMap.set(cur, Math.min(curLow!, childLow!));
-
-                    if (needArticulationPoints) {
-                        if (cur === root && childCount >= 2 || ((cur !== root) && (childLow! >= dfnMap.get(cur)!))) {
-                            articulationPoints.push(cur);
-                        }
+                    // TODO after no-non-null-assertion not ensure the logic
+                    if (curLow !== undefined && childLow !== undefined) {
+                        lowMap.set(cur, Math.min(curLow, childLow));
                     }
+                    const curFromMap = dfnMap.get(cur);
+                    if (childLow !== undefined && curFromMap !== undefined) {
+                        if (needArticulationPoints) {
+                            if (cur === root && childCount >= 2 || ((cur !== root) && (childLow >= curFromMap))) {
+                                articulationPoints.push(cur);
+                            }
+                        }
 
-                    if (needBridges) {
-                        if (childLow! > dfnMap.get(cur)!) {
-                            bridges.push(this.getEdge(cur, neighbor)!);
+                        if (needBridges) {
+                            if (childLow > curFromMap) {
+                                const edgeCurToNeighbor = this.getEdge(cur, neighbor);
+                                if (edgeCurToNeighbor) {
+                                    bridges.push(edgeCurToNeighbor);
+                                }
+                            }
                         }
                     }
                 }

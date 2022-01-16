@@ -186,7 +186,12 @@ export class BST<T> extends BinaryTree<T> implements I_BST<T> {
             return dfs(cur.left, min, cur.id) && dfs(cur.right, cur.id, max);
         }
 
-        return dfs(this.root!, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+        if (this.root) {
+            return dfs(this.root, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+        } else {
+            // todo not ensure
+            return false;
+        }
 
         // if (!this.root) return true;
         //
