@@ -1,8 +1,8 @@
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {BinaryTree} from '../../../data-structures/binary-tree';
+import {BinaryTree, BinaryTreeNode} from '../../../data-structures';
 import {wait, WaitManager} from '../../../utils';
 import {runAlgorithm} from '../../helpers';
-import {testBSTCase1} from '../bst';
+import {testBSTCase1, testSymmetricTreeCase1} from '../bst';
 
 const waitManager = new WaitManager(10);
 const {time1, time2, time3} = waitManager;
@@ -82,3 +82,38 @@ const runTestBinaryTree = async () => {
 };
 
 // runTestBinaryTree().then()
+export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?: TProxyHandler) {
+    const arrCopy = [...arr];
+    const rest = arrCopy.splice(1);
+    const proxyVariables: { binaryTree: BinaryTree<number> } = new DeepProxy({binaryTree: new BinaryTree<number>(0, arrCopy[0])}, proxyHandler);
+
+    // const binaryTree = new BinaryTree<number>(0, arrCopy[0]);
+    for (let i = 0; i < rest.length; i++) {
+        proxyVariables.binaryTree.insert(i + 1, rest[i]);
+    }
+
+    console.log(proxyVariables.binaryTree);
+
+    const root = proxyVariables.binaryTree.root;
+    if (root) {
+        return symmetricHelper(root.left, root.right);
+    } else {
+        return true;
+    }
+
+    function symmetricHelper(left: BinaryTreeNode<number> | null, right: BinaryTreeNode<number> | null): boolean {
+        if (left === null && right === null) {
+            return true;
+        } else if (left === null || right === null) {
+            return false;
+        } else {
+            return left.val === right.val && symmetricHelper(left.left, right.right) && symmetricHelper(left.right, right.left);
+        }
+    }
+}
+
+const runTestSymmetricTree = async () => {
+    await runAlgorithm(testSymmetricTree, false, ...testSymmetricTreeCase1);
+};
+
+// runTestSymmetricTree().then();

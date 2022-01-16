@@ -52,4 +52,4 @@ export const logoutAction: (payload: ILogoutPayload) => ILogoutAction = (payload
     };
 };
 
-export type UserAction = ILoginSuccessAction | ILoginFailedAction | ILogoutAction ;
+export type UserAction = ILoginSuccessAction | ILoginFailedAction | ILogoutAction;

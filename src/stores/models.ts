@@ -10,6 +10,6 @@ export interface IRootState {
     demoHelloState: IDemoHelloState;
     demoState2: IDemoState2;
     userState: IUserState;
-    demoThunkState: IDemoThunk
+    demoThunkState: IDemoThunk;
 }
 

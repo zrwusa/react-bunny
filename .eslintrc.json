@@ -18,6 +18,7 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off", //const fun(var1: string) => 0 Missing return type on function
     "@typescript-eslint/ban-ts-comment": "off",
+    "no-debugger": "off",
     //    "@typescript-eslint/no-non-null-assertion": "off",  // e.g. variable!
     //    "@typescript-eslint/no-inferrable-types": "off", // e.g. let num: number = 0;
     //    "@typescript-eslint/no-var-requires": "off", // Require statement not part of import statement, e.g. const {PriorityQueue} = require('./priority-queue')

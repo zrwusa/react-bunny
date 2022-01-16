@@ -28,4 +28,4 @@ export const demoHelloStateAction2: (payload: IDemoHelloStateAction2Payload) => 
 };
 
 
-export type IDemoHelloStateAction = IDemoHelloStateAction1 | IDemoHelloStateAction2 ;
+export type IDemoHelloStateAction = IDemoHelloStateAction1 | IDemoHelloStateAction2;

@@ -1,17 +1,18 @@
 import * as React from 'react';
 import {TreeNode} from '../../types';
-import {BinaryTree, BinaryTreeNode} from '../../utils/data-structures/binary-tree';
-import {Coordinate, getDirectionVector} from '../../utils/algorithms';
 import {
     AbstractEdge,
     AbstractGraph,
     AbstractVertex,
+    BinaryTree,
+    BinaryTreeNode,
     DirectedGraph,
+    SinglyLinkedListNode,
+    Stack,
     UndirectedGraph
-} from '../../utils/data-structures/graph';
+} from '../../utils/data-structures';
+import {Coordinate, getDirectionVector} from '../../utils/algorithms';
 import {uuidV4} from '../../utils/utils';
-import {SinglyLinkedListNode} from '../../utils/data-structures/linked-list';
-import {Stack} from '../../utils/data-structures/stack';
 
 export interface VividAlgorithmProps<T> {
     data?: T,
@@ -401,7 +402,12 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                         : null
                 }
                 <circle r={circleR} cx={offsetX} cy={offsetY}
-                        fill={isActive ? circleFillActiveColor : circleFillColor}/>
+                        fill={isActive ? circleFillActiveColor : circleFillColor}
+                        onClick={(e) => {
+                            const {id, val, count, allLesserSum} = node;
+                            console.info({id, val, count, allLesserSum});
+                        }}
+                />
                 {
                     offsetY !== undefined
                         ? <text
@@ -412,12 +418,16 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                             x={offsetX}
                             y={offsetY + fontOffsetY}
                             textAnchor="middle"
+                            onClick={(e) => {
+                                const {id, val, count, allLesserSum} = node;
+                                console.info({id, val, count, allLesserSum});
+                            }}
                         >
                             <tspan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</tspan>
-                            <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.count}</tspan>
-
-                            <tspan x={offsetX}
-                                   y={offsetY + fontOffsetY + 2 * fontSize + 4}>{node.allLesserSum}</tspan>
+                            <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.val}</tspan>
+                            {/*<tspan x={offsetX} y={offsetY + fontOffsetY + 2 * fontSize + 4}>{'q: ' + node.count}</tspan>*/}
+                            {/*<tspan x={offsetX}*/}
+                            {/*       y={offsetY + fontOffsetY + 3 * fontSize + 6}>{'s:' + node.allLesserSum}</tspan>*/}
 
                         </text>
                         : null

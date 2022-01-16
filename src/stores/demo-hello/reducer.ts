@@ -7,7 +7,10 @@ export const initialState: IDemoHelloState = {
     order: 0,
 };
 
-export function demoHelloStateReducer(state: IDemoHelloState = initialState, {type, payload}: IDemoHelloStateAction): IDemoHelloState {
+export function demoHelloStateReducer(state: IDemoHelloState = initialState, {
+    type,
+    payload
+}: IDemoHelloStateAction): IDemoHelloState {
     switch (type) {
         case EDemoHelloStateAction.ACTION_ONE: {
             console.log(`${EDemoHelloStateAction.ACTION_ONE} Invoked With Payload:${JSON.stringify(payload)}`);

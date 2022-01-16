@@ -24,6 +24,8 @@ import {
     testBSTCase3,
     testGraphs,
     testPriorityQueue,
+    testSymmetricTree,
+    testSymmetricTreeCase1,
     treeData,
     treeMaxDepth
 } from '../../utils/algorithms';
@@ -172,6 +174,13 @@ export function AlgorithmScreen() {
         await runAllWordBreakII();
     };
 
+
+    const [testSymmetricTreeVariables, setTestSymmetricTreeVariables] = useState<{ [key in string]: unknown }>();
+    const _testSymmetricTree = async () => {
+        const result = await testSymmetricTree(...testSymmetricTreeCase1, proxyFactory(setTestSymmetricTreeVariables));
+        console.log('Is symmetric tree: ', result);
+    };
+
     return (
         <div>
             <div style={{flex: 1}}>
@@ -248,6 +257,9 @@ export function AlgorithmScreen() {
                         </button>
                         <button onClick={_runAllBreakWordII}>
                             <span>Run All BreakWordII</span>
+                        </button>
+                        <button onClick={_testSymmetricTree}>
+                            <span>Test Symmetric Tree</span>
                         </button>
                     </div>
                     {
@@ -333,6 +345,12 @@ export function AlgorithmScreen() {
                     {
                         regionsBySlashesVars
                             ? <VividAlgorithm data={regionsBySlashesVars}/>
+                            : null
+                    }
+
+                    {
+                        testSymmetricTreeVariables
+                            ? <VividAlgorithm data={testSymmetricTreeVariables}/>
                             : null
                     }
                 </div>

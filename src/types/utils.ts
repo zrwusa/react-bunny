@@ -16,18 +16,18 @@ export type Cast<T, TComplex> = { [M in keyof TComplex]: T };
 export type DeepLeavesWrap<T, TComplex> =
     T extends string ? Cast<string, TComplex>
         : T extends number ? Cast<number, TComplex>
-        : T extends boolean ? Cast<boolean, TComplex>
-            : T extends undefined ? Cast<undefined, TComplex>
-                : T extends null ? Cast<null, TComplex>
-                    : T extends void ? Cast<void, TComplex>
-                        : T extends symbol ? Cast<symbol, TComplex>
-                            : T extends AnyFunction ? Cast<AnyFunction, TComplex>
-                                : T extends Date ? Cast<Date, TComplex>
-                                    : {
-                                        [K in keyof T]:
-                                        T[K] extends (infer U)[] ? DeepLeavesWrap<U, TComplex>[]
-                                            : DeepLeavesWrap<T[K], TComplex>;
-                                    }
+            : T extends boolean ? Cast<boolean, TComplex>
+                : T extends undefined ? Cast<undefined, TComplex>
+                    : T extends null ? Cast<null, TComplex>
+                        : T extends void ? Cast<void, TComplex>
+                            : T extends symbol ? Cast<symbol, TComplex>
+                                : T extends AnyFunction ? Cast<AnyFunction, TComplex>
+                                    : T extends Date ? Cast<Date, TComplex>
+                                        : {
+                                            [K in keyof T]:
+                                            T[K] extends (infer U)[] ? DeepLeavesWrap<U, TComplex>[]
+                                                : DeepLeavesWrap<T[K], TComplex>;
+                                        }
 
 
 type Json = null | string | number | boolean | Json [] | { [name: string]: Json }

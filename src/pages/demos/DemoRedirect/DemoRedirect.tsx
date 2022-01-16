@@ -6,7 +6,7 @@ import {StaticContext} from 'react-router';
 type IStates = { redirectToReferrer: boolean, }
 
 interface IProps extends RouteComponentProps<never, StaticContext, { from: { pathname: string } }> {
-    title?: string
+    title?: string;
 }
 
 class DemoRedirect extends Component<IProps, IStates> {

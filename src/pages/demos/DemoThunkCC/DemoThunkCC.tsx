@@ -12,7 +12,7 @@ const mapDispatchToProps = (dispatch: IThunkDispatch) => ({
     demoThunkAction: (data: IReqDemoThunkPayload) => dispatch(demoThunkAction(data)),
 });
 
-type IProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> ;
+type IProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
 export class DemoThunkCC extends React.Component<IProps> {
     constructor(props: IProps) {

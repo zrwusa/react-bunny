@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch: IThunkDispatch) => ({
 });
 
 interface IPropsWithRouteProps extends RouteComponentProps<never, StaticContext, { from: { pathname: string } }> {
-    title?: string
+    title?: string;
 }
 
 type IProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & IPropsWithRouteProps;
