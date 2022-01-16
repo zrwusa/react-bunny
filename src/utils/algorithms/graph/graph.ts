@@ -181,7 +181,7 @@ function numIslands(grid: string[][]): number {
         return grid[cord.y][cord.x] === '1';
     };
 
-    let ans: number = 0;
+    let ans = 0;
 
     const dfs = (cur: Coordinate) => {
         if (isLand(cur)) {

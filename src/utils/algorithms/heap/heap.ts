@@ -280,7 +280,7 @@ function reorganizeString(s: string): string {
     for (const entry of hash) {
         heap.insert(new HeapNode<[string, number]>(entry[1], entry));
     }
-    let ans: string = '';
+    let ans = '';
     // TODO after no-non-null-assertion not ensure the logic
     const peek = heap.peek();
     const peekVal = peek ? peek.val : null;

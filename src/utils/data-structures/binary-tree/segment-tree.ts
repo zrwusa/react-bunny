@@ -1,7 +1,7 @@
 export type SegmentTreeNodeVal = number;
 
 export class SegmentTreeNode {
-    protected _start: number = 0;
+    protected _start = 0;
     get start(): number {
         return this._start;
     }
@@ -10,7 +10,7 @@ export class SegmentTreeNode {
         this._start = v;
     }
 
-    protected _end: number = 0;
+    protected _end = 0;
     get end(): number {
         return this._end;
     }
@@ -28,7 +28,7 @@ export class SegmentTreeNode {
         this._val = v;
     }
 
-    protected _sum: number = 0;
+    protected _sum = 0;
     get sum(): number {
         return this._sum;
     }
@@ -65,7 +65,7 @@ export class SegmentTreeNode {
 
 export class SegmentTree {
     protected _values: number[] = [];
-    protected _start: number = 0;
+    protected _start = 0;
     protected _end: number;
     protected _root: SegmentTreeNode | null;
     get root(): SegmentTreeNode | null {

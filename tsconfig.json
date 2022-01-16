@@ -15,7 +15,6 @@
     "jsx": "react",
     "downlevelIteration": true,
 
-
     "typeRoots": [
       "src/types/patches",
       "node_modules/@types"

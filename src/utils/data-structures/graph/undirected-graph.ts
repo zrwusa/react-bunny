@@ -130,8 +130,10 @@ export class UndirectedGraph<V extends UndirectedVertex, E extends UndirectedEdg
         if (vertex) {
             const neighborEdges = this.getEdgesOf(vertex);
             for (const edge of neighborEdges) {
-                const neighbor = this.getVertex(edge.vertices.filter(e => e !== vertex.id)[0])!;
-                neighbors.push(neighbor);
+                const neighbor = this.getVertex(edge.vertices.filter(e => e !== vertex.id)[0]);
+                if (neighbor) {
+                    neighbors.push(neighbor);
+                }
             }
         }
         return neighbors;
