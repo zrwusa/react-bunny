@@ -297,7 +297,7 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
             offsetX = space - circleR;
             offsetY = (level - 1) * levelOffset + circleR + strokeWidth;
         } else {
-            if(parentX !== undefined) {
+            if (parentX !== undefined) {
                 offsetX = parentX - (familyLength / 2) * levelNodeSpace + (index + 0.5) * levelNodeSpace;
                 offsetY = (level - 1) * levelOffset + circleR + strokeWidth;
             }
@@ -404,23 +404,23 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                         fill={isActive ? circleFillActiveColor : circleFillColor}/>
                 {
                     offsetY !== undefined
-                    ? <text
-                        fill="none"
-                        stroke={isActive ? textFillActiveColor : textFillColor}
-                        fontSize={fontSize}
-                        fontWeight={1}
-                        x={offsetX}
-                        y={offsetY + fontOffsetY}
-                        textAnchor="middle"
-                    >
-                        <tspan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</tspan>
-                        <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.count}</tspan>
+                        ? <text
+                            fill="none"
+                            stroke={isActive ? textFillActiveColor : textFillColor}
+                            fontSize={fontSize}
+                            fontWeight={1}
+                            x={offsetX}
+                            y={offsetY + fontOffsetY}
+                            textAnchor="middle"
+                        >
+                            <tspan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</tspan>
+                            <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.count}</tspan>
 
-                        <tspan x={offsetX}
-                               y={offsetY + fontOffsetY + 2 * fontSize + 4}>{node.allLesserSum}</tspan>
+                            <tspan x={offsetX}
+                                   y={offsetY + fontOffsetY + 2 * fontSize + 4}>{node.allLesserSum}</tspan>
 
-                    </text>
-                    : null
+                        </text>
+                        : null
                 }
             </g>
         );

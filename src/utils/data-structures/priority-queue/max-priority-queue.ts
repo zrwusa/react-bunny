@@ -4,9 +4,7 @@
  */
 
 import {HeapNode, MaxHeap} from '../heap';
-import {PriorityQueueOptions} from './priority-queue';
-
-const {PriorityQueue} = require('./priority-queue');
+import {PriorityQueue, PriorityQueueOptions} from './priority-queue';
 
 /**
  * @class MaxPriorityQueue

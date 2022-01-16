@@ -293,9 +293,9 @@ function calcEquation(equations: [string, string][], values: number[], queries: 
     }
 
     const ans: number[] = [];
-    for (const query of queries) {
-
-    }
+    // for (const query of queries) {
+    //
+    // }
     return ans;
 }
 

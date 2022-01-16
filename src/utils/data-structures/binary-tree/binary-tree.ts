@@ -213,11 +213,11 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         for (const node of nodes) {
             switch (node.familyPosition) {
                 case 0:
-                    if (node.left) {
-
-                    } else if (node.right) {
-
-                    }
+                    // if (node.left) {
+                    //
+                    // } else if (node.right) {
+                    //
+                    // }
                     break;
                 case 1:
                     break;
@@ -567,7 +567,26 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         this._resetResults();
 
         let cur: BinaryTreeNode<T> | null = this.root;
-
+        const reverseEdge = (node: BinaryTreeNode<T> | null) => {
+            let pre: BinaryTreeNode<T> | null = null;
+            let next: BinaryTreeNode<T> | null = null;
+            while (node) {
+                next = node.right;
+                node.right = pre;
+                pre = node;
+                node = next;
+            }
+            return pre;
+        };
+        const printEdge = (node: BinaryTreeNode<T> | null) => {
+            const tail: BinaryTreeNode<T> | null = reverseEdge(node);
+            let cur: BinaryTreeNode<T> | null = tail;
+            while (cur) {
+                this._pushByPropertyName(cur, nodeOrPropertyName);
+                cur = cur.right;
+            }
+            reverseEdge(tail);
+        };
         switch (pattern) {
             case 'in':
                 while (cur) {
@@ -604,26 +623,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
                 }
                 break;
             case 'post':
-                const reverseEdge = (node: BinaryTreeNode<T> | null) => {
-                    let pre: BinaryTreeNode<T> | null = null;
-                    let next: BinaryTreeNode<T> | null = null;
-                    while (node) {
-                        next = node.right;
-                        node.right = pre;
-                        pre = node;
-                        node = next;
-                    }
-                    return pre;
-                };
-                const printEdge = (node: BinaryTreeNode<T> | null) => {
-                    const tail: BinaryTreeNode<T> | null = reverseEdge(node);
-                    let cur: BinaryTreeNode<T> | null = tail;
-                    while (cur) {
-                        this._pushByPropertyName(cur, nodeOrPropertyName);
-                        cur = cur.right;
-                    }
-                    reverseEdge(tail);
-                };
+
                 while (cur) {
                     if (cur.left) {
                         const predecessor = this.getPredecessor(cur);

@@ -285,9 +285,7 @@ function reorganizeString(s: string): string {
     const peek = heap.peek();
     const peekVal = peek ? peek.val : null;
     if (peek && peekVal) {
-        if (peekVal[1] > Math.ceil(s.length / 2)) {
-
-        } else {
+        if (peekVal[1] <= Math.ceil(s.length / 2)) {
             const conveyor: string[][] = [];
             // TODO after no-non-null-assertion not ensure the logic
             const polled = heap.poll();

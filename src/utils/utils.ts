@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {AnyFunction} from '../types';
 
 export type JSONSerializable = {
     [key: string]: any
@@ -63,7 +64,7 @@ export const getValue = <T, K extends keyof T>(obj: T, names: K[]): Array<T[K]> 
     return names.map(i => obj[i]);
 };
 
-export const isObject = (object: string | object | boolean | Function | number) => {
+export const isObject = (object: string | JSONObject | boolean | AnyFunction | number) => {
     return object != null && typeof object === 'object';
 };
 
@@ -100,10 +101,7 @@ export const deepObjectStrictEqual = (object1: JSONSerializable, object2: JSONSe
 };
 
 export const isTypeEqual = <T>(obj: unknown) => {
-    try {
-        const m = obj as unknown as T;
-    } catch (e: any) {
-    }
+    const m = obj as unknown as T;
 };
 
 export function reverseColor(oldColor: string) {
@@ -130,7 +128,7 @@ export const isSameStructure = (objA: unknown, objB: unknown) => {
     }
 };
 
-export const isLeafParent = (obj: object) => {
+export const isLeafParent = (obj: JSONObject) => {
     let isLeaf = true;
     Object.values(obj).forEach(value => {
         if (typeof value === 'object' && value instanceof Array) {

@@ -1,5 +1,5 @@
-type AnyFunction = (...args: any[]) => any;
-type Primitive =
+export type AnyFunction = (...args: any[]) => any;
+export type Primitive =
     | number
     | string
     | boolean
@@ -42,9 +42,6 @@ export interface JSONObject {
     [key: string]: JSONValue;
 }
 
-export interface JSONArray extends Array<JSONValue> {
-}
-
 export type TypeName<T> = T extends string
     ? 'string'
     : T extends number
@@ -53,7 +50,7 @@ export type TypeName<T> = T extends string
             ? 'boolean'
             : T extends undefined
                 ? 'undefined'
-                : T extends Function
+                : T extends AnyFunction
                     ? 'function'
                     : 'object';
 
@@ -157,3 +154,5 @@ export class TreeNode<T> {
 }
 
 export type OrderType = 'InOrder' | 'PreOrder' | 'PostOrder'
+
+

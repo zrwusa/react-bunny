@@ -13,7 +13,7 @@ export const isValidParenthesis = async function (input: string, proxyHandler: T
         stack: Stack<HashKey>,
         char: string,
     }
-    const onlyHashKey = input.match(/[{}\[\]()]/g)?.join('');
+    const onlyHashKey = input.match(/[{}[\]()]/g)?.join('');
 
     if (!onlyHashKey) {
         return false;
