@@ -25,7 +25,7 @@ import {
     testGraphs,
     testPriorityQueue,
     testSymmetricTree,
-    testSymmetricTreeCase1,
+    testSymmetricTreeCase1, testSymmetricTreeCase2,
     treeData,
     treeMaxDepth
 } from '../../utils/algorithms';
@@ -177,7 +177,7 @@ export function AlgorithmScreen() {
 
     const [testSymmetricTreeVariables, setTestSymmetricTreeVariables] = useState<{ [key in string]: unknown }>();
     const _testSymmetricTree = async () => {
-        const result = await testSymmetricTree(...testSymmetricTreeCase1, proxyFactory(setTestSymmetricTreeVariables));
+        const result = await testSymmetricTree(...testSymmetricTreeCase2, proxyFactory(setTestSymmetricTreeVariables));
         console.log('Is symmetric tree: ', result);
     };
 

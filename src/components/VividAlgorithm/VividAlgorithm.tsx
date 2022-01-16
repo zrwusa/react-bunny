@@ -424,7 +424,7 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                             }}
                         >
                             <tspan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</tspan>
-                            <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.val}</tspan>
+                            <tspan x={offsetX} y={offsetY + fontOffsetY + fontSize + 2}>{node.val !== null ? node.val : 'null'}</tspan>
                             {/*<tspan x={offsetX} y={offsetY + fontOffsetY + 2 * fontSize + 4}>{'q: ' + node.count}</tspan>*/}
                             {/*<tspan x={offsetX}*/}
                             {/*       y={offsetY + fontOffsetY + 3 * fontSize + 6}>{'s:' + node.allLesserSum}</tspan>*/}
