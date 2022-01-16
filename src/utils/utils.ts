@@ -337,7 +337,7 @@ export const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const comparerArray = <T extends any>(otherArray: T[], limitKeys?: string[]) => {
+export const comparerArray = <T>(otherArray: T[], limitKeys?: string[]) => {
     return function (current: T) {
         return otherArray.filter(function (other: T) {
             if (!limitKeys) {
@@ -349,15 +349,15 @@ export const comparerArray = <T extends any>(otherArray: T[], limitKeys?: string
     };
 };
 
-export const onlyInA = <T extends any>(a: T[], b: T[]) => {
+export const onlyInA = <T>(a: T[], b: T[]) => {
     return a.filter(comparerArray(b));
 };
 
-export const onlyInB = <T extends any>(a: T[], b: T[]) => {
+export const onlyInB = <T>(a: T[], b: T[]) => {
     return b.filter(comparerArray(a));
 };
 
-export const diffAB = <T extends any>(a: T[], b: T[]) => {
+export const diffAB = <T>(a: T[], b: T[]) => {
     return onlyInA(a, b).concat(onlyInB(a, b));
 };
 

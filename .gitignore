@@ -7,4 +7,5 @@ public/
 
 yarn-error.log
 tsconfig.tsbuildinfo
+yarn-backup.lock
 
