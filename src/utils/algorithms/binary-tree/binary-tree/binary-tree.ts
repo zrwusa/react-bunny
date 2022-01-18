@@ -2,7 +2,7 @@ import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
 import {BinaryTree, BinaryTreeNode} from '../../../data-structures';
 import {wait, WaitManager} from '../../../utils';
 import {runAlgorithm} from '../../helpers';
-import {testBSTCase1, testSymmetricTreeCase1} from '../bst';
+import {pathSumIIICase3, testBSTCase1, testSymmetricTreeCase1} from '../bst';
 
 const waitManager = new WaitManager(10);
 const {time1, time2, time3} = waitManager;
@@ -148,3 +148,197 @@ const runTestSymmetricTree = async () => {
 };
 
 // runTestSymmetricTree().then();
+
+
+// 543. Diameter of Binary Tree
+function diameterOfBinaryTree(root: BinaryTreeNode<number> | null): number {
+    let ans = 0;
+
+    function dfs(cur: BinaryTreeNode<number> | null): number {
+        if (!cur) {
+            return 0;
+        }
+        const leftH = dfs(cur.left);
+        const rightH = dfs(cur.right);
+        ans = Math.max(leftH + rightH, ans);
+        return Math.max(leftH, rightH) + 1;
+    }
+
+    dfs(root);
+    return ans;
+}
+
+// 687. Longest Univalue Path
+function longestUnivaluePath(root: BinaryTreeNode<number> | null): number {
+    let ans = 0;
+
+    function dfs(cur: BinaryTreeNode<number> | null, parentVal: number): number {
+        if (!cur) {
+            return 0;
+        }
+        const leftH = dfs(cur.left, cur.val || NaN);
+        const rightH = dfs(cur.right, cur.val || NaN);
+        ans = Math.max(leftH + rightH, ans);
+        if (cur.val === parentVal) {
+            return Math.max(leftH, rightH) + 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    if (root) {
+        dfs(root, root.val || NaN);
+    }
+    return ans;
+}
+
+// 337. House Robber III
+function rob(root: BinaryTreeNode<number> | null): number {
+    function dfs(cur: BinaryTreeNode<number> | null): [number, number] {
+        if (!cur) {
+            return [0, 0];
+        }
+        const maxArrLeft = dfs(cur.left);
+        const maxArrRight = dfs(cur.right);
+
+        return [
+            Math.max(...maxArrLeft) + Math.max(...maxArrRight),
+            maxArrLeft[0] + maxArrRight[0] + (cur.val || 0)
+        ];
+
+    }
+    return Math.max(...dfs(root));
+}
+
+// 979. Distribute Coins in Binary Tree
+function distributeCoins(root: BinaryTreeNode<number> | null): number {
+    let ans = 0;
+
+    function reqDFS(cur: BinaryTreeNode<number> | null): number {
+        if (!cur) return 0;
+        const cR = cur.val || 0 - 1;
+        const lR = reqDFS(cur.left);
+        const rR = reqDFS(cur.right);
+        const totalR = cR + lR + rR;
+        ans += Math.abs(totalR);
+        return totalR;
+    }
+
+    reqDFS(root);
+    return ans;
+}
+
+// 113. Path Sum II
+function pathSum(root: BinaryTreeNode<number> | null, targetSum: number): number[][] {
+    const ans: number[][] = [];
+
+    function dfs(cur: BinaryTreeNode<number>, acc: number[], rest: number) {
+        acc.push(cur.val || NaN);
+        rest -= cur.val || 0;
+
+        if (cur.left === null && cur.right === null && rest === 0) {
+            ans.push([...acc]);
+        }
+
+        if (cur.left) dfs(cur.left, acc, rest);
+        if (cur.right) dfs(cur.right, acc, rest);
+        acc.pop();
+
+    }
+
+    if (root) {
+        dfs(root, [], targetSum);
+    }
+    return ans;
+}
+
+// 437. Path Sum III (Brute force)
+function pathSumIIIBruteForce1(root: BinaryTreeNode<number> | null, targetSum: number): number {
+    const nodes: BinaryTreeNode<number>[] = [];
+    function flatDFS(cur: BinaryTreeNode<number> | null): void {
+        if (cur) {nodes.push(cur)} else return;
+        flatDFS(cur.left);
+        flatDFS(cur.right);
+    }
+    flatDFS(root);
+
+
+    let ans = 0;
+    function pathDFS(cur: BinaryTreeNode<number> | null, rest: number): void {
+        if (cur) {
+            rest -= cur.val || NaN;
+            if (rest === 0) {
+                ans += 1;
+            }
+            if (cur.left) pathDFS(cur.left, rest);
+            if (cur.right) pathDFS(cur.right, rest);
+        }
+    }
+    for(const sNode of nodes) {
+        pathDFS(sNode, targetSum);
+    }
+
+    return ans;
+}
+
+function pathSumIIIBruteForce2(root: BinaryTreeNode<number> | null, targetSum: number): number {
+    let ans = 0;
+
+    function pathDFS(cur: BinaryTreeNode<number> | null, rest: number): void {
+        if (cur) {
+            rest -= cur.val || 0;
+            if (rest === 0) {
+                ans += 1;
+            }
+            if (cur.left) pathDFS(cur.left, rest);
+            if (cur.right) pathDFS(cur.right, rest);
+        }
+    }
+
+    function flatDFS(cur: BinaryTreeNode<number> | null): void {
+        if (cur) {pathDFS(cur, targetSum);} else return;
+        flatDFS(cur.left);
+        flatDFS(cur.right);
+    }
+    flatDFS(root);
+
+
+    return ans;
+}
+
+
+
+
+export async function pathSumIII(data: Array<number | null>, targetSum: number, proxyHandler?: TProxyHandler): Promise<number> {
+    // [[0, 1, 1], 1] The question description does not match the test case, according the description this should return 2, but returned 4
+    const arrCopy = [...data];
+    const proxy: { binaryTree: BinaryTree<number | null> } = new DeepProxy({binaryTree: new BinaryTree<number | null>(0, arrCopy[0])}, proxyHandler);
+    proxy.binaryTree.fill(arrCopy.slice(1));
+    const root = proxy.binaryTree.root;
+    const sumMap: Map<number, number> = new Map();
+    let ans = 0;
+    function dfs(cur: BinaryTreeNode<number | null>, sum: number): void {
+        sum += cur.val || 0;
+        if (sumMap.has(sum - targetSum)) {
+            ans++;
+        }
+        sumMap.set(sum, 1);
+
+        if (cur.left) dfs(cur.left, sum);
+        if (cur.right) dfs(cur.right, sum);
+
+        sumMap.delete(sum);
+    }
+
+    if (root) dfs(root, 0);
+
+    return ans;
+}
+
+
+const runPathSumIII = async () => {
+    await runAlgorithm(pathSumIII, false, ...pathSumIIICase3);
+};
+
+// runPathSumIII().then();

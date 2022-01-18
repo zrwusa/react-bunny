@@ -14,7 +14,7 @@ import {
     lengthOfLongestSubstring,
     letterCombinations,
     networkDelayTime,
-    networkDelayTimeCase3,
+    networkDelayTimeCase3, pathSumIII, pathSumIIICase1, pathSumIIICase3, pathSumIIICase4, pathSumIIICase5,
     regionsBySlashes,
     reverseLinkedList,
     testAVLTree,
@@ -181,6 +181,13 @@ export function AlgorithmScreen() {
         console.log('Is symmetric tree: ', result);
     };
 
+    const [testPathSumIIIVariables, setTestPathSumIIIVariables] = useState<{ [key in string]: unknown }>();
+    const _testPathSumIII = async () => {
+        const result = await pathSumIII(...pathSumIIICase5, proxyFactory(setTestPathSumIIIVariables));
+        console.log('Test PathSumIII: ', result);
+    };
+
+
     return (
         <div>
             <div style={{flex: 1}}>
@@ -260,6 +267,10 @@ export function AlgorithmScreen() {
                         </button>
                         <button onClick={_testSymmetricTree}>
                             <span>Test Symmetric Tree</span>
+                        </button>
+
+                        <button onClick={_testPathSumIII}>
+                            <span>Test PathSum III</span>
                         </button>
                     </div>
                     {
@@ -351,6 +362,11 @@ export function AlgorithmScreen() {
                     {
                         testSymmetricTreeVariables
                             ? <VividAlgorithm data={testSymmetricTreeVariables}/>
+                            : null
+                    }
+                    {
+                        testPathSumIIIVariables
+                            ? <VividAlgorithm data={testPathSumIIIVariables}/>
                             : null
                     }
                 </div>

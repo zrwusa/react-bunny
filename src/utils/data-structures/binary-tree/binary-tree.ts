@@ -1,3 +1,5 @@
+import {BSTNode} from './bst';
+
 export type BinaryTreeNodePropertyName = 'id' | 'val' | 'count' | 'allLesserSum';
 export type NodeOrPropertyName = 'node' | BinaryTreeNodePropertyName;
 export type DFSOrderPattern = 'in' | 'pre' | 'post';
@@ -206,6 +208,13 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
             }
         }
         return inserted;
+    }
+
+    fill(data: T[]): BinaryTreeNode<T> | null {
+        for (let i = 0; i < data.length; i++) {
+            this.insert(i + 1, data[i]);
+        }
+        return this.root;
     }
 
     remove(id: BinaryTreeNodeId): BinaryTreeDeletedResult<T>[] {
