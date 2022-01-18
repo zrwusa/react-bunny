@@ -22,7 +22,12 @@ const {time1, time2, time3} = waitManager;
 export const testAVLTree = async (arr: number[], proxyHandler?: TProxyHandler) => {
     const arrCopy = [...arr];
     const rest = arrCopy.splice(1);
-    const proxyVariables: { avl: AVLTree<number> } = new DeepProxy({avl: new AVLTree<number>({idOrNode:arrCopy[0],val: arrCopy[0]}, true)}, proxyHandler);
+    const proxyVariables: { avl: AVLTree<number> } = new DeepProxy({
+        avl: new AVLTree<number>({
+            idOrNode: arrCopy[0],
+            val: arrCopy[0]
+        }, true)
+    }, proxyHandler);
 
     for (const i of rest) {
         proxyVariables.avl.insert(i, i);

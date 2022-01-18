@@ -152,7 +152,12 @@ const {time1, time2, time3} = waitManager;
 export async function testBST(arr: number[], proxyHandler?: TProxyHandler) {
     const arrCopy = [...arr];
     const rest = arrCopy.splice(1);
-    const proxyVariables: { bst: BST<number> } = new DeepProxy({bst: new BST<number>({idOrNode: arrCopy[0], val: arrCopy[0]}, true)}, proxyHandler);
+    const proxyVariables: { bst: BST<number> } = new DeepProxy({
+        bst: new BST<number>({
+            idOrNode: arrCopy[0],
+            val: arrCopy[0]
+        }, true)
+    }, proxyHandler);
 
     for (const i of rest) {
         proxyVariables.bst.insert(i, i);

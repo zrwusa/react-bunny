@@ -10,9 +10,11 @@ const {time1, time2, time3} = waitManager;
 export async function testBinaryTree(arr: number[], proxyHandler?: TProxyHandler) {
     const arrCopy = [...arr];
     const rest = arrCopy.splice(1);
-    const proxyVariables: { binaryTree: BinaryTree<number> } = new DeepProxy({binaryTree: new BinaryTree<number>({
-            idOrNode: arrCopy[0],val: arrCopy[0]
-        })}, proxyHandler);
+    const proxyVariables: { binaryTree: BinaryTree<number> } = new DeepProxy({
+        binaryTree: new BinaryTree<number>({
+            idOrNode: arrCopy[0], val: arrCopy[0]
+        })
+    }, proxyHandler);
 
     for (const i of rest) {
         console.log(`insert ${i}`, proxyVariables.binaryTree.insert(i, i));
@@ -210,6 +212,7 @@ function rob(root: BinaryTreeNode<number> | null): number {
         ];
 
     }
+
     return Math.max(...dfs(root));
 }
 
@@ -258,15 +261,20 @@ function pathSum(root: BinaryTreeNode<number> | null, targetSum: number): number
 // 437. Path Sum III (Brute force)
 function pathSumIIIBruteForce1(root: BinaryTreeNode<number> | null, targetSum: number): number {
     const nodes: BinaryTreeNode<number>[] = [];
+
     function flatDFS(cur: BinaryTreeNode<number> | null): void {
-        if (cur) {nodes.push(cur)} else return;
+        if (cur) {
+            nodes.push(cur);
+        } else return;
         flatDFS(cur.left);
         flatDFS(cur.right);
     }
+
     flatDFS(root);
 
 
     let ans = 0;
+
     function pathDFS(cur: BinaryTreeNode<number> | null, rest: number): void {
         if (cur) {
             rest -= cur.val || NaN;
@@ -277,7 +285,8 @@ function pathSumIIIBruteForce1(root: BinaryTreeNode<number> | null, targetSum: n
             if (cur.right) pathDFS(cur.right, rest);
         }
     }
-    for(const sNode of nodes) {
+
+    for (const sNode of nodes) {
         pathDFS(sNode, targetSum);
     }
 
@@ -299,10 +308,13 @@ function pathSumIIIBruteForce2(root: BinaryTreeNode<number> | null, targetSum: n
     }
 
     function flatDFS(cur: BinaryTreeNode<number> | null): void {
-        if (cur) {pathDFS(cur, targetSum);} else return;
+        if (cur) {
+            pathDFS(cur, targetSum);
+        } else return;
         flatDFS(cur.left);
         flatDFS(cur.right);
     }
+
     flatDFS(root);
 
 
@@ -312,18 +324,24 @@ function pathSumIIIBruteForce2(root: BinaryTreeNode<number> | null, targetSum: n
 
 export async function pathSumIII(data: Array<number | null>, targetSum: number, proxyHandler?: TProxyHandler): Promise<number> {
     const arrCopy = [...data];
-    const proxy: { binaryTree: BinaryTree<number | null> } = new DeepProxy({binaryTree: new BinaryTree<number | null>({idOrNode:0, val:arrCopy[0]})}, proxyHandler);
+    const proxy: { binaryTree: BinaryTree<number | null> } = new DeepProxy({
+        binaryTree: new BinaryTree<number | null>({
+            idOrNode: 0,
+            val: arrCopy[0]
+        })
+    }, proxyHandler);
     proxy.binaryTree.fill(arrCopy.slice(1));
     const root = proxy.binaryTree.root;
 
-    const sumMap: {[key in number]: number} = {0: 1};
+    const sumMap: { [key in number]: number } = {0: 1};
 
     let ans = 0;
+
     function dfs(cur: BinaryTreeNode<number | null>, sum: number): void {
         sum += cur.val || 0;
         const x = sum - targetSum;
         if (sumMap[x]) {
-            ans+= sumMap[x];
+            ans += sumMap[x];
         }
 
 

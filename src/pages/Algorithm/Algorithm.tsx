@@ -14,7 +14,9 @@ import {
     lengthOfLongestSubstring,
     letterCombinations,
     networkDelayTime,
-    networkDelayTimeCase3, pathSumIII, pathSumIIICase1, pathSumIIICase3, pathSumIIICase4, pathSumIIICase5,
+    networkDelayTimeCase3,
+    pathSumIII,
+    pathSumIIICase5,
     regionsBySlashes,
     reverseLinkedList,
     testAVLTree,
@@ -25,7 +27,7 @@ import {
     testGraphs,
     testPriorityQueue,
     testSymmetricTree,
-    testSymmetricTreeCase1, testSymmetricTreeCase2,
+    testSymmetricTreeCase2,
     treeData,
     treeMaxDepth
 } from '../../utils/algorithms';
