@@ -1,5 +1,3 @@
-import {BSTNode} from './bst';
-
 export type BinaryTreeNodePropertyName = 'id' | 'val' | 'count' | 'allLesserSum';
 export type NodeOrPropertyName = 'node' | BinaryTreeNodePropertyName;
 export type DFSOrderPattern = 'in' | 'pre' | 'post';
@@ -121,19 +119,31 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         this._allowDuplicate = v;
     }
 
-    constructor(idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean) {
-        if (allowDuplicate === undefined) {
-            allowDuplicate = false;
-        }
-        this._allowDuplicate = allowDuplicate;
-        if (idOrNode !== undefined) {
-            if (typeof idOrNode === 'number') {
-                this.root = this.createNode(idOrNode, val, count);
-            } else {
-                this.root = idOrNode;
+    protected constructor()
+    protected constructor(nodeOrData: T[])
+    protected constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean })
+    protected constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean } | T[]) {
+        if (nodeOrData instanceof Array) {
+            this.fill(nodeOrData);
+        } else {
+            if (nodeOrData !== undefined) {
+                const {idOrNode, val, count} = nodeOrData;
+                let {allowDuplicate} = nodeOrData;
+                if (allowDuplicate === undefined) {
+                    allowDuplicate = false;
+                }
+                this._allowDuplicate = allowDuplicate;
+                if (idOrNode !== undefined) {
+                    if (typeof idOrNode === 'number') {
+                        this.root = this.createNode(idOrNode, val, count);
+                    } else {
+                        this.root = idOrNode;
+                    }
+                    this._size = 1;
+                }
             }
-            this._size = 1;
         }
+
     }
 
     abstract createNode(id: BinaryTreeNodeId, val?: T | null, count?: number): BinaryTreeNode<T>;
@@ -211,6 +221,8 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
     }
 
     fill(data: T[]): BinaryTreeNode<T> | null {
+        this.root = null;
+        this.size = 0;
         for (let i = 0; i < data.length; i++) {
             this.insert(i + 1, data[i]);
         }
@@ -911,6 +923,21 @@ export class BinaryTreeNode<T> {
 }
 
 export class BinaryTree<T> extends AbstractBinaryTree<T> {
+    constructor()
+    constructor(nodeOrData: T[])
+    constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean })
+    constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean } | T[]) {
+        super();
+        // super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+        if (nodeOrData !== undefined) {
+            if (Array.isArray(nodeOrData)) {
+                super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+            } else {
+                super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+            }
+        }
+    }
+
     createNode(id: BinaryTreeNodeId, val?: T | null, count?: number): BinaryTreeNode<T> {
         return new BinaryTreeNode(id, val, count);
     }

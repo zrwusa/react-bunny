@@ -46,9 +46,22 @@ export class BST<T> extends BinaryTree<T> implements I_BST<T> {
 
     protected readonly _autoAllLesserSum: boolean = false;
 
-    constructor(autoPrefixSum?: boolean, id?: BinaryTreeNodeId, val?: T | null, count?: number) {
-        super(id, val, count);
-        if (autoPrefixSum) {
+    constructor()
+    constructor(nodeOrData: T[], autoAllLesserSum?: boolean)
+    constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | BSTNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean }, autoAllLesserSum?: boolean)
+    constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | BSTNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean } | T[], autoAllLesserSum?: boolean) {
+        // This is very strange, A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers,
+        // but Typescript requires code logic to judge the parameters and then call the parent class constructor.
+        // So we can only call the super method multiple times
+        super();
+        if (nodeOrData !== undefined) {
+            if (Array.isArray(nodeOrData)) {
+                super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+            } else {
+                super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+            }
+        }
+        if (autoAllLesserSum) {
             this._autoAllLesserSum = true;
         }
     }
@@ -497,4 +510,32 @@ export class BST<T> extends BinaryTree<T> implements I_BST<T> {
     }
 
     // --- end additional functions
+}
+
+
+class A {
+    node: number | undefined;
+    data: string[] | undefined;
+
+    constructor(data: string[])
+    constructor(node: number)
+    constructor(nodeOrData: number | string[]) {
+        if (nodeOrData instanceof Array) {
+            this.data = nodeOrData;
+        } else {
+            this.node = nodeOrData;
+        }
+    }
+}
+
+class B extends A {
+    constructor(data: string[])
+    constructor(node: number)
+    constructor(nodeOrData: number | string[]) {
+        if (typeof nodeOrData === 'number') {
+            super(nodeOrData);
+        } else {
+            super(nodeOrData);
+        }
+    }
 }

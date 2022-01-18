@@ -26,6 +26,20 @@ export class AVLTreeNode<T> extends BSTNode<T> {
 }
 
 export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
+    constructor()
+    constructor(nodeOrData: T[], autoAllLesserSum?: boolean)
+    constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | AVLTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean }, autoAllLesserSum?: boolean)
+    constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | AVLTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean } | T[], autoAllLesserSum?: boolean) {
+        // super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+        super();
+        if (nodeOrData !== undefined) {
+            if (Array.isArray(nodeOrData)) {
+                super(nodeOrData, autoAllLesserSum); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+            } else {
+                super(nodeOrData, autoAllLesserSum); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+            }
+        }
+    }
 
     balanceFactor(node: AVLTreeNode<T>): number {
         if (node.right === null) // node has no right subtree

@@ -10,7 +10,9 @@ const {time1, time2, time3} = waitManager;
 export async function testBinaryTree(arr: number[], proxyHandler?: TProxyHandler) {
     const arrCopy = [...arr];
     const rest = arrCopy.splice(1);
-    const proxyVariables: { binaryTree: BinaryTree<number> } = new DeepProxy({binaryTree: new BinaryTree<number>(arrCopy[0], arrCopy[0])}, proxyHandler);
+    const proxyVariables: { binaryTree: BinaryTree<number> } = new DeepProxy({binaryTree: new BinaryTree<number>({
+            idOrNode: arrCopy[0],val: arrCopy[0]
+        })}, proxyHandler);
 
     for (const i of rest) {
         console.log(`insert ${i}`, proxyVariables.binaryTree.insert(i, i));
@@ -115,12 +117,12 @@ const runTestBinaryTree = async () => {
 export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?: TProxyHandler) {
     const arrCopy = [...arr];
     const rest = arrCopy.splice(1);
-    const proxyVariables: { binaryTree: BinaryTree<number> } = new DeepProxy({binaryTree: new BinaryTree<number>(0, arrCopy[0])}, proxyHandler);
+    const proxyVariables: { binaryTree: BinaryTree<number | null> } = new DeepProxy({binaryTree: new BinaryTree<number | null>(arrCopy)}, proxyHandler);
 
     // const binaryTree = new BinaryTree<number>(0, arrCopy[0]);
-    for (let i = 0; i < rest.length; i++) {
-        proxyVariables.binaryTree.insert(i + 1, rest[i]);
-    }
+    // for (let i = 0; i < rest.length; i++) {
+    //     proxyVariables.binaryTree.insert(i + 1, rest[i]);
+    // }
 
     const root = proxyVariables.binaryTree.root;
 
@@ -130,7 +132,7 @@ export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?
         return true;
     }
 
-    function symmetricHelper(left: BinaryTreeNode<number> | null, right: BinaryTreeNode<number> | null): boolean {
+    function symmetricHelper(left: BinaryTreeNode<number | null> | null, right: BinaryTreeNode<number | null> | null): boolean {
         if (left === null && right === null) {
             return true;
         } else if (left === null || right === null) {
@@ -308,32 +310,40 @@ function pathSumIIIBruteForce2(root: BinaryTreeNode<number> | null, targetSum: n
 }
 
 
-
-
 export async function pathSumIII(data: Array<number | null>, targetSum: number, proxyHandler?: TProxyHandler): Promise<number> {
-    // [[0, 1, 1], 1] The question description does not match the test case, according the description this should return 2, but returned 4
     const arrCopy = [...data];
-    const proxy: { binaryTree: BinaryTree<number | null> } = new DeepProxy({binaryTree: new BinaryTree<number | null>(0, arrCopy[0])}, proxyHandler);
+    const proxy: { binaryTree: BinaryTree<number | null> } = new DeepProxy({binaryTree: new BinaryTree<number | null>({idOrNode:0, val:arrCopy[0]})}, proxyHandler);
     proxy.binaryTree.fill(arrCopy.slice(1));
     const root = proxy.binaryTree.root;
-    const sumMap: Map<number, number> = new Map();
+
+    const sumMap: {[key in number]: number} = {0: 1};
+
     let ans = 0;
     function dfs(cur: BinaryTreeNode<number | null>, sum: number): void {
         sum += cur.val || 0;
-        if (sumMap.has(sum - targetSum)) {
-            ans++;
+        const x = sum - targetSum;
+        if (sumMap[x]) {
+            ans+= sumMap[x];
         }
-        sumMap.set(sum, 1);
+
+
+        if (sumMap[sum]) {
+            sumMap[sum]++;
+        } else {
+            sumMap[sum] = 1;
+        }
+
 
         if (cur.left) dfs(cur.left, sum);
         if (cur.right) dfs(cur.right, sum);
 
-        sumMap.delete(sum);
+        sumMap[sum]--;
     }
 
     if (root) dfs(root, 0);
 
     return ans;
+
 }
 
 
