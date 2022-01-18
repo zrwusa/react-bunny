@@ -1,8 +1,8 @@
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {BinaryTree, BinaryTreeNode} from '../../../data-structures';
+import {BinaryTree, BinaryTreeNode, BST} from '../../../data-structures';
 import {wait, WaitManager} from '../../../utils';
 import {runAlgorithm} from '../../helpers';
-import {pathSumIIICase3, testBSTCase1, testSymmetricTreeCase1} from '../bst';
+import {pathSumIIICase3, testBSTCase1, testSymmetricTreeCase1, trimABSTCase1} from '../bst';
 
 const waitManager = new WaitManager(10);
 const {time1, time2, time3} = waitManager;
@@ -330,43 +330,55 @@ export async function pathSumIII(data: Array<number | null>, targetSum: number, 
             val: arrCopy[0]
         })
     }, proxyHandler);
-    proxy.binaryTree.fill(arrCopy.slice(1));
+    proxy.binaryTree.insertMany(arrCopy.slice(1));
     const root = proxy.binaryTree.root;
 
-    const sumMap: { [key in number]: number } = {0: 1};
-
+    const freq: { [key in number]: number } = {0: 1};
     let ans = 0;
 
     function dfs(cur: BinaryTreeNode<number | null>, sum: number): void {
         sum += cur.val || 0;
         const x = sum - targetSum;
-        if (sumMap[x]) {
-            ans += sumMap[x];
+        if (freq[x]) {
+            ans += freq[x];
         }
 
-
-        if (sumMap[sum]) {
-            sumMap[sum]++;
+        if (freq[sum]) {
+            freq[sum]++;
         } else {
-            sumMap[sum] = 1;
+            freq[sum] = 1;
         }
-
 
         if (cur.left) dfs(cur.left, sum);
         if (cur.right) dfs(cur.right, sum);
-
-        sumMap[sum]--;
+        freq[sum]--;
     }
 
     if (root) dfs(root, 0);
-
     return ans;
-
 }
-
 
 const runPathSumIII = async () => {
     await runAlgorithm(pathSumIII, false, ...pathSumIIICase3);
+};
+
+// runPathSumIII().then();
+
+
+export async function trimABST(data: Array<number | null>, low: number, high: number, proxyHandler?: TProxyHandler): Promise<number> {
+    const arrCopy = [...data];
+    console.log(arrCopy);
+    const proxy: { binaryTree: BST<number | null> } = new DeepProxy({
+        binaryTree: new BST<number | null>(arrCopy)
+    }, proxyHandler);
+
+    const root = proxy.binaryTree.root;
+    console.log(proxy.binaryTree);
+    return 0;
+}
+
+const runTrimABST = async () => {
+    await runAlgorithm(trimABST, false, ...trimABSTCase1);
 };
 
 // runPathSumIII().then();

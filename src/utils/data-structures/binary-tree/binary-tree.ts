@@ -220,13 +220,28 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         return inserted;
     }
 
-    fill(data: T[]): BinaryTreeNode<T> | null {
+    insertMany(data: T[]): boolean {
+        try {
+            for (let i = 0; i < data.length; i++) {
+                this.insert(i + 1, data[i]);
+            }
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
+    fill(data: T[]): boolean {
         this.root = null;
         this.size = 0;
-        for (let i = 0; i < data.length; i++) {
-            this.insert(i + 1, data[i]);
+        try {
+            for (let i = 0; i < data.length; i++) {
+                this.insert(i + 1, data[i]);
+            }
+        } catch (e) {
+            return false;
         }
-        return this.root;
+        return true;
     }
 
     remove(id: BinaryTreeNodeId): BinaryTreeDeletedResult<T>[] {
@@ -294,7 +309,10 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
     }
 
     isBalanced(beginRoot?: BinaryTreeNode<T> | null): boolean {
-        return (this.getMinHeight(beginRoot) >= this.getHeight(beginRoot) + 1);
+        console.log('minHeight: ', this.getMinHeight(beginRoot));
+        console.log('height: ', this.getHeight(beginRoot));
+        // TODO maybe logic is wrong
+        return (this.getMinHeight(beginRoot) + 1 >= this.getHeight(beginRoot));
     }
 
     getNodes(nodeProperty: BinaryTreeNodeId | number | T, propertyName ?: BinaryTreeNodePropertyName, onlyOne ?: boolean) {

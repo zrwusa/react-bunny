@@ -29,7 +29,9 @@ import {
     testSymmetricTree,
     testSymmetricTreeCase2,
     treeData,
-    treeMaxDepth
+    treeMaxDepth,
+    trimABST,
+    trimABSTCase1
 } from '../../utils/algorithms';
 import {VividAlgorithm} from '../../components/VividAlgorithm';
 import {BinaryTree, BinaryTreeNode, SinglyLinkedList} from '../../utils/data-structures';
@@ -136,6 +138,7 @@ export function AlgorithmScreen() {
     const [countSmallerVariables, setCountSmallerVariables] = useState<{ [key in string]: unknown }>();
     const _countSmallerBST = async () => {
         const result = await countSmallerBST(...countSmallerCase1, proxyFactory(setCountSmallerVariables));
+        console.log(result);
     };
 
     const [testBinaryTreeVariables, setTestBinaryTreeVariables] = useState<{ [key in string]: unknown }>();
@@ -189,190 +192,204 @@ export function AlgorithmScreen() {
         console.log('Test PathSumIII: ', result);
     };
 
+    const [trimABSTVariables, setTrimABSTVariables] = useState<{ [key in string]: unknown }>();
+    const _trimABST = async () => {
+        const result = await trimABST(...trimABSTCase1, proxyFactory(setTrimABSTVariables));
+        console.log('Test trimABST: ', result);
+    };
+
 
     return (
         <div>
-            <div style={{flex: 1}}>
-                <div>
-                    <div title="Algorithms">
-                        <button onClick={() => _binaryTreeInorderTraversal()}>
-                            <span>Binary Tree Inorder Traversal</span>
-                        </button>
-                        <button onClick={() => handleDFS('PreOrder')}>
-                            <span>DFS PreOrder</span>
-                        </button>
-                        <button onClick={() => handleDFS('InOrder')}>
-                            <span>DFS InOrder</span>
-                        </button>
-                        <button onClick={() => handleDFS('PostOrder')}>
-                            <span>DFS PostOrder</span>
-                        </button>
-                        <button onClick={() => handleBFS()}>
-                            <span>BFS</span>
-                        </button>
-                        <button onClick={() => _letterCombinations()}>
-                            <span>Letter Combinations</span>
-                        </button>
-                        <input value={parenthesisInput} onChange={(e) => {
-                            setParenthesisInput(e.target.value);
-                        }}/>
-                        <button onClick={_parenthesisInput}>
-                            <span>Parenthesis Check</span>
-                        </button>
-                        <input value={lengthOfLongestSubstringValue}
-                               onChange={(e) => {
-                                   setLengthOfLongestSubstringValue(e.target.value);
-                               }}/>
-                        <button onClick={_lengthOfLongestSubstring}>
-                            <span>Length Of Longest Substring</span>
-                        </button>
-                        <button onClick={_reverseLinkedList}>
-                            <span>Reverse Linked List</span>
-                        </button>
-                        <button onClick={_ladderLength}>
-                            <span>Ladder Length</span>
-                        </button>
-                        <button onClick={() => {
-                            console.log(treeMaxDepth(treeData));
-                        }}>
-                            <span>Max Depth</span>
-                        </button>
-                        <button onClick={_cutOffTree}>
-                            <span>Cut Off Tree For Golf Event</span>
-                        </button>
-                        <button onClick={_countSmallerBST}>
-                            <span>Count Smaller BST</span>
-                        </button>
-                        <button onClick={_testBinaryTree}>
-                            <span>Test BinaryTree</span>
-                        </button>
-                        <button onClick={_testBST}>
-                            <span>Test BST</span>
-                        </button>
-                        <button onClick={_testAVL}>
-                            <span>Test AVL</span>
-                        </button>
-                        <button onClick={_testGraphs}>
-                            <span>Test Graphs</span>
-                        </button>
-                        <button onClick={_netWorkDelayTime}>
-                            <span>Network Delay Time</span>
-                        </button>
-                        <button onClick={_regionsBySlashes}>
-                            <span>Regions By Slashes</span>
-                        </button>
-                        <button onClick={_testPriorityQueue}>
-                            <span>Test PriorityQueue</span>
-                        </button>
-                        <button onClick={_runAllBreakWordII}>
-                            <span>Run All BreakWordII</span>
-                        </button>
-                        <button onClick={_testSymmetricTree}>
-                            <span>Test Symmetric Tree</span>
-                        </button>
+            <div title="Algorithms">
+                <button onClick={() => _binaryTreeInorderTraversal()}>
+                    <span>Binary Tree Inorder Traversal</span>
+                </button>
+                <button onClick={() => handleDFS('PreOrder')}>
+                    <span>DFS PreOrder</span>
+                </button>
+                <button onClick={() => handleDFS('InOrder')}>
+                    <span>DFS InOrder</span>
+                </button>
+                <button onClick={() => handleDFS('PostOrder')}>
+                    <span>DFS PostOrder</span>
+                </button>
+                <button onClick={() => handleBFS()}>
+                    <span>BFS</span>
+                </button>
+                <button onClick={() => _letterCombinations()}>
+                    <span>Letter Combinations</span>
+                </button>
+                <input value={parenthesisInput} onChange={(e) => {
+                    setParenthesisInput(e.target.value);
+                }}/>
+                <button onClick={_parenthesisInput}>
+                    <span>Parenthesis Check</span>
+                </button>
+                <input value={lengthOfLongestSubstringValue}
+                       onChange={(e) => {
+                           setLengthOfLongestSubstringValue(e.target.value);
+                       }}/>
+                <button onClick={_lengthOfLongestSubstring}>
+                    <span>Length Of Longest Substring</span>
+                </button>
+                <button onClick={_reverseLinkedList}>
+                    <span>Reverse Linked List</span>
+                </button>
+                <button onClick={_ladderLength}>
+                    <span>Ladder Length</span>
+                </button>
+                <button onClick={() => {
+                    console.log(treeMaxDepth(treeData));
+                }}>
+                    <span>Max Depth</span>
+                </button>
+                <button onClick={_cutOffTree}>
+                    <span>Cut Off Tree For Golf Event</span>
+                </button>
+                <button onClick={_countSmallerBST}>
+                    <span>Count Smaller BST</span>
+                </button>
+                <button onClick={_testBinaryTree}>
+                    <span>Test BinaryTree</span>
+                </button>
+                <button onClick={_testBST}>
+                    <span>Test BST</span>
+                </button>
+                <button onClick={_testAVL}>
+                    <span>Test AVL</span>
+                </button>
+                <button onClick={_testGraphs}>
+                    <span>Test Graphs</span>
+                </button>
+                <button onClick={_netWorkDelayTime}>
+                    <span>Network Delay Time</span>
+                </button>
+                <button onClick={_regionsBySlashes}>
+                    <span>Regions By Slashes</span>
+                </button>
+                <button onClick={_testPriorityQueue}>
+                    <span>Test PriorityQueue</span>
+                </button>
+                <button onClick={_runAllBreakWordII}>
+                    <span>Run All BreakWordII</span>
+                </button>
+                <button onClick={_testSymmetricTree}>
+                    <span>Test Symmetric Tree</span>
+                </button>
 
-                        <button onClick={_testPathSumIII}>
-                            <span>Test PathSum III</span>
-                        </button>
-                    </div>
-                    {
-                        binaryTreeInorderTraversalVariables
-                            ? <VividAlgorithm data={binaryTreeInorderTraversalVariables}
-                                              referenceData={binaryTree.root} relatedNodeKey="node"/>
-                            : null
-                    }
-                    {
-                        DFSVariables
-                            ? <VividAlgorithm data={DFSVariables} referenceData={treeData}
-                                              relatedNodeKey="nodeNeedPrint"/>
-                            : null
-                    }
-                    {
-                        letterCombinationsVariables
-                            ? <VividAlgorithm data={letterCombinationsVariables}/>
-                            : null
-                    }
-                    {
-                        BFSVariables
-                            ? <VividAlgorithm data={BFSVariables} referenceData={treeData}
-                                              relatedNodeKey="node"/>
-                            : null
-                    }
-                    {
-                        lengthOfLongestSubstringVariables
-                            ? <VividAlgorithm data={lengthOfLongestSubstringVariables}/>
-                            : null
-                    }
-                    {
-                        parenthesisVariables
-                            ? <VividAlgorithm data={parenthesisVariables}/>
-                            : null
-                    }
-                    {
-                        reverseLinkedListVariables
-                            ? <VividAlgorithm data={reverseLinkedListVariables}/>
-                            : null
-                    }
-                    {
-                        ladderLengthVariables
-                            ? <VividAlgorithm data={ladderLengthVariables}/>
-                            : null
-                    }
-                    {
-                        cutOffTreeVariables
-                            ? <VividAlgorithm data={cutOffTreeVariables} relatedNodeKey="cur"
-                                              referenceData={cutOffTreeCase8[0]}
-                                              relatedRouteKey="route"/>
-                            : null
-                    }
-                    {
-                        countSmallerVariables
-                            ? <VividAlgorithm data={countSmallerVariables}/>
-                            : null
-                    }
-                    {
-                        testBinaryTreeVariables
-                            ? <VividAlgorithm data={testBinaryTreeVariables}/>
-                            : null
-                    }
-                    {
-                        testBSTVariables
-                            ? <VividAlgorithm data={testBSTVariables}/>
-                            : null
-                    }
-                    {
-                        testAVLVariables
-                            ? <VividAlgorithm data={testAVLVariables}/>
-                            : null
-                    }
-                    {
-                        testGraphVars
-                            ? <VividAlgorithm data={testGraphVars}/>
-                            : null
-                    }
-                    {
-                        netWorkDelayTimeVars
-                            ? <VividAlgorithm data={netWorkDelayTimeVars}/>
-                            : null
-                    }
-                    {
-                        regionsBySlashesVars
-                            ? <VividAlgorithm data={regionsBySlashesVars}/>
-                            : null
-                    }
+                <button onClick={_testPathSumIII}>
+                    <span>Test PathSum III</span>
+                </button>
 
-                    {
-                        testSymmetricTreeVariables
-                            ? <VividAlgorithm data={testSymmetricTreeVariables}/>
-                            : null
-                    }
-                    {
-                        testPathSumIIIVariables
-                            ? <VividAlgorithm data={testPathSumIIIVariables}/>
-                            : null
-                    }
-                </div>
+                <button onClick={_trimABST}>
+                    <span>Trim a BST</span>
+                </button>
+
             </div>
+            {
+                binaryTreeInorderTraversalVariables
+                    ? <VividAlgorithm data={binaryTreeInorderTraversalVariables}
+                                      referenceData={binaryTree.root} relatedNodeKey="node"/>
+                    : null
+            }
+            {
+                DFSVariables
+                    ? <VividAlgorithm data={DFSVariables} referenceData={treeData}
+                                      relatedNodeKey="nodeNeedPrint"/>
+                    : null
+            }
+            {
+                letterCombinationsVariables
+                    ? <VividAlgorithm data={letterCombinationsVariables}/>
+                    : null
+            }
+            {
+                BFSVariables
+                    ? <VividAlgorithm data={BFSVariables} referenceData={treeData}
+                                      relatedNodeKey="node"/>
+                    : null
+            }
+            {
+                lengthOfLongestSubstringVariables
+                    ? <VividAlgorithm data={lengthOfLongestSubstringVariables}/>
+                    : null
+            }
+            {
+                parenthesisVariables
+                    ? <VividAlgorithm data={parenthesisVariables}/>
+                    : null
+            }
+            {
+                reverseLinkedListVariables
+                    ? <VividAlgorithm data={reverseLinkedListVariables}/>
+                    : null
+            }
+            {
+                ladderLengthVariables
+                    ? <VividAlgorithm data={ladderLengthVariables}/>
+                    : null
+            }
+            {
+                cutOffTreeVariables
+                    ? <VividAlgorithm data={cutOffTreeVariables} relatedNodeKey="cur"
+                                      referenceData={cutOffTreeCase8[0]}
+                                      relatedRouteKey="route"/>
+                    : null
+            }
+            {
+                countSmallerVariables
+                    ? <VividAlgorithm data={countSmallerVariables}/>
+                    : null
+            }
+            {
+                testBinaryTreeVariables
+                    ? <VividAlgorithm data={testBinaryTreeVariables}/>
+                    : null
+            }
+            {
+                testBSTVariables
+                    ? <VividAlgorithm data={testBSTVariables}/>
+                    : null
+            }
+            {
+                testAVLVariables
+                    ? <VividAlgorithm data={testAVLVariables}/>
+                    : null
+            }
+            {
+                testGraphVars
+                    ? <VividAlgorithm data={testGraphVars}/>
+                    : null
+            }
+            {
+                netWorkDelayTimeVars
+                    ? <VividAlgorithm data={netWorkDelayTimeVars}/>
+                    : null
+            }
+            {
+                regionsBySlashesVars
+                    ? <VividAlgorithm data={regionsBySlashesVars}/>
+                    : null
+            }
+
+            {
+                testSymmetricTreeVariables
+                    ? <VividAlgorithm data={testSymmetricTreeVariables}/>
+                    : null
+            }
+            {
+                testPathSumIIIVariables
+                    ? <VividAlgorithm data={testPathSumIIIVariables}/>
+                    : null
+            }
+
+            {
+                trimABSTVariables
+                    ? <VividAlgorithm data={trimABSTVariables}/>
+                    : null
+            }
+
         </div>
     );
 }

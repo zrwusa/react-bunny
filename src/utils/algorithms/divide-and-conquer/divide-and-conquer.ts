@@ -187,14 +187,14 @@ export const countSmallerBST = async (nums: number[], proxyHandler: TProxyHandle
     const proxyVariables = new DeepProxy<{ bst: BST<number> }>({
         bst: new BST<number>({
             idOrNode: nums[rootIndex],
-            val: undefined
+            val: nums[rootIndex],
         }, true)
     }, proxyHandler);
     const outputArr = new Array(nums.length).fill(0);
 
     for (let j = nums.length - 1; j > -1; j--) {
         if (j !== rootIndex) {
-            const nodes = proxyVariables.bst.insert(nums[j]);
+            const nodes = proxyVariables.bst.insert(nums[j], nums[j]);
             for (const node of nodes) {
                 outputArr[j] = node?.allLesserSum;
             }
