@@ -1,16 +1,16 @@
 import {BinaryTreeNodeId, BST, BSTNode} from '../../../data-structures/binary-tree';
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {testBSTCase1} from './cases';
+import {testBSTCase1, trimABSTCase1} from './cases';
 import {runAlgorithm} from '../../helpers';
 import {wait, WaitManager} from '../../../utils';
 
 /** --- start BST --- **/
 
 //98	Validate Binary Search Tree	★★	530					DFS/inorder
-const isValidBST = (root: BSTNode<number> | null): boolean => {
+const isValidBST = (root: BSTNode<number> | null | undefined): boolean => {
     if (!root) return true;
 
-    function dfs(cur: BSTNode<number> | null, min: BinaryTreeNodeId, max: BinaryTreeNodeId): boolean {
+    function dfs(cur: BSTNode<number> | null | undefined, min: BinaryTreeNodeId, max: BinaryTreeNodeId): boolean {
         if (!cur) return true;
         if ((cur.id <= min) || (cur.id >= max)) return false;
         return dfs(cur.left, min, cur.id) && dfs(cur.right, cur.id, max);
@@ -53,7 +53,7 @@ function kthSmallest(root: BSTNode<number> | null, k: number): number {
 }
 
 // 99	Recover Binary Search Tree	★★★						inorder
-function recoverTree(root: BSTNode<number> | null): void {
+function recoverTree(root: BSTNode<number> | null | undefined): void {
 
     const swap = (nodeA: BSTNode<number>, nodeB: BSTNode<number>) => {
         const tempVal = nodeA.val;
@@ -61,9 +61,9 @@ function recoverTree(root: BSTNode<number> | null): void {
         nodeB.val = tempVal;
     };
 
-    let firstBad: BSTNode<number> | null = null;
-    let secondBad: BSTNode<number> | null = null;
-    let prev: BSTNode<number> | null = null;
+    let firstBad: BSTNode<number> | null | undefined = undefined;
+    let secondBad: BSTNode<number> | null | undefined = undefined;
+    let prev: BSTNode<number> | null | undefined = undefined;
     let cur = root;
 
     // Morris Traversal, space complexity is O(1)
@@ -124,7 +124,7 @@ function findMode(root: BSTNode<number> | null): number[] {
     let prev = -Infinity;
     let modes: number[] = [];
 
-    const inorderDFS = (cur: BSTNode<number> | null) => {
+    const inorderDFS = (cur: BSTNode<number> | null | undefined) => {
         if (!cur) return;
         inorderDFS(cur.left);
         count = prev === cur.id ? count + 1 : 1;
@@ -156,7 +156,7 @@ export async function testBST(arr: number[], proxyHandler?: TProxyHandler) {
         bst: new BST<number>({
             idOrNode: arrCopy[0],
             val: arrCopy[0]
-        }, true)
+        }, false, true)
     }, proxyHandler);
 
     for (const i of rest) {
@@ -282,5 +282,23 @@ const runTestBST = async () => {
 };
 
 // runTestBST().then()
+
+export async function trimABST(data: Array<number | null>, low: number, high: number, proxyHandler?: TProxyHandler): Promise<number> {
+    const arrCopy = [...data];
+    console.log(arrCopy);
+    const proxy: { binaryTree: BST<number | null> } = new DeepProxy({
+        binaryTree: new BST<number | null>(arrCopy)
+    }, proxyHandler);
+
+    const root = proxy.binaryTree.root;
+    console.log(proxy.binaryTree);
+    return 0;
+}
+
+const runTrimABST = async () => {
+    await runAlgorithm(trimABST, false, ...trimABSTCase1);
+};
+
+// runTrimABST().then();
 
 /** --- end BST --- **/

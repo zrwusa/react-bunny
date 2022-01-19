@@ -27,37 +27,37 @@ export class AVLTreeNode<T> extends BSTNode<T> {
 
 export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
     constructor()
-    constructor(nodeOrData: T[], autoAllLesserSum?: boolean)
-    constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | AVLTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean }, autoAllLesserSum?: boolean)
-    constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | AVLTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean } | T[], autoAllLesserSum?: boolean) {
+    constructor(nodeOrData: T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean)
+    constructor(nodeOrData: { idOrNode: BinaryTreeNodeId | AVLTreeNode<T>, val?: T | null, count?: number }, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
+    constructor(nodeOrData?: { idOrNode: BinaryTreeNodeId | AVLTreeNode<T>, val?: T | null, count?: number } | T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean) {
         // super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
         super();
         if (nodeOrData !== undefined) {
             if (Array.isArray(nodeOrData)) {
-                super(nodeOrData, autoAllLesserSum); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+                super(nodeOrData, allowDuplicate, autoAllLesserSum); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
             } else {
-                super(nodeOrData, autoAllLesserSum); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+                super(nodeOrData, allowDuplicate, autoAllLesserSum); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
             }
         }
     }
 
     balanceFactor(node: AVLTreeNode<T>): number {
-        if (node.right === null) // node has no right subtree
+        if (!node.right) // node has no right subtree
             return -node.height;
-        else if (node.left === null) // node has no left subtree
+        else if (!node.left) // node has no left subtree
             return +node.height;
         else
             return node.right.height - node.left.height;
     }
 
     updateHeight(node: AVLTreeNode<T>): void {
-        if (node.left === null && node.right === null) // node is a leaf
+        if (!node.left && !node.right) // node is a leaf
             node.height = 0;
-        else if (node.left === null) {
+        else if (!node.left) {
             // node has no left subtree
             const rightHeight = node.right ? node.right.height : 0;
             node.height = 1 + rightHeight;
-        } else if (node.right === null) // node has no right subtree
+        } else if (!node.right) // node has no right subtree
             node.height = 1 + node.left.height;
         else
             node.height = 1 + Math.max(node.right.height, node.left.height);
@@ -94,12 +94,12 @@ export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
         const parentOfA = A.parent;
         const B = A.left; // A is left-heavy and B is left-heavy
         A.parent = B;
-        if (B && B.right !== null) {
+        if (B && B.right) {
             B.right.parent = A;
         }
         if (B) B.parent = parentOfA;
         if (A === this.root) {
-            this.root = B;
+            if (B) this.root = B;
         } else {
             if (parentOfA?.left === A) {
                 parentOfA.left = B;
@@ -127,17 +127,17 @@ export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
         if (B) B.parent = C;
 
         if (C) {
-            if (C.left !== null) {
+            if (C.left) {
                 C.left.parent = B;
             }
-            if (C.right !== null) {
+            if (C.right) {
                 C.right.parent = A;
             }
             C.parent = parentOfA;
         }
 
         if (A === this.root) {
-            this.root = C;
+            if (C) this.root = C;
         } else {
             if (parentOfA) {
                 if (parentOfA.left === A) {
@@ -165,14 +165,14 @@ export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
         const B = A.right; // A is right-heavy and B is right-heavy
         A.parent = B;
         if (B) {
-            if (B.left !== null) {
+            if (B.left) {
                 B.left.parent = A;
             }
             B.parent = parentOfA;
         }
 
         if (A === this.root) {
-            this.root = B;
+            if (B) this.root = B;
         } else {
             if (parentOfA) {
                 if (parentOfA.left === A) {
@@ -203,10 +203,10 @@ export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
         if (B) B.parent = C;
 
         if (C) {
-            if (C.left !== null) {
+            if (C.left) {
                 C.left.parent = A;
             }
-            if (C.right !== null) {
+            if (C.right) {
                 C.right.parent = B;
             }
             C.parent = parentOfA;
@@ -214,7 +214,7 @@ export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
 
 
         if (A === this.root) {
-            this.root = C;
+            if (C) this.root = C;
         } else {
             if (parentOfA) {
                 if (parentOfA.left === A) {
@@ -239,13 +239,10 @@ export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
         return new AVLTreeNode<T>(id, val, count);
     }
 
-    insert(id: BinaryTreeNodeId, val?: T | null, count?: number): (AVLTreeNode<T> | null)[] {
+    insert(id: BinaryTreeNodeId, val: T | null, count?: number): AVLTreeNode<T> | null {
         const inserted = super.insert(id, val, count);
-        for (const node of inserted) {
-            if (node) {
-                this.balancePath(node);
-            }
-        }
+        console.log('---ids:', id, inserted?.id);
+        if (inserted) this.balancePath(inserted);
         return inserted;
     }
 

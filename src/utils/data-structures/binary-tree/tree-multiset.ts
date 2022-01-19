@@ -9,7 +9,7 @@ export class TreeMultiSet<T> extends BST<T> implements I_BST<T> {
         return new BSTNode<T>(id, val, count);
     }
 
-    insert(id: BinaryTreeNodeId, val?: T | null, count?: number): (BSTNode<T> | null)[] {
+    insert(id: BinaryTreeNodeId, val: T | null, count?: number): BSTNode<T> | null {
         const inserted = super.insert(id, val, count);
         return inserted;
     }

@@ -12,7 +12,7 @@ export interface I_BinaryTree<T> {
 
     isEmpty(): boolean;
 
-    insert(id: BinaryTreeNodeId, val?: T | null, count?: number): (BinaryTreeNode<T> | null)[];
+    insert(id: BinaryTreeNodeId, val?: T | null, count?: number): BinaryTreeNode<T> | null;
 
     getDepth(node: BinaryTreeNode<T>): number;
 
@@ -120,19 +120,20 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
     }
 
     protected constructor()
-    protected constructor(nodeOrData: T[])
-    protected constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean })
-    protected constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean } | T[]) {
+    protected constructor(nodeOrData: T[], allowDuplicate?: boolean)
+    protected constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number }, allowDuplicate?: boolean)
+    protected constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number } | T[], allowDuplicate?: boolean) {
+        if (allowDuplicate !== undefined) {
+            this._allowDuplicate = allowDuplicate;
+        }
         if (nodeOrData instanceof Array) {
             this.fill(nodeOrData);
         } else {
             if (nodeOrData !== undefined) {
                 const {idOrNode, val, count} = nodeOrData;
-                let {allowDuplicate} = nodeOrData;
                 if (allowDuplicate === undefined) {
                     allowDuplicate = false;
                 }
-                this._allowDuplicate = allowDuplicate;
                 if (idOrNode !== undefined) {
                     if (typeof idOrNode === 'number') {
                         this.root = this.createNode(idOrNode, val, count);
@@ -146,7 +147,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     }
 
-    abstract createNode(id: BinaryTreeNodeId, val?: T | null, count?: number): BinaryTreeNode<T>;
+    abstract createNode(id: BinaryTreeNodeId, val?: T | null, count?: number): BinaryTreeNode<T> | null;
 
     clear() {
         this.root = null;
@@ -157,64 +158,70 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         return this._size === 0;
     }
 
-    insert(id: BinaryTreeNodeId, val?: T | null, count?: number): (BinaryTreeNode<T> | null)[] {
+    insert(id: BinaryTreeNodeId, val: T | null, count?: number): BinaryTreeNode<T> | null {
         if (count === undefined) {
             count = 1;
         }
-        const _bfs = (root: BinaryTreeNode<T>, newNode: BinaryTreeNode<T>): BinaryTreeNode<T> | null => {
-            const queue: BinaryTreeNode<T>[] = [root];
+        const _bfs = (root: BinaryTreeNode<T>, newNode: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null => {
+            const queue: Array<BinaryTreeNode<T> | null> = [root];
             while (queue.length > 0) {
                 const cur = queue.shift();
                 if (cur) {
-                    if (!cur.left) {
-                        newNode.parent = cur;
-                        newNode.familyPosition = 1;
+                    if (cur.left === undefined) {
+                        if (newNode) {
+                            newNode.parent = cur;
+                            newNode.familyPosition = 1;
+                        }
+
                         cur.left = newNode;
                         this._size++;
                         return cur.left;
                     }
-                    if (!cur.right) {
-                        newNode.parent = cur;
-                        newNode.familyPosition = 2;
+                    if (cur.right === undefined) {
+                        if (newNode) {
+                            newNode.parent = cur;
+                            newNode.familyPosition = 2;
+                        }
                         cur.right = newNode;
                         this._size++;
                         return cur.right;
                     }
-                    cur.left && queue.push(cur.left);
-                    cur.right && queue.push(cur.right);
+                    if (cur.left) queue.push(cur.left);
+                    if (cur.right) queue.push(cur.right);
                 } else {
                     return null;
                 }
             }
             return null;
         };
-        const inserted: (BinaryTreeNode<T> | null)[] = [];
+        let inserted: BinaryTreeNode<T> | null = null;
         if (this._allowDuplicate) {
             if (this.root) {
                 for (let i = 0; i < count; i++) {
-                    inserted.push(_bfs(this.root, new BinaryTreeNode<T>(id, val, 1)));
+                    inserted = _bfs(this.root, val !== null ? new BinaryTreeNode<T>(id, val, 1) : null);
                 }
             } else {
                 this.root = new BinaryTreeNode<T>(id, val, 1);
-                inserted.push(this.root);
+                inserted = this.root;
                 this._size = 1;
                 for (let i = 0; i < count - 1; i++) {
-                    inserted.push(_bfs(this.root, new BinaryTreeNode<T>(id, val, 1)));
+                    inserted = _bfs(this.root, val !== null ? new BinaryTreeNode<T>(id, val, 1) : null);
                 }
             }
         } else {
-            const existNode = this.getNode(id);
+
+            const existNode = val !== null ? this.getNode(val, 'val') : null;
             if (this.root) {
                 if (existNode) {
                     existNode.count += count;
-                    inserted.push(existNode);
+                    inserted = existNode;
                 } else {
-                    inserted.push(_bfs(this.root, new BinaryTreeNode<T>(id, val, count)));
+                    inserted = _bfs(this.root, val !== null ? new BinaryTreeNode<T>(id, val, count) : null);
                 }
             } else {
-                this.root = new BinaryTreeNode<T>(id, val, count);
+                this.root = val !== null ? new BinaryTreeNode<T>(id, val, count) : null;
                 this._size = 1;
-                inserted.push(this.root);
+                inserted = this.root;
             }
         }
         return inserted;
@@ -236,7 +243,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         this.size = 0;
         try {
             for (let i = 0; i < data.length; i++) {
-                this.insert(i + 1, data[i]);
+                this.insert(i, data[i]);
             }
         } catch (e) {
             return false;
@@ -267,7 +274,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     getDepth(node: BinaryTreeNode<T>): number {
         let depth = 0;
-        while (node.parent !== null) {
+        while (node.parent) {
             depth++;
             node = node.parent;
         }
@@ -276,7 +283,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     getMinHeight(beginRoot?: BinaryTreeNode<T> | null): number {
         const _beginRoot = beginRoot || this.root;
-        const _getMinHeight = (cur: BinaryTreeNode<T> | null): number => {
+        const _getMinHeight = (cur: BinaryTreeNode<T> | null | undefined): number => {
             if (!cur) return 0;
             if (!cur.left && !cur.right) return 0;
             const leftMinHeight = _getMinHeight(cur.left);
@@ -293,7 +300,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     getHeight(beginRoot?: BinaryTreeNode<T> | null): number {
         const _beginRoot = beginRoot || this.root;
-        const _getMaxHeight = (cur: BinaryTreeNode<T> | null): number => {
+        const _getMaxHeight = (cur: BinaryTreeNode<T> | null | undefined): number => {
             if (!cur) return 0;
             if (!cur.left && !cur.right) return 0;
             const leftHeight = _getMaxHeight(cur.left);
@@ -365,7 +372,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         return result;
     }
 
-    getNode(nodeProperty: BinaryTreeNodeId | number | T, propertyName ?: BinaryTreeNodePropertyName): BinaryTreeNode<T> | null {
+    getNode(nodeProperty: BinaryTreeNodeId | T, propertyName ?: BinaryTreeNodePropertyName): BinaryTreeNode<T> | null {
         if (propertyName === undefined) {
             propertyName = 'id';
         }
@@ -379,7 +386,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     getPathToRoot(node: BinaryTreeNode<T>): BinaryTreeNode<T>[] {
         const result: BinaryTreeNode<T>[] = [];
-        while (node.parent !== null) {
+        while (node.parent) {
             result.unshift(node);
             node = node.parent;
         }
@@ -462,7 +469,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
         this._resetResults();
 
-        const queue = new Array<BinaryTreeNode<T> | null>();
+        const queue = new Array<BinaryTreeNode<T> | null | undefined>();
         queue.push(this.root);
         while (queue.length !== 0) {
             const cur = queue.shift();
@@ -536,7 +543,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         this._resetResults();
         if (!this.root) return this._getResultByPropertyName(nodeOrPropertyName);
         // 0: visit, 1: print
-        const stack: { opt: 0 | 1, node: BinaryTreeNode<T> | null }[] = [];
+        const stack: { opt: 0 | 1, node: BinaryTreeNode<T> | null | undefined }[] = [];
         stack.push({opt: 0, node: this.root});
         while (stack.length > 0) {
             const cur = stack.pop();
@@ -688,10 +695,10 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
         this._resetResults();
 
-        let cur: BinaryTreeNode<T> | null = this.root;
-        const reverseEdge = (node: BinaryTreeNode<T> | null) => {
-            let pre: BinaryTreeNode<T> | null = null;
-            let next: BinaryTreeNode<T> | null = null;
+        let cur: BinaryTreeNode<T> | null | undefined = this.root;
+        const reverseEdge = (node: BinaryTreeNode<T> | null | undefined) => {
+            let pre: BinaryTreeNode<T> | null | undefined = null;
+            let next: BinaryTreeNode<T> | null | undefined = null;
             while (node) {
                 next = node.right;
                 node.right = pre;
@@ -701,8 +708,8 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
             return pre;
         };
         const printEdge = (node: BinaryTreeNode<T> | null) => {
-            const tail: BinaryTreeNode<T> | null = reverseEdge(node);
-            let cur: BinaryTreeNode<T> | null = tail;
+            const tail: BinaryTreeNode<T> | null | undefined = reverseEdge(node);
+            let cur: BinaryTreeNode<T> | null | undefined = tail;
             while (cur) {
                 this._pushByPropertyName(cur, nodeOrPropertyName);
                 cur = cur.right;
@@ -769,7 +776,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     subTreeSum(subTreeRoot: BinaryTreeNode<T>, propertyName ?: BinaryTreeNodePropertyName): number {
         if (propertyName === undefined) {
-            propertyName = 'id';
+            propertyName = 'val';
         }
         let sum = 0;
 
@@ -784,6 +791,9 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
                     break;
                 case 'allLesserSum':
                     needSum = cur.allLesserSum;
+                    break;
+                case 'val':
+                    needSum = typeof cur.val === 'number' ? cur.val : 0;
                     break;
                 default:
                     needSum = cur.id;
@@ -820,12 +830,12 @@ export class BinaryTreeNode<T> {
         this._val = v;
     }
 
-    protected _left: BinaryTreeNode<T> | null = null;
-    public get left(): BinaryTreeNode<T> | null {
+    protected _left: BinaryTreeNode<T> | null | undefined = undefined;
+    public get left(): BinaryTreeNode<T> | null | undefined {
         return this._left;
     }
 
-    public set left(v: BinaryTreeNode<T> | null) {
+    public set left(v: BinaryTreeNode<T> | null | undefined) {
         if (v) {
             v.parent = this;
             v.familyPosition = 1;
@@ -833,12 +843,12 @@ export class BinaryTreeNode<T> {
         this._left = v;
     }
 
-    protected _right: BinaryTreeNode<T> | null = null;
-    public get right(): BinaryTreeNode<T> | null {
+    protected _right: BinaryTreeNode<T> | null | undefined = undefined;
+    public get right(): BinaryTreeNode<T> | null | undefined {
         return this._right;
     }
 
-    public set right(v: BinaryTreeNode<T> | null) {
+    public set right(v: BinaryTreeNode<T> | null | undefined) {
         if (v) {
             v.parent = this;
             v.familyPosition = 2;
@@ -846,12 +856,12 @@ export class BinaryTreeNode<T> {
         this._right = v;
     }
 
-    protected _parent: BinaryTreeNode<T> | null = null;
-    public get parent(): BinaryTreeNode<T> | null {
+    protected _parent: BinaryTreeNode<T> | null | undefined = undefined;
+    public get parent(): BinaryTreeNode<T> | null | undefined {
         return this._parent;
     }
 
-    public set parent(v: BinaryTreeNode<T> | null) {
+    public set parent(v: BinaryTreeNode<T> | null | undefined) {
         this._parent = v;
     }
 
@@ -942,21 +952,27 @@ export class BinaryTreeNode<T> {
 
 export class BinaryTree<T> extends AbstractBinaryTree<T> {
     constructor()
-    constructor(nodeOrData: T[])
-    constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean })
-    constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number, allowDuplicate?: boolean } | T[]) {
+    constructor(nodeOrData: T[], allowDuplicate?: boolean)
+    constructor(nodeOrData: { idOrNode: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number }, allowDuplicate?: boolean)
+    constructor(nodeOrData?: { idOrNode: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number } | T[], allowDuplicate?: boolean) {
         super();
         // super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+        // if (allowDuplicate !== undefined) {
+        //     this._allowDuplicate = allowDuplicate
+        // }
         if (nodeOrData !== undefined) {
             if (Array.isArray(nodeOrData)) {
-                super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+                super(nodeOrData, allowDuplicate); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
             } else {
-                super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+                super(nodeOrData, allowDuplicate); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
             }
         }
+
     }
 
-    createNode(id: BinaryTreeNodeId, val?: T | null, count?: number): BinaryTreeNode<T> {
-        return new BinaryTreeNode(id, val, count);
+    // createNode(id: BinaryTreeNodeId, val?: T , count?: number): BinaryTreeNode<T>
+    // createNode(id: BinaryTreeNodeId, val?: null, count?: number): null
+    createNode(id: BinaryTreeNodeId, val: T | null, count?: number): BinaryTreeNode<T> | null {
+        return val !== null ? new BinaryTreeNode(id, val, count) : null;
     }
 }

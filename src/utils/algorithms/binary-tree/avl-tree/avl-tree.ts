@@ -8,7 +8,7 @@ const avlTree = new AVLTree<number>();
 
 const performanceAVLTree = () => {
     for (let i = 0; i < 1e+5; i++) {
-        avlTree.insert(i);
+        avlTree.insert(i, i);
     }
 };
 
@@ -26,7 +26,7 @@ export const testAVLTree = async (arr: number[], proxyHandler?: TProxyHandler) =
         avl: new AVLTree<number>({
             idOrNode: arrCopy[0],
             val: arrCopy[0]
-        }, true)
+        }, false, true)
     }, proxyHandler);
 
     for (const i of rest) {

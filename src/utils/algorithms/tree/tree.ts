@@ -41,7 +41,7 @@ import {OrderType, TreeNode} from '../../../types';
 
 export async function binaryTreeInorderTraversal(root: BinaryTreeNode<number> | undefined, proxyHandler: TProxyHandler): Promise<number[]> {
     type Variables = {
-        node: BinaryTreeNode<number> | null
+        node: BinaryTreeNode<number> | null | undefined
     }
 
     const proxyVariables = new DeepProxy<Variables>({node: null}, proxyHandler);
