@@ -8,11 +8,11 @@ const waitManager = new WaitManager(10);
 const {time1, time2, time3} = waitManager;
 
 export async function testBinaryTree(arr: number[], proxyHandler?: TProxyHandler) {
-    const arrCopy = [...arr];
-    // const rest = arrCopy.splice(1);
+    const clonedData = [...arr];
+    // const rest = clonedData.splice(1);
     // console.log('---rest', rest)
     const proxyVariables: { binaryTree: BinaryTree<number> } = new DeepProxy({
-        binaryTree: new BinaryTree<number>(arrCopy, false)
+        binaryTree: new BinaryTree<number>(clonedData, false)
     }, proxyHandler);
 
     // for (let i = 0; i < rest.length; i++) {
@@ -116,11 +116,11 @@ const runTestBinaryTree = async () => {
 
 // runTestBinaryTree().then()
 export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?: TProxyHandler) {
-    const arrCopy = [...arr];
-    // const rest = arrCopy.splice(1);
-    const proxyVariables: { binaryTree: BinaryTree<number | null> } = new DeepProxy({binaryTree: new BinaryTree<number | null>(arrCopy)}, proxyHandler);
+    const clonedData = [...arr];
+    // const rest = clonedData.splice(1);
+    const proxyVariables: { binaryTree: BinaryTree<number | null> } = new DeepProxy({binaryTree: new BinaryTree<number | null>(clonedData)}, proxyHandler);
 
-    // const binaryTree = new BinaryTree<number>(0, arrCopy[0]);
+    // const binaryTree = new BinaryTree<number>(0, clonedData[0]);
     // for (let i = 0; i < rest.length; i++) {
     //     proxyVariables.binaryTree.insert(i + 1, rest[i]);
     // }
@@ -322,20 +322,23 @@ function pathSumIIIBruteForce2(root: BinaryTreeNode<number> | null, targetSum: n
 
 
 export async function pathSumIII(data: Array<number | null>, targetSum: number, proxyHandler?: TProxyHandler): Promise<number> {
-    const arrCopy = [...data];
+    const clonedData = [...data];
     const proxy: { binaryTree: BinaryTree<number | null> } = new DeepProxy({
         binaryTree: new BinaryTree<number | null>({
-            idOrNode: 0,
-            val: arrCopy[0]
+            id: 0,
+            val: clonedData[0]
         })
     }, proxyHandler);
-    proxy.binaryTree.insertMany(arrCopy.slice(1));
+    proxy.binaryTree.insertMany(clonedData.slice(1));
+    await wait(time1);
     const root = proxy.binaryTree.root;
 
     const freq: { [key in number]: number } = {0: 1};
     let ans = 0;
 
-    function dfs(cur: BinaryTreeNode<number | null>, sum: number): void {
+    async function dfs(cur: BinaryTreeNode<number | null>, sum: number): Promise<void> {
+        await wait(time1);
+
         sum += cur.val || 0;
         const x = sum - targetSum;
         if (freq[x]) {
@@ -348,12 +351,12 @@ export async function pathSumIII(data: Array<number | null>, targetSum: number, 
             freq[sum] = 1;
         }
 
-        if (cur.left) dfs(cur.left, sum);
-        if (cur.right) dfs(cur.right, sum);
+        if (cur.left) await dfs(cur.left, sum);
+        if (cur.right) await dfs(cur.right, sum);
         freq[sum]--;
     }
 
-    if (root) dfs(root, 0);
+    if (root) await dfs(root, 0);
     return ans;
 }
 

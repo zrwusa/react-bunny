@@ -42,7 +42,7 @@ export function AlgorithmScreen() {
 
     const [binaryTreeInorderTraversalVariables, setBinaryTreeInorderTraversalVariables] = useState<{ [key in string]: BinaryTreeNode<any> }>();
     const binaryTreeNode1 = new BinaryTreeNode<number>(1, 1);
-    const binaryTree = new BinaryTree<number>({idOrNode: binaryTreeNode1});
+    const binaryTree = new BinaryTree<number>(binaryTreeNode1);
 
     const proxyFactory = (setVars: React.Dispatch<React.SetStateAction<{ [p: string]: unknown } | undefined>>) => {
         return ({value, key, DEFAULT}: THandlerContext<any>) => {
@@ -282,7 +282,9 @@ export function AlgorithmScreen() {
                     <span>Test PathSum III</span>
                 </button>
 
-                <button onClick={_trimABST}>
+                <button onClick={async () => {
+                    await _trimABST();
+                }}>
                     <span>Trim a BST</span>
                 </button>
 

@@ -1,5 +1,5 @@
 import {BST, BSTNode, I_BST} from './bst';
-import {BinaryTreeNodeId} from './binary-tree';
+import {BinaryTreeNodeId, BinaryTreeNodeParam} from './binary-tree';
 
 export type AVLTreeDeletedResult<T> = { deleted: AVLTreeNode<T> | null, needBalanced: AVLTreeNode<T> | null };
 
@@ -28,8 +28,9 @@ export class AVLTreeNode<T> extends BSTNode<T> {
 export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
     constructor()
     constructor(nodeOrData: T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean)
-    constructor(nodeOrData: { idOrNode: BinaryTreeNodeId | AVLTreeNode<T>, val?: T | null, count?: number }, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
-    constructor(nodeOrData?: { idOrNode: BinaryTreeNodeId | AVLTreeNode<T>, val?: T | null, count?: number } | T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean) {
+    constructor(nodeOrData: AVLTreeNode<T>, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
+    constructor(nodeOrData: BinaryTreeNodeParam<T>, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
+    constructor(nodeOrData?: AVLTreeNode<T> | BinaryTreeNodeParam<T> | T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean) {
         // super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
         super();
         if (nodeOrData !== undefined) {
@@ -235,7 +236,7 @@ export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
         C && this.updateHeight(C);
     }
 
-    createNode(id: BinaryTreeNodeId, val?: T | null, count?: number): AVLTreeNode<T> {
+    createNode(id: BinaryTreeNodeId, val: T, count?: number): AVLTreeNode<T> {
         return new AVLTreeNode<T>(id, val, count);
     }
 

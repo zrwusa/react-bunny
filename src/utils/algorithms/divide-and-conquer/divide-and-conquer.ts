@@ -186,7 +186,7 @@ export const countSmallerBST = async (nums: number[], proxyHandler: TProxyHandle
     const rootIndex = nums.length - 1;
     const proxyVariables = new DeepProxy<{ bst: BST<number> }>({
         bst: new BST<number>({
-            idOrNode: nums[rootIndex],
+            id: nums[rootIndex],
             val: nums[rootIndex],
         }, true)
     }, proxyHandler);

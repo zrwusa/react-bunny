@@ -1,4 +1,11 @@
-import {BinaryTree, BinaryTreeNode, BinaryTreeNodeId, BinaryTreeNodePropertyName, I_BinaryTree} from './binary-tree';
+import {
+    BinaryTree,
+    BinaryTreeNode,
+    BinaryTreeNodeId,
+    BinaryTreeNodeParam,
+    BinaryTreeNodePropertyName,
+    I_BinaryTree,
+} from './binary-tree';
 
 export type BSTDeletedResult<T> = { deleted: BSTNode<T> | null, needBalanced: BSTNode<T> | null };
 
@@ -47,9 +54,10 @@ export class BST<T> extends BinaryTree<T> implements I_BST<T> {
     protected readonly _autoAllLesserSum: boolean = false;
 
     constructor()
-    constructor(nodeOrData: T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean)
-    constructor(nodeOrData: { idOrNode: BinaryTreeNodeId | BSTNode<T>, val?: T | null, count?: number }, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
-    constructor(nodeOrData?: { idOrNode: BinaryTreeNodeId | BSTNode<T>, val?: T | null, count?: number } | T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean) {
+    constructor(nodeOrData: (T | null)[], allowDuplicate?: boolean, autoAllLesserSum?: boolean)
+    constructor(nodeOrData: BSTNode<T>, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
+    constructor(nodeOrData: BinaryTreeNodeParam<T>, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
+    constructor(nodeOrData?: BinaryTreeNodeParam<T> | BSTNode<T> | T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean) {
         // This is very strange, A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers,
         // but Typescript requires code logic to judge the parameters and then call the parent class constructor.
         // So we can only call the super method multiple times

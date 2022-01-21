@@ -5,7 +5,7 @@ export type TreeMultiSetDeletedResult<T> = { deleted: BSTNode<T> | null, needBal
 
 
 export class TreeMultiSet<T> extends BST<T> implements I_BST<T> {
-    createNode(id: BinaryTreeNodeId, val?: T | null, count?: number): BSTNode<T> {
+    createNode(id: BinaryTreeNodeId, val: T, count?: number): BSTNode<T> {
         return new BSTNode<T>(id, val, count);
     }
 

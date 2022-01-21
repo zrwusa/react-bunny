@@ -4,8 +4,14 @@ export type DFSOrderPattern = 'in' | 'pre' | 'post';
 export type BinaryTreeNodeId = number;
 export type FamilyPosition = 0 | 1 | 2;
 export type BinaryTreeDeletedResult<T> = { deleted: BinaryTreeNode<T> | null, needBalanced: BinaryTreeNode<T> | null };
-export type ResultsByTypeItem<T> = T | null | BinaryTreeNode<T> | number | BinaryTreeNodeId;
-export type ResultsByType<T> = Array<T | null> | BinaryTreeNode<T> [] | number[] | BinaryTreeNodeId[];
+export type ResultsByTypeItem<T> = T | BinaryTreeNode<T> | number | BinaryTreeNodeId;
+export type ResultsByType<T> = ResultsByTypeItem<T>[];
+
+export interface BinaryTreeNodeParam<T> {
+    id: BinaryTreeNodeId;
+    val: T;
+    count?: number;
+}
 
 export interface I_BinaryTree<T> {
     clear(): void;
@@ -32,7 +38,7 @@ export interface I_BinaryTree<T> {
 
     BFS(nodeOrPropertyName: 'id'): BinaryTreeNodeId[];
 
-    BFS(nodeOrPropertyName: 'val'): (T | null)[];
+    BFS(nodeOrPropertyName: 'val'): T[];
 
     BFS(nodeOrPropertyName: 'node'): BinaryTreeNode<T>[];
 
@@ -46,7 +52,7 @@ export interface I_BinaryTree<T> {
 
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
 
-    DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): (T | null)[];
+    DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
 
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
 
@@ -60,7 +66,7 @@ export interface I_BinaryTree<T> {
 
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
 
-    DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): (T | null)[];
+    DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
 
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
 
@@ -74,7 +80,7 @@ export interface I_BinaryTree<T> {
 
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
 
-    morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): (T | null)[];
+    morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
 
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
 
@@ -119,10 +125,11 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         this._allowDuplicate = v;
     }
 
-    protected constructor()
-    protected constructor(nodeOrData: T[], allowDuplicate?: boolean)
-    protected constructor(nodeOrData: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number }, allowDuplicate?: boolean)
-    protected constructor(nodeOrData?: { idOrNode?: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number } | T[], allowDuplicate?: boolean) {
+    constructor()
+    constructor(nodeOrData: T[], allowDuplicate?: boolean)
+    constructor(nodeOrData: BinaryTreeNode<T>, allowDuplicate?: boolean)
+    constructor(nodeOrData: BinaryTreeNodeParam<T>, allowDuplicate?: boolean)
+    constructor(nodeOrData?: BinaryTreeNodeParam<T> | BinaryTreeNode<T> | T[], allowDuplicate?: boolean) {
         if (allowDuplicate !== undefined) {
             this._allowDuplicate = allowDuplicate;
         }
@@ -130,15 +137,15 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
             this.fill(nodeOrData);
         } else {
             if (nodeOrData !== undefined) {
-                const {idOrNode, val, count} = nodeOrData;
+                const {id, val, count} = nodeOrData;
                 if (allowDuplicate === undefined) {
                     allowDuplicate = false;
                 }
-                if (idOrNode !== undefined) {
-                    if (typeof idOrNode === 'number') {
-                        this.root = this.createNode(idOrNode, val, count);
+                if (id !== undefined) {
+                    if (typeof id === 'number') {
+                        this.root = this.createNode(id, val, count);
                     } else {
-                        this.root = idOrNode;
+                        this.root = id;
                     }
                     this._size = 1;
                 }
@@ -147,7 +154,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     }
 
-    abstract createNode(id: BinaryTreeNodeId, val?: T | null, count?: number): BinaryTreeNode<T> | null;
+    abstract createNode(id: BinaryTreeNodeId, val: T, count?: number): BinaryTreeNode<T> | null;
 
     clear() {
         this.root = null;
@@ -158,7 +165,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         return this._size === 0;
     }
 
-    insert(id: BinaryTreeNodeId, val: T | null, count?: number): BinaryTreeNode<T> | null {
+    insert(id: BinaryTreeNodeId, val: T, count?: number): BinaryTreeNode<T> | null {
         if (count === undefined) {
             count = 1;
         }
@@ -322,7 +329,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         return (this.getMinHeight(beginRoot) + 1 >= this.getHeight(beginRoot));
     }
 
-    getNodes(nodeProperty: BinaryTreeNodeId | number | T, propertyName ?: BinaryTreeNodePropertyName, onlyOne ?: boolean) {
+    getNodes(nodeProperty: BinaryTreeNodeId | T, propertyName ?: BinaryTreeNodePropertyName, onlyOne ?: boolean) {
         if (propertyName === undefined) {
             propertyName = 'id';
         }
@@ -395,7 +402,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
     }
 
     protected _visitedId: BinaryTreeNodeId[] = [];
-    protected _visitedVal: Array<T | null> = [];
+    protected _visitedVal: Array<T> = [];
     protected _visitedNode: BinaryTreeNode<T>[] = [];
     protected _visitedCount: number[] = [];
     protected _visitedLeftSum: number[] = [];
@@ -458,7 +465,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     BFS(): BinaryTreeNodeId[];
     BFS(nodeOrPropertyName: 'id'): BinaryTreeNodeId[];
-    BFS(nodeOrPropertyName: 'val'): (T | null)[];
+    BFS(nodeOrPropertyName: 'val'): T[];
     BFS(nodeOrPropertyName: 'node'): BinaryTreeNode<T>[];
     BFS(nodeOrPropertyName: 'count'): number[];
     BFS(nodeOrPropertyName: 'allLesserSum'): number[];    // TODO in BinaryTree not implemented
@@ -484,7 +491,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     DFS(): BinaryTreeNodeId[];
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
-    DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): (T | null)[];
+    DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'count'): number[];
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'allLesserSum'): number[]; // TODO in BinaryTree not implemented
@@ -526,7 +533,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     DFSIterative(): BinaryTreeNodeId[];
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
-    DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): (T | null)[];
+    DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'count'): number[];
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'allLesserSum'): number[]; // TODO in BinaryTree not implemented
@@ -580,7 +587,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     levelIterative(node: BinaryTreeNode<T> | null): BinaryTreeNodeId[];
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
-    levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'val'): (T | null)[];
+    levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'val'): T[];
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'count'): number[];
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'allLesserSum'): number[];
@@ -611,7 +618,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     listLevels(node: BinaryTreeNode<T> | null): BinaryTreeNodeId[][];
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[][];
-    listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'val'): (T | null)[][];
+    listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'val'): T[][];
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[][];
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'count'): number[][];
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'allLesserSum'): number[][];
@@ -675,7 +682,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     morris(): BinaryTreeNodeId[];
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
-    morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): (T | null)[];
+    morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'count'): number[];
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'allLesserSum'): number[];
@@ -821,16 +828,16 @@ export class BinaryTreeNode<T> {
         this._id = v;
     }
 
-    protected _val: T | null = null;
-    public get val(): T | null {
+    protected _val: T;
+    public get val(): T {
         return this._val;
     }
 
-    public set val(v: T | null) {
+    public set val(v: T) {
         this._val = v;
     }
 
-    protected _left: BinaryTreeNode<T> | null | undefined = undefined;
+    protected _left?: BinaryTreeNode<T> | null;
     public get left(): BinaryTreeNode<T> | null | undefined {
         return this._left;
     }
@@ -843,7 +850,7 @@ export class BinaryTreeNode<T> {
         this._left = v;
     }
 
-    protected _right: BinaryTreeNode<T> | null | undefined = undefined;
+    protected _right?: BinaryTreeNode<T> | null;
     public get right(): BinaryTreeNode<T> | null | undefined {
         return this._right;
     }
@@ -902,10 +909,7 @@ export class BinaryTreeNode<T> {
         this._allLesserSum = v;
     }
 
-    constructor(id: BinaryTreeNodeId, val?: T | null, count?: number) {
-        if (val === undefined) {
-            val = null;
-        }
+    constructor(id: BinaryTreeNodeId, val: T, count?: number) {
         if (count === undefined) {
             count = 1;
         }
@@ -924,8 +928,8 @@ export class BinaryTreeNode<T> {
     }
 
     swapLocation(swapNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
-        const tempNode = new BinaryTreeNode<T>(swapNode.id);
         const {val, count, height, allLesserSum} = swapNode;
+        const tempNode = new BinaryTreeNode<T>(swapNode.id, val);
         tempNode.val = val;
         tempNode.count = count;
         tempNode.height = height;
@@ -953,8 +957,9 @@ export class BinaryTreeNode<T> {
 export class BinaryTree<T> extends AbstractBinaryTree<T> {
     constructor()
     constructor(nodeOrData: T[], allowDuplicate?: boolean)
-    constructor(nodeOrData: { idOrNode: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number }, allowDuplicate?: boolean)
-    constructor(nodeOrData?: { idOrNode: BinaryTreeNodeId | BinaryTreeNode<T>, val?: T | null, count?: number } | T[], allowDuplicate?: boolean) {
+    constructor(nodeOrData: BinaryTreeNode<T>, allowDuplicate?: boolean)
+    constructor(nodeOrData: BinaryTreeNodeParam<T>, allowDuplicate?: boolean)
+    constructor(nodeOrData?: BinaryTreeNodeParam<T> | BinaryTreeNode<T> | T[], allowDuplicate?: boolean) {
         super();
         // super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
         // if (allowDuplicate !== undefined) {
@@ -963,7 +968,7 @@ export class BinaryTree<T> extends AbstractBinaryTree<T> {
         if (nodeOrData !== undefined) {
             if (Array.isArray(nodeOrData)) {
                 super(nodeOrData, allowDuplicate); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
-            } else {
+            } else if (nodeOrData.id) {
                 super(nodeOrData, allowDuplicate); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
             }
         }
