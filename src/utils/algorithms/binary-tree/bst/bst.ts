@@ -1,6 +1,6 @@
 import {BinaryTreeNodeId, BST, BSTNode} from '../../../data-structures';
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {testBSTCase1, trimABSTCase1} from './cases';
+import {deleteLeavesCase1, testBSTCase1, trimABSTCase1} from './cases';
 import {runAlgorithm} from '../../helpers';
 import {wait, WaitManager} from '../../../utils';
 
@@ -284,6 +284,7 @@ function findMode(root: BSTNode<number> | null): number[] {
 // 450	Delete Node in a BST	★★★★						binary search
 
 
+// 669. Trim a Binary Search Tree
 export async function trimABST(data: Array<number | null>, low: number, high: number, proxyHandler?: TProxyHandler): Promise<BSTNode<number> | null> {
     const clonedData = [...data];
     const proxy: { binaryTree: BST<number> } = new DeepProxy({
@@ -306,7 +307,7 @@ export async function trimABST(data: Array<number | null>, low: number, high: nu
     const ans = await trimBST(proxy.binaryTree.root, low, high);
     proxy.binaryTree.root = ans;
     // TODO proxy bug needs to be fixed, last time not effective, with a DFS hack can apply another effect
-    // proxy.binaryTree.DFS();
+    proxy.binaryTree.DFS();
     return ans;
 }
 
@@ -315,5 +316,19 @@ const runTrimABST = async () => {
 };
 
 // runTrimABST().then();
+
+// 1325. Delete Leaves With a Given Value
+export async function deleteLeaves(data: Array<number | null>, target: number, proxyHandler?: TProxyHandler): Promise<BSTNode<number> | null> {
+    const clonedData = [...data];
+    const proxy: { bst: BST<number> } = new DeepProxy({
+        bst: new BST<number>(clonedData)
+    }, proxyHandler);
+
+    return proxy.bst.root;
+}
+
+const runDeleteLeaves = async () => {
+    await runAlgorithm(deleteLeaves, false, ...deleteLeavesCase1);
+};
 
 /** --- end BST --- **/

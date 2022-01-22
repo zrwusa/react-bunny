@@ -2,7 +2,7 @@ import {EDemoThunkAction} from './constants';
 import {IDemoThunkSuccessPayload, IReqDemoThunkPayload} from './payloads';
 import {AxiosError} from 'axios';
 import {IThunkResult} from '../thunk';
-import api from '../../common/api';
+import api from '../../helpers/api';
 
 
 export interface IDemoThunkSuccessAction {

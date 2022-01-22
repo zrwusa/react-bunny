@@ -17,7 +17,7 @@ import Login from './pages/Login/Login';
 import DemoThunkCC from './pages/demos/DemoThunkCC';
 import {PrivateRoute} from './components/PrivateRoute';
 import DemoRedirect from './pages/demos/DemoRedirect';
-import history from './common/history';
+import history from './helpers/history';
 import {AlgorithmScreen} from './pages/Algorithm';
 
 interface IProps {

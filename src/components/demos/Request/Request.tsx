@@ -1,5 +1,5 @@
 import React, {Component, MouseEvent} from 'react';
-import api from '../../../common/api';
+import api from '../../../helpers/api';
 import {IDemoEmployee} from '../../../stores/models';
 
 type IProps = { title: string, }

@@ -1,7 +1,7 @@
 import {EUser} from './constants';
 import {ILoginSuccessPayload, ILogoutPayload, IReqLoginPayload} from './payloads';
 
-import api from '../../common/api';
+import api from '../../helpers/api';
 import {IThunkResult} from '../thunk';
 import {AxiosError} from 'axios';
 
