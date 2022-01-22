@@ -4,7 +4,7 @@ import {testBSTCase1, trimABSTCase1} from './cases';
 import {runAlgorithm} from '../../helpers';
 import {wait, WaitManager} from '../../../utils';
 
-const waitManager = new WaitManager(2);
+const waitManager = new WaitManager(6);
 const {time1, time2, time3} = waitManager;
 
 export async function testBST(arr: number[], proxyHandler?: TProxyHandler) {
@@ -290,11 +290,9 @@ export async function trimABST(data: Array<number | null>, low: number, high: nu
         binaryTree: new BST<number>(clonedData)
     }, proxyHandler);
 
-    const root = proxy.binaryTree.root;
-
     async function trimBST(cur: BSTNode<number> | null | undefined, low: number, high: number): Promise<BSTNode<number> | null> {
-        if (!cur) return null;
         await wait(time1);
+        if (!cur) return null;
 
         if (cur.val < low) return await trimBST(cur.right, low, high);
         if (cur.val > high) return await trimBST(cur.left, low, high);
@@ -305,7 +303,11 @@ export async function trimABST(data: Array<number | null>, low: number, high: nu
         return cur;
     }
 
-    return await trimBST(root, low, high);
+    const ans = await trimBST(proxy.binaryTree.root, low, high);
+    proxy.binaryTree.root = ans;
+    // TODO proxy bug needs to be fixed, last time not effective, with a DFS hack can apply another effect
+    // proxy.binaryTree.DFS();
+    return ans;
 }
 
 const runTrimABST = async () => {

@@ -14,4 +14,4 @@ export const pathSumIIICase5: PathSumIIIParams = [[0, 1, 1, 0, 1, 1], 1];
 
 export type TrimABSTParams = [Array<number | null>, number, number];
 export const trimABSTCase1: TrimABSTParams = [[3, 0, 4, null, 2, null, null, 1], 1, 3];
-
+export const trimABSTCase2: TrimABSTParams = [[11, 3, 15, 1, 8, 13, 16, 2, 6, 9, 12, 14, 4, 7, 10, 5], 1, 3];

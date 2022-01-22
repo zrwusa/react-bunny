@@ -31,10 +31,10 @@ import {
     treeData,
     treeMaxDepth,
     trimABST,
-    trimABSTCase1
+    trimABSTCase2
 } from '../../utils/algorithms';
 import {VividAlgorithm} from '../../components/VividAlgorithm';
-import {BinaryTree, BinaryTreeNode, SinglyLinkedList} from '../../utils/data-structures';
+import {BinaryTree, BinaryTreeNode, BST, SinglyLinkedList} from '../../utils/data-structures';
 import {THandlerContext} from '@qiwi/deep-proxy';
 import {runAllWordBreakII} from '../../utils/algorithms/uncategorized';
 
@@ -194,7 +194,7 @@ export function AlgorithmScreen() {
 
     const [trimABSTVariables, setTrimABSTVariables] = useState<{ [key in string]: unknown }>();
     const _trimABST = async () => {
-        const result = await trimABST(...trimABSTCase1, proxyFactory(setTrimABSTVariables));
+        const result = await trimABST(...trimABSTCase2, proxyFactory(setTrimABSTVariables));
         console.log('Test trimABST: ', result);
     };
 
@@ -282,9 +282,7 @@ export function AlgorithmScreen() {
                     <span>Test PathSum III</span>
                 </button>
 
-                <button onClick={async () => {
-                    await _trimABST();
-                }}>
+                <button onClick={_trimABST}>
                     <span>Trim a BST</span>
                 </button>
 

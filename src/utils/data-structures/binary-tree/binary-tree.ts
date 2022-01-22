@@ -109,7 +109,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
 
     protected _size = 0;
     public get size(): number {
-        return this.size;
+        return this._size;
     }
 
     public set size(v: number) {
@@ -138,9 +138,6 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         } else {
             if (nodeOrData !== undefined) {
                 const {id, val, count} = nodeOrData;
-                if (allowDuplicate === undefined) {
-                    allowDuplicate = false;
-                }
                 if (id !== undefined) {
                     if (typeof id === 'number') {
                         this.root = this.createNode(id, val, count);
@@ -501,7 +498,7 @@ export abstract class AbstractBinaryTree<T> implements I_BinaryTree<T> {
         }
 
         if (nodeOrPropertyName === undefined) {
-            nodeOrPropertyName = 'id';
+            nodeOrPropertyName = 'val';
         }
 
         this._resetResults();
