@@ -18,3 +18,5 @@ export const trimABSTCase2: TrimABSTParams = [[11, 3, 15, 1, 8, 13, 16, 2, 6, 9,
 
 export type DeleteLeavesParams = [(number | null)[], number];
 export const deleteLeavesCase1: DeleteLeavesParams = [[1, 2, 3, 2, null, 2, 4], 2];
+export const deleteLeavesCase2: DeleteLeavesParams = [[1, 3, 3, 3, 2], 3];
+export const deleteLeavesCase3: DeleteLeavesParams = [[1, 2, null, 2, null, 2], 2];

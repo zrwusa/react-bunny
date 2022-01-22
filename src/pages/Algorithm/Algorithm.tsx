@@ -6,6 +6,8 @@ import {
     countSmallerCase1,
     cutOffTree,
     cutOffTreeCase8,
+    deleteLeaves,
+    deleteLeavesCase1,
     DFS,
     isValidParenthesis,
     ladderLengthCase1,
@@ -99,6 +101,8 @@ export function AlgorithmScreen() {
                             buttonLabel={'Symmetric Tree'}/>
             <AlgorithmPanel algorithm={pathSumIII} testCase={pathSumIIICase5} buttonLabel={'Path Sum III'}/>
             <AlgorithmPanel algorithm={trimABST} testCase={trimABSTCase2} buttonLabel={'Trim a BST'}/>
+            <AlgorithmPanel algorithm={deleteLeaves} testCase={deleteLeavesCase1}
+                            buttonLabel={'Delete Leaves With a Given Value'}/>
         </div>
     );
 }

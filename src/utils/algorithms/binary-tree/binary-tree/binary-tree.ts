@@ -2,7 +2,7 @@ import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
 import {BinaryTree, BinaryTreeNode} from '../../../data-structures';
 import {wait, WaitManager} from '../../../utils';
 import {runAlgorithm} from '../../helpers';
-import {pathSumIIICase3, testBSTCase1, testSymmetricTreeCase1} from '../bst';
+import {deleteLeavesCase1, pathSumIIICase3, testBSTCase1, testSymmetricTreeCase1} from '../bst';
 
 const waitManager = new WaitManager(10);
 const {time1, time2, time3} = waitManager;
@@ -362,6 +362,32 @@ export async function pathSumIII(data: Array<number | null>, targetSum: number, 
 
 const runPathSumIII = async () => {
     await runAlgorithm(pathSumIII, false, ...pathSumIIICase3);
+};
+
+
+// 1325. Delete Leaves With a Given Value
+export async function deleteLeaves(data: Array<number | null>, target: number, proxyHandler?: TProxyHandler): Promise<BinaryTreeNode<number | null> | null> {
+    const clonedData = [...data];
+    const proxy: { bst: BinaryTree<number | null> } = new DeepProxy({
+        bst: new BinaryTree<number | null>(clonedData)
+    }, proxyHandler);
+
+    function dfs(root: BinaryTreeNode<number | null> | null) {
+        if (!root) return null;
+
+        if (root.left !== undefined) root.left = dfs(root.left);
+        if (root.right !== undefined) root.right = dfs(root.right);
+
+        if (!root.left && !root.right && root.val === target) return null;
+        return root;
+    }
+
+    const ans = dfs(proxy.bst.root);
+    return ans;
+}
+
+const runDeleteLeaves = async () => {
+    await runAlgorithm(deleteLeaves, false, ...deleteLeavesCase1);
 };
 
 // runPathSumIII().then();

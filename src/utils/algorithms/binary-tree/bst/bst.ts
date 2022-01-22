@@ -1,6 +1,6 @@
 import {BinaryTreeNodeId, BST, BSTNode} from '../../../data-structures';
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {deleteLeavesCase1, testBSTCase1, trimABSTCase1} from './cases';
+import {testBSTCase1, trimABSTCase1} from './cases';
 import {runAlgorithm} from '../../helpers';
 import {wait, WaitManager} from '../../../utils';
 
@@ -316,19 +316,5 @@ const runTrimABST = async () => {
 };
 
 // runTrimABST().then();
-
-// 1325. Delete Leaves With a Given Value
-export async function deleteLeaves(data: Array<number | null>, target: number, proxyHandler?: TProxyHandler): Promise<BSTNode<number> | null> {
-    const clonedData = [...data];
-    const proxy: { bst: BST<number> } = new DeepProxy({
-        bst: new BST<number>(clonedData)
-    }, proxyHandler);
-
-    return proxy.bst.root;
-}
-
-const runDeleteLeaves = async () => {
-    await runAlgorithm(deleteLeaves, false, ...deleteLeavesCase1);
-};
 
 /** --- end BST --- **/

@@ -958,10 +958,6 @@ export class BinaryTree<T> extends AbstractBinaryTree<T> {
     constructor(nodeOrData: BinaryTreeNodeParam<T>, allowDuplicate?: boolean)
     constructor(nodeOrData?: BinaryTreeNodeParam<T> | BinaryTreeNode<T> | T[], allowDuplicate?: boolean) {
         super();
-        // super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
-        // if (allowDuplicate !== undefined) {
-        //     this._allowDuplicate = allowDuplicate
-        // }
         if (nodeOrData !== undefined) {
             if (Array.isArray(nodeOrData)) {
                 super(nodeOrData, allowDuplicate); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
@@ -969,11 +965,8 @@ export class BinaryTree<T> extends AbstractBinaryTree<T> {
                 super(nodeOrData, allowDuplicate); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
             }
         }
-
     }
 
-    // createNode(id: BinaryTreeNodeId, val?: T , count?: number): BinaryTreeNode<T>
-    // createNode(id: BinaryTreeNodeId, val?: null, count?: number): null
     createNode(id: BinaryTreeNodeId, val: T | null, count?: number): BinaryTreeNode<T> | null {
         return val !== null ? new BinaryTreeNode(id, val, count) : null;
     }
