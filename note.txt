@@ -1,0 +1,504 @@
+
+     "start": "webpack serve --open 'google Chrome'",
+     "build": "webpack --mode production",
+
+  "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --config webpack.config.dev.ts serve --open 'google Chrome'",
+    "build": "webpack --config webpack.prod.js --mode production"
+
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    "webpack": "^5.7.0",
+
+    CSS Processor Sass
+    Autoprefixer
+    /* autoprefixer: off */
+    /* autoprefixer: ignore next */
+    console.log(autoprefixer().info())
+
+    CSS Naming Scheme BEM
+    Flexbox
+    Jest
+    Stylelint
+    Styled Components
+    Task Runners Gulp
+    Module Bundler Webpack
+    Performance Testing Lighthouse
+
+
+
+
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ]
+  ]
+
+
+const { CheckerPlugin } = require('awesome-typescript-loader');
+
+
+    "noImplicitAny": false
+
+"autoprefixer": "^10.0.4",
+
+
+//    "consistent-this": ["error", "self"],
+//    // just as bad as "max components per file"
+//    "max-classes-per-file": "off",
+//    // Too interruptive
+//    "no-alert": "error",
+//    // Allow warn and error for dev environments
+//    "no-console": ["error", { "allow": ["warn", "error"] }],
+//    "no-param-reassign": "off", // It's fine.
+//    "no-restricted-imports": [
+//      "error",
+//      {
+//        "patterns": [
+//          "@material-ui/*/*/*",
+//          // Begin block: Packages with files instead of packages in the top level
+//          // Importing from the top level pulls in CommonJS instead of ES modules
+//          // Allowing /icons as to reduce cold-start of dev builds significantly.
+//          // There's nothing to tree-shake when importing from /icons this way:
+//          // '@material-ui/icons/*/',
+//          "@material-ui/system/*",
+//          "@material-ui/utils/*",
+//          // End block
+//          // Macros are fine since their import path is transpiled away
+//          "!@material-ui/utils/macros",
+//          "@material-ui/utils/macros/*",
+//          "!@material-ui/utils/macros/*.macro",
+//        ],
+//      },
+//    ],
+//    "no-constant-condition": "error",
+//    // Use the proptype inheritance chain
+//    "no-prototype-builtins": "off",
+//    "no-underscore-dangle": "error",
+//    "nonblock-statement-body-position": "error",
+//    "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
+//    // Destructuring harm grep potential.
+//    "prefer-destructuring": "off",
+//
+//    // TODO performance consideration
+//    "@typescript-eslint/dot-notation": "off",
+//    // TODO performance consideration
+//    "@typescript-eslint/no-implied-eval": "off",
+//    // TODO performance consideration
+//    "@typescript-eslint/no-throw-literal": "off",
+//
+//    // Not sure why it doesn't work
+//    "import/named": "off",
+//    // Missing yarn workspace support
+//    "import/no-extraneous-dependencies": "off",
+//
+//    // doesn't work?
+//    "jsx-a11y/label-has-associated-control": [
+//      "error",
+//      {
+//        // airbnb uses 'both' which requires nesting i.e. <label><input /></label>
+//        // 'either' allows `htmlFor`
+//        "assert": "either",
+//      },
+//    ],
+//    // We are a library, we need to support it too
+//    "jsx-a11y/no-autofocus": "off",
+//
+//    "material-ui/docgen-ignore-before-comment": "error",
+//    "material-ui/rules-of-use-theme-variants": "error",
+//
+//    "react-hooks/exhaustive-deps": ["error", { "additionalHooks": "useEnhancedEffect" }],
+//    "react-hooks/rules-of-hooks": "error",
+//
+//    "react/default-props-match-prop-types": [
+//      "error",
+//      {
+//        // Otherwise the rule thinks inner props = outer props
+//        // But in TypeScript we want to know that a certain prop is defined during render
+//        // while it can be ommitted from the callsite.
+//        // Then defaultProps (or default values) will make sure that the prop is defined during render
+//        "allowRequiredDefaults": true,
+//      },
+//    ],
+//    // Can add verbosity to small functions making them harder to grok.
+//    // Though we have to manually enforce it for function components with default values.
+//    "react/destructuring-assignment": "off",
+//    "react/forbid-prop-types": "off", // Too strict, no time for that
+//    "react/jsx-curly-brace-presence": "off", // broken
+//    // airbnb is using .jsx
+//    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".tsx"] }],
+//    // Prefer <React.Fragment> over <>.
+//    "react/jsx-fragments": ["error", "element"],
+//    // We are a UI library.
+//    "react/jsx-props-no-spreading": "off",
+//    // This rule is great for raising people awareness of what a key is and how it works.
+//    "react/no-array-index-key": "off",
+//    "react/no-danger": "error",
+//    "react/no-direct-mutation-state": "error",
+//    // Not always relevant
+//    "react/require-default-props": "off",
+//    "react/sort-prop-types": "error",
+//    // This depends entirely on what you're doing. There's no universal pattern
+//    "react/state-in-constructor": "off",
+//    // stylistic opinion. For conditional assignment we want it outside, otherwise as static
+//    "react/static-property-placement": "off"
+
+        performance: prodMode ? {
+            hints: false,
+            maxEntrypointSize: 512000,
+            maxAssetSize: 512000
+        } : undefined,
+
+
+
+        {
+          "presets": [
+            "@babel/preset-env",
+            "@babel/preset-react",
+            "@babel/preset-typescript"
+          ],
+          "plugins": [
+            "react-hot-loader/babel",
+            ["@babel/transform-runtime"]
+          ]
+        }
+
+
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false
+        }
+      }
+    ]
+
+    For your layout, use CSS grid, for alignment of your elements, use Flexbox.
+
+
+
+
+    #root{
+      height: 100vh;
+    }
+
+    .lo1-container > * {
+      background-color: #ffec99;
+    }
+
+    .lo1-container {
+      display: grid;
+      grid-template-columns: repeat(12, [col-start] 1fr);
+      gap: 2px;
+      margin: 0 auto;
+    }
+
+    .lo1-container > * {
+      grid-column: col-start / span 12;
+    }
+    @media (min-width: 500px) {
+      .lo1-content, .main-footer {
+        grid-column: col-start 0 / span 12;
+      }
+      nav ul {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+    @media (min-width: 700px) {
+      .lo1-header{
+        height: 60px;
+      }
+      .lo1-footer{
+        height: 60px;
+      }
+      .lo1-nav,.lo1-content{
+        height: calc(100vh - 124px);
+      }
+      .lo1-nav {
+        grid-column: col-start / span 3;
+        grid-row: 2 / 4;
+      }
+      .lo1-content {
+        grid-column: col-start 4 / span 9;
+        grid-row: 2 / 4;
+      }
+
+      .lo1-footer {
+        grid-column: col-start / span 12;
+      }
+      nav ul {
+        flex-direction: column;
+      }
+    }
+
+    .lo1-with-side{
+      @media (min-width: 500px) {
+        .lo1-side {
+          grid-column: col-start / span 3;
+          grid-row: 3;
+        }
+        .lo1-ad {
+          grid-column: col-start / span 3;
+          grid-row: 4;
+        }
+        .lo1-content, .lo1-footer {
+          grid-column: col-start 4 / span 9;
+        }
+      }
+      @media (min-width: 700px) {
+        .lo1-nav {
+          grid-column: col-start / span 2;
+          grid-row: 2 / 4;
+        }
+        .lo1-content {
+          grid-column: col-start 3 / span 8;
+          grid-row: 2 / 4;
+        }
+        .lo1-side {
+          grid-column: col-start 11 / span 2;
+          grid-row: 2;
+        }
+        .lo1-ad {
+          grid-column: col-start 11 / span 2;
+          grid-row: 3;
+        }
+        .lo1-footer {
+          grid-column: col-start / span 12;
+        }
+      }
+    }
+
+
+
+
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all",
+
+
+          "browserslist": [
+            "defaults",
+            "not ie < 11",
+            "last 2 versions",
+            "> 1%",
+            "iOS 7",
+            "last 3 iOS versions"
+          ]
+
+
+
+
+{
+  "rules": {
+    "at-rule-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "blockless-after-same-name-blockless",
+          "first-nested"
+        ],
+        "ignore": [
+          "after-comment"
+        ]
+      }
+    ],
+    "at-rule-name-case": "lower",
+    "at-rule-name-space-after": "always-single-line",
+    "at-rule-semicolon-newline-after": "always",
+    "block-closing-brace-empty-line-before": "never",
+    "block-closing-brace-newline-after": "always",
+    "block-closing-brace-newline-before": "always-multi-line",
+    "block-closing-brace-space-before": "always-single-line",
+    "block-opening-brace-newline-after": "always-multi-line",
+    "block-opening-brace-space-after": "always-single-line",
+    "block-opening-brace-space-before": "always",
+    "color-hex-case": "lower",
+    "color-hex-length": "short",
+    "comment-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "first-nested"
+        ],
+        "ignore": [
+          "stylelint-commands"
+        ]
+      }
+    ],
+    "comment-whitespace-inside": "always",
+    "custom-property-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "after-custom-property",
+          "first-nested"
+        ],
+        "ignore": [
+          "after-comment",
+          "inside-single-line-block"
+        ]
+      }
+    ],
+    "declaration-bang-space-after": "never",
+    "declaration-bang-space-before": "always",
+    "declaration-block-semicolon-newline-after": "always-multi-line",
+    "declaration-block-semicolon-space-after": "always-single-line",
+    "declaration-block-semicolon-space-before": "never",
+    "declaration-block-single-line-max-declarations": 1,
+    "declaration-block-trailing-semicolon": "always",
+    "declaration-colon-newline-after": "always-multi-line",
+    "declaration-colon-space-after": "always-single-line",
+    "declaration-colon-space-before": "never",
+    "declaration-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "after-declaration",
+          "first-nested"
+        ],
+        "ignore": [
+          "after-comment",
+          "inside-single-line-block"
+        ]
+      }
+    ],
+    "function-comma-newline-after": "always-multi-line",
+    "function-comma-space-after": "always-single-line",
+    "function-comma-space-before": "never",
+    "function-max-empty-lines": 0,
+    "function-name-case": "lower",
+    "function-parentheses-newline-inside": "always-multi-line",
+    "function-parentheses-space-inside": "never-single-line",
+    "function-whitespace-after": "always",
+    "indentation": 2,
+    "length-zero-no-unit": true,
+    "max-empty-lines": 1,
+    "media-feature-colon-space-after": "always",
+    "media-feature-colon-space-before": "never",
+    "media-feature-name-case": "lower",
+    "media-feature-parentheses-space-inside": "never",
+    "media-feature-range-operator-space-after": "always",
+    "media-feature-range-operator-space-before": "always",
+    "media-query-list-comma-newline-after": "always-multi-line",
+    "media-query-list-comma-space-after": "always-single-line",
+    "media-query-list-comma-space-before": "never",
+    "no-eol-whitespace": true,
+    "no-missing-end-of-source-newline": true,
+    "number-leading-zero": "always",
+    "number-no-trailing-zeros": true,
+    "property-case": "lower",
+    "rule-empty-line-before": [
+      "always-multi-line",
+      {
+        "except": [
+          "first-nested"
+        ],
+        "ignore": [
+          "after-comment"
+        ]
+      }
+    ],
+    "selector-attribute-brackets-space-inside": "never",
+    "selector-attribute-operator-space-after": "never",
+    "selector-attribute-operator-space-before": "never",
+    "selector-combinator-space-after": "always",
+    "selector-combinator-space-before": "always",
+    "selector-descendant-combinator-no-non-space": true,
+    "selector-list-comma-newline-after": "always",
+    "selector-list-comma-space-before": "never",
+    "selector-max-empty-lines": 0,
+    "selector-pseudo-class-case": "lower",
+    "selector-pseudo-class-parentheses-space-inside": "never",
+    "selector-pseudo-element-case": "lower",
+    "selector-pseudo-element-colon-notation": "double",
+    "selector-type-case": "lower",
+    "unit-case": "lower",
+    "value-keyword-case": "lower",
+    "value-list-comma-newline-after": "always-multi-line",
+    "value-list-comma-space-after": "always-single-line",
+    "value-list-comma-space-before": "never",
+    "value-list-max-empty-lines": 0
+  }
+}
+
+
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react-hooks"
+  ],
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": "off"
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
+  }
+}
+
+
+
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react-hooks"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": "off",
+    "no-console": 1
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
+  }
+}
