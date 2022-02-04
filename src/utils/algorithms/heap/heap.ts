@@ -1,7 +1,6 @@
 /* --- start heap --- */
 // 215. Kth Largest Element in an Array ★★★★
 // O(nLog(k))
-import {HeapNode, MaxHeap, MinHeap} from '../../data-structures/heap';
 import {runAlgorithm} from '../helpers';
 import {
     findKthLargestCase1,
@@ -14,19 +13,20 @@ import {
     topKFrequentCase1
 } from './cases';
 import {SinglyLinkedListNode} from '../../data-structures/linked-list';
+import {Heap} from '../../data-structures/heap/heap';
 
 export function findKthLargestMinHeap(nums: number[], k: number): number {
-    const heap = new MinHeap<number, number>([]);
+    const heap = new Heap<number>({nodes: [], comparator: (a, b) => a - b});
     for (const i of nums) {
         // TODO after no-non-null-assertion not ensure the logic
         const peek = heap.peek();
         if (peek) {
-            if (heap.size() < k || i >= peek) {
+            if (heap.size < k || i >= peek) {
                 heap.insert(i);
             }
         }
 
-        if (heap.size() > k) {
+        if (heap.size > k) {
             heap.poll();
         }
     }
@@ -50,34 +50,34 @@ const runAllFindKthLargest = async () => {
 //23. Merge k Sorted Lists
 function mergeKLists(lists: SinglyLinkedListNode[]): SinglyLinkedListNode | null {
     // TODO dev tools was disconnected issue
-    const heap = new MinHeap<HeapNode<SinglyLinkedListNode>, SinglyLinkedListNode>();
+    const heap = new Heap<SinglyLinkedListNode>({nodes: [], comparator: (a, b) => a.value - b.value});
     for (const l of lists) {
         if (l) {
-            heap.insert(new HeapNode<SinglyLinkedListNode>(l.value, l));
+            heap.insert(l.value);
         }
     }
-    if (heap.size() < 1) {
+    if (heap.size < 1) {
         return null;
     }
     // TODO after no-non-null-assertion not ensure the logic
     const polled = heap.poll();
-    const ans: SinglyLinkedListNode | null = polled ? polled.val : null;
+    const ans: SinglyLinkedListNode | null = polled ? polled : null;
     if (ans) {
         ans.prev = null;
         if (ans.next) {
-            heap.insert(new HeapNode(ans.next.value, ans.next));
+            heap.insert(ans.next);
         }
         let prev: SinglyLinkedListNode = ans;
         while (!heap.isEmpty()) {
             // TODO after no-non-null-assertion not ensure the logic
             const polled = heap.poll();
-            const cur = polled ? polled.val : null;
+            const cur = polled ? polled : null;
             if (cur) {
                 cur.prev = prev;
                 prev.next = cur;
                 prev = prev.next;
                 if (cur.next) {
-                    heap.insert(new HeapNode(cur.next.value, cur.next));
+                    heap.insert(cur.next.value);
                 }
             }
         }
@@ -107,31 +107,28 @@ function topKFrequent(nums: number[], k: number): number[] {
         }
     }
 
-    const heap = new MinHeap<HeapNode<[number, number]>, [number, number]>();
+    const minHeap = new Heap<[number, number]>({nodes: [], comparator: (a, b) => a[1] - b[1]});
 
     for (const entry of hash) {
-        const node = new HeapNode<[number, number]>(entry[1], entry);
-
-        if (heap.size() < k) {
-            heap.insert(node);
-        } else if (heap.size() === k) {
-            const peek = heap.peek();
+        if (minHeap.size < k) {
+            minHeap.insert(entry);
+        } else if (minHeap.size === k) {
+            const peek = minHeap.peek();
             // TODO after no-non-null-assertion not ensure the logic
             if (peek) {
-                if (peek.id < entry[1]) {
-                    heap.poll();
-                    heap.insert(node);
+                if (peek[1] < entry[1]) {
+                    minHeap.poll();
+                    minHeap.insert(entry);
                 }
             }
         }
 
     }
 
-    return heap.toArray().map(item => {
-        const val = item.val;
+    return minHeap.toArray().map(item => {
         // TODO after no-non-null-assertion not ensure the logic
-        if (val) {
-            return val[0];
+        if (item) {
+            return item[0];
         } else {
             return NaN;
         }
@@ -181,20 +178,20 @@ const runAllTopKFrequent = async () => {
 //253
 //295. Find Median from Data Stream  ★★★★
 class MedianFinder {
-    private _leftHeap: MaxHeap<number, number>;
-    private _rightHeap: MinHeap<number, number>;
+    private _leftHeap: Heap<number>;
+    private _rightHeap: Heap<number>;
 
     constructor() {
-        this._leftHeap = new MaxHeap<number, number>();
-        this._rightHeap = new MinHeap<number, number>();
+        this._leftHeap = new Heap<number>({nodes: [], comparator: (a, b) => b - a});
+        this._rightHeap = new Heap<number>({nodes: [], comparator: (a, b) => a - b});
     }
 
     addNum(num: number): void {
-        if (this._leftHeap.size() === 0) {
+        if (this._leftHeap.size === 0) {
             this._leftHeap.insert(num);
         } else {
             const leftPeek = this._leftHeap.peek();
-            if (leftPeek !== null) {
+            if (leftPeek !== undefined) {
                 if (num > leftPeek) {
                     this._rightHeap.insert(num);
                 } else {
@@ -202,8 +199,8 @@ class MedianFinder {
                 }
             }
         }
-        const leftSize = this._leftHeap.size();
-        const rightSize = this._rightHeap.size();
+        const leftSize = this._leftHeap.size;
+        const rightSize = this._rightHeap.size;
         if (leftSize - rightSize >= 2) {
             // TODO after no-non-null-assertion not ensure the logic
             const leftPolled = this._leftHeap.poll();
@@ -220,8 +217,8 @@ class MedianFinder {
     }
 
     findMedian(): number {
-        const leftSize = this._leftHeap.size();
-        const rightSize = this._rightHeap.size();
+        const leftSize = this._leftHeap.size;
+        const rightSize = this._rightHeap.size;
         // TODO after no-non-null-assertion not ensure the logic
         const leftPeek = this._leftHeap.peek();
         const rightPeek = this._rightHeap.peek();
@@ -275,23 +272,23 @@ function reorganizeString(s: string): string {
         }
     }
 
-    const heap = new MaxHeap<HeapNode<[string, number]>, [string, number]>();
+    const heap = new Heap<[string, number]>({comparator: (a, b) => b[1] - a[1]});
 
     for (const entry of hash) {
-        heap.insert(new HeapNode<[string, number]>(entry[1], entry));
+        heap.insert(entry);
     }
     let ans = '';
     // TODO after no-non-null-assertion not ensure the logic
     const peek = heap.peek();
-    const peekVal = peek ? peek.val : null;
+    const peekVal = peek ? peek : null;
     if (peek && peekVal) {
         if (peekVal[1] <= Math.ceil(s.length / 2)) {
             const conveyor: string[][] = [];
             // TODO after no-non-null-assertion not ensure the logic
             const polled = heap.poll();
             if (polled) {
-                for (let i = 0; i < polled.id; i++) {
-                    const polledVal = polled.val;
+                for (let i = 0; i < polled[1]; i++) {
+                    const polledVal = polled;
                     // TODO after no-non-null-assertion not ensure the logic
                     if (polledVal) {
                         conveyor.push([polledVal[0]]);
@@ -299,16 +296,16 @@ function reorganizeString(s: string): string {
                 }
             }
             let processCount = 0;
-            while (heap.size() > 0) {
+            while (heap.size > 0) {
                 const polled1 = heap.poll();
                 if (polled1) {
-                    const count = polled1.id;
+                    const count = polled1[1];
                     for (let j = 0; j < count; j++) {
                         processCount++;
                         // TODO after no-non-null-assertion not ensure the logic
                         const cur = conveyor.shift();
                         if (cur !== undefined) {
-                            const polled1Val = polled1.val;
+                            const polled1Val = polled1;
                             if (polled1Val) {
                                 cur.push(polled1Val[0]);
                             }
@@ -342,19 +339,19 @@ const runAllReorganizeString = async () => {
 
 // 703. Kth Largest Element in a Stream
 class KthLargest {
-    private _heap: MinHeap<number, number>;
+    private _heap: Heap<number>;
     private readonly _k: number;
 
     constructor(k: number, nums: number[]) {
         this._k = k;
-        this._heap = new MinHeap<number, number>(nums);
-        while (this._heap.size() > k) {
+        this._heap = new Heap<number>({nodes: nums, comparator: (a, b) => a - b});
+        while (this._heap.size > k) {
             this._heap.poll();
         }
     }
 
     add(val: number): number {
-        const size = this._heap.size();
+        const size = this._heap.size;
         if (size < this._k) {
             this._heap.insert(val);
 
@@ -388,7 +385,7 @@ const runAllKthLargest = async () => {
 // runAllKthLargest().then();
 
 const testHeap1 = () => {
-    const minHeap = new MinHeap<number, unknown>([5, 2, 3, 4, 6, 1]);
+    const minHeap = new Heap<number>({nodes: [5, 2, 3, 4, 6, 1], comparator: (a, b) => a - b});
     console.log(minHeap.toArray());
     console.log(minHeap.toArray());
     console.log(minHeap.peek());
@@ -396,13 +393,13 @@ const testHeap1 = () => {
     minHeap.poll();
     minHeap.poll();
     console.log(minHeap.toArray());
-    console.log(MinHeap.heapify([3, 2, 1, 5, 6, 7, 8, 9, 10]).toArray());
+    console.log(Heap.heapify({nodes: [3, 2, 1, 5, 6, 7, 8, 9, 10], comparator: (a, b) => a - b}).toArray());
     return;
 };
 
 const testHeap2 = () => {
     // const maxHeap = new MaxHeap<number>([5, 2, 3, 4, 6, 1]);
-    const maxHeap = new MaxHeap<HeapNode<number>, number>([new HeapNode(5, 5), new HeapNode(2), new HeapNode(3), new HeapNode(4), new HeapNode('6', 6), new HeapNode(1)]);
+    const maxHeap = new Heap<number>({nodes: [5, 2, 3, 4, 6, 1], comparator: (a, b) => b - a});
     console.log(maxHeap.toArray());
     console.log(maxHeap.toArray());
     console.log(maxHeap.peek());
@@ -410,17 +407,26 @@ const testHeap2 = () => {
     maxHeap.poll();
     maxHeap.poll();
     console.log(maxHeap.toArray());
-    console.log(MaxHeap.heapify([3, 2, 1, 5, 6, 7, 8, 9, 10]).toArray());
+    console.log(Heap.heapify({nodes: [3, 2, 1, 5, 6, 7, 8, 9, 10], comparator: (a, b) => a - b}).toArray());
 };
 
+class HeapNode {
+    val: {
+        a: string
+    };
+
+    constructor(val: { a: string }) {
+        this.val = val;
+    }
+}
+
 const testHeap3 = () => {
-    const heapSortTest = new MinHeap<HeapNode<number>, number>([new HeapNode<number>(2, 2), new HeapNode<number>(5), new HeapNode<number>(8), new HeapNode<number>(3), new HeapNode<number>(1), new HeapNode<number>(6, 6), new HeapNode<number>(7), new HeapNode<number>(4)]);
-    const sorted = heapSortTest.clone().sort('val');
+    const heapSortTest = new Heap<number>({nodes: [2, 5, 8, 3, 1, 6, 7, 4], comparator: (a, b) => a - b});
+    const sorted = heapSortTest.clone().sort();
     console.log('sorted', sorted, heapSortTest);
     console.log('DFS inOrder default', heapSortTest.DFS('in'));
-    console.log('DFS inOrder id', heapSortTest.DFS('in', 'id'));
-    console.log('DFS inOrder val', heapSortTest.DFS('in', 'val'));
-    console.log('DFS preOrder val', heapSortTest.DFS('pre', 'val'));
+    console.log('DFS inOrder id', heapSortTest.DFS('post'));
+    console.log('DFS preOrder val', heapSortTest.DFS('pre'));
 };
 
 // const runAllTestHeap = async () => {
@@ -432,11 +438,39 @@ const testHeap3 = () => {
 // runAllTestHeap().then()
 
 export const testHeap = () => {
-    const minHeap = new MinHeap([3, 2, 4, 5, 1, 9]);
+    const minHeap = new Heap({nodes: [3, 2, 4, 5, 1, 9], comparator: (a, b) => a - b});
     console.log(minHeap.sort());
     console.log(minHeap.sort());
-    const maxHeap = new MaxHeap([3, 2, 4, 5, 1, 9]);
+    const maxHeap = new Heap({nodes: [3, 2, 4, 5, 1, 9], comparator: (a, b) => b - a});
     console.log(maxHeap.sort());
     console.log(maxHeap.sort());
 };
 /* --- end heap --- */
+
+// 378. Kth Smallest Element in a Sorted Matrix
+function kthSmallest(matrix: number[][], k: number): number {
+    const minHeap = new Heap<{ val: number, y: number, x: number }>({comparator: (a, b) => a.val - b.val});
+
+    minHeap.insert({val: matrix[0][0], y: 0, x: 0});
+
+    while (--k > 0) {
+        const polled = minHeap.poll();
+        if (!polled) {
+            continue;
+        }
+
+        const {y, x} = polled;
+
+        if (y < matrix.length - 1 && matrix[y + 1][x] !== Infinity) {
+            minHeap.insert({val: matrix[y + 1][x], y: y + 1, x});
+            matrix[y + 1][x] = Infinity;
+        }
+
+        if (x < matrix[0].length - 1 && matrix[y][x + 1] !== Infinity) {
+            minHeap.insert({val: matrix[y][x + 1], y, x: x + 1});
+            matrix[y][x + 1] = Infinity;
+        }
+    }
+
+    return minHeap.peek()?.val || 0;
+}

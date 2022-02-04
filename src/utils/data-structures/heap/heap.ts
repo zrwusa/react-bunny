@@ -1,169 +1,172 @@
 // Online Algorithms use Heap (e.g. Top K problems)
 // Offline Algorithms use sort
-import {DFSMode} from '../common';
+export type HeapDFSOrderPattern = 'pre' | 'in' | 'post';
 
-export type HeapNodePropertyName = 'id' | 'val';
-export type HeapNodeOrPropertyName = 'node' | HeapNodePropertyName;
-
-
-export class HeapNode<V> {
-    private _id: number | string;
-    get id(): number | string {
-        return this._id;
-    }
-
-    set id(v: number | string) {
-        this._id = v;
-    }
-
-    private _val: V | null;
-    get val(): V | null {
-        return this._val;
-    }
-
-    set val(v: V | null) {
-        this._val = v;
-    }
-
-    constructor(id: number | string, val?: V | null) {
-        if (val === undefined) {
-            val = null;
-        }
-        this._id = id;
-        this._val = val || null;
-    }
+export interface HeapOptions<T> {
+    nodes?: T[];
+    comparator: (i: T, j: T) => number;
 }
 
-export abstract class Heap<T extends number | HeapNode<V>, V> {
-    protected _nodes: T[];
+export class Heap<T> {
+    protected _nodes: T[] = [];
+    protected _comparator: (a: T, b: T) => number;
 
-    protected constructor(nodes?: T[]) {
-        // TODO support distinct
-        this._nodes = Array.isArray(nodes) ? [...nodes] : [];
-        this._fix();
+    constructor(options: HeapOptions<T>) {
+        const {nodes, comparator} = options;
+        this._comparator = comparator;
+
+        if (nodes && nodes instanceof Array && nodes.length > 0) {
+            // TODO support distinct
+            this._nodes = Array.isArray(nodes) ? [...nodes] : [];
+            this._fix();
+        }
     }
 
-    abstract compare(parentIndex: number, childIndex: number): boolean;
-
-    abstract clone(): Heap<T, V>;
-
-    protected _swap(i: number, j: number) {
-        const temp = this._nodes[i];
-        this._nodes[i] = this._nodes[j];
-        this._nodes[j] = temp;
-        // ES6 swap
-        // [this._nodes[i], this._nodes[j]] = [this._nodes[j], this._nodes[i]];
+    protected _compare(parentIndex: number, childIndex: number): boolean {
+        return this._comparator(this._nodes[parentIndex], this._nodes[childIndex]) > 0;
     }
 
     protected _shouldSwap(parentIndex: number, childIndex: number) {
-        if (parentIndex < 0 || parentIndex >= (this.size() - 1)) return false;
-        if (childIndex < 1 || childIndex > (this.size() - 1)) return false;
-        return !this.compare(parentIndex, childIndex);
+        if (!this._isParentIndex(parentIndex)) return false;
+        if (!this._isChildIndex(childIndex)) return false;
+        return this._compare(parentIndex, childIndex);
     }
 
-    protected _parentIndex(childIndex: number): number {
+    protected _isValidIndex(index: number): boolean {
+        return index > -1 && index < this.size;
+    }
+
+    protected _isParentIndex(index: number) {
+        return index >= 0 && index < this.size - 1;
+    }
+
+    protected _isChildIndex(index: number): boolean {
+        return index >= 1 && index <= this.size - 1;
+    }
+
+    protected _getParentIndex(childIndex: number): number {
         const parentIndex = Math.floor((childIndex - 1) / 2);
-        if (parentIndex < 0 || parentIndex >= (this.size() - 1)) return -1;
-        return parentIndex;
+        return this._isParentIndex(parentIndex) ? parentIndex : -1;
+    }
+
+    protected _getLeftChildIndex(parentIndex: number): number {
+        const leftChildIndex = parentIndex * 2 + 1;
+        return this._isChildIndex(leftChildIndex) ? leftChildIndex : -1;
+    }
+
+    protected _getRightChildIndex(parentIndex: number): number {
+        const rightChildIndex = parentIndex * 2 + 2;
+        return this._isChildIndex(rightChildIndex) ? rightChildIndex : -1;
+    }
+
+    protected _getComparedChild(parentIndex: number): number {
+        if (!this._hasLeftChild(parentIndex) && !this._hasRightChild(parentIndex)) return -1;
+        const leftChildIndex = this._getLeftChildIndex(parentIndex),
+            rightChildIndex = this._getRightChildIndex(parentIndex);
+        if (!this._hasLeftChild(parentIndex)) return rightChildIndex;
+        if (!this._hasRightChild(parentIndex)) return leftChildIndex;
+        return this._compare(leftChildIndex, rightChildIndex) ? rightChildIndex : leftChildIndex;
     }
 
     protected _hasParent(childIndex: number): boolean {
-        return this._parentIndex(childIndex) > -1;
-    }
-
-    protected _leftChildIndex(parentIndex: number): number {
-        const leftChildIndex = parentIndex * 2 + 1;
-        if (leftChildIndex < 1 || leftChildIndex > (this.size() - 1)) {
-            return -1;
-        } else {
-            return leftChildIndex;
-        }
-    }
-
-    protected _rightChildIndex(parentIndex: number): number {
-        const rightChildIndex = parentIndex * 2 + 2;
-        if (rightChildIndex < 1 || rightChildIndex > (this.size() - 1)) {
-            return -1;
-        } else {
-            return rightChildIndex;
-        }
+        return this._getParentIndex(childIndex) > -1;
     }
 
     protected _hasLeftChild(parentIndex: number) {
-        return this._leftChildIndex(parentIndex) !== -1;
+        return this._getLeftChildIndex(parentIndex) !== -1;
     }
 
     protected _hasRightChild(parentIndex: number) {
-        return this._rightChildIndex(parentIndex) !== -1;
+        return this._getRightChildIndex(parentIndex) !== -1;
     }
 
-    protected _compareChildren(parentIndex: number): number {
-        if (!this._hasLeftChild(parentIndex) && !this._hasRightChild(parentIndex)) return -1;
-        const leftChildIndex = this._leftChildIndex(parentIndex), rightChildIndex = this._rightChildIndex(parentIndex);
-        if (!this._hasLeftChild(parentIndex)) return rightChildIndex;
-        if (!this._hasRightChild(parentIndex)) return leftChildIndex;
-        return this.compare(leftChildIndex, rightChildIndex) ? leftChildIndex : rightChildIndex;
-    }
-
-    protected _fix() {
-        for (let i = Math.floor(this.size() / 2); i > -1; i--) {
-            this.heapifyDown(i);
-        }
+    protected _swap(i: number, j: number) {
+        [this._nodes[i], this._nodes[j]] = [this._nodes[j], this._nodes[i]];
     }
 
     heapifyUp(startingIndex: number): number {
         let childIndex = startingIndex;
-        let parentIndex = Math.floor((childIndex - 1) / 2);
+        let parentIndex = this._getParentIndex(childIndex);
         while (this._shouldSwap(parentIndex, childIndex)) {
             this._swap(parentIndex, childIndex);
             childIndex = parentIndex;
-            parentIndex = Math.floor((childIndex - 1) / 2);
+            parentIndex = this._getParentIndex(childIndex);
         }
         return childIndex;
     }
 
     heapifyDown(startingIndex: number): number {
         let parentIndex = startingIndex;
-        let childIndex = this._compareChildren(parentIndex);
+        let childIndex = this._getComparedChild(parentIndex);
         while (this._shouldSwap(parentIndex, childIndex)) {
             this._swap(parentIndex, childIndex);
             parentIndex = childIndex;
-            childIndex = this._compareChildren(parentIndex);
+            childIndex = this._getComparedChild(parentIndex);
         }
         return parentIndex;
     }
 
-    poll(): T | null {
-        // TODO after no-non-null-assertion not ensure the logic
-        let res: T | null;
-        if (this.size() > 1) {
-            this._swap(0, this._nodes.length - 1);
-            res = this._nodes.pop() || null;
-            this.heapifyDown(0);
-        } else {
-            if (this.size() === 1) {
-                res = this._nodes.pop() || null;
-            } else {
-                res = null;
-            }
-        }
-
-        return res;
-    }
-
-    insert(node: T, priority?: number | string): void {
+    insert(node: T): void {
         // TODO may bugs exist for priorities
-        if (priority !== undefined) {
-            if (node instanceof HeapNode) {
-                node.id = priority;
-            }
-        }
         this._nodes.push(node);
         this.heapifyUp(this._nodes.length - 1);
     }
 
-    isValidNode(index: number): boolean {
-        return this._nodes[index] !== undefined;
+    poll(): T | undefined {
+        // TODO after no-non-null-assertion not ensure the logic
+        let res: T | undefined = undefined;
+        if (this.size > 1) {
+            this._swap(0, this._nodes.length - 1);
+            res = this._nodes.pop();
+            this.heapifyDown(0);
+        } else {
+            if (this.size === 1) {
+                res = this._nodes.pop();
+            }
+        }
+        return res;
+    }
+
+    peek(): T | undefined {
+        return this._isValidIndex(0) ? this._nodes[0] : undefined;
+    }
+
+    leaf(): T | undefined {
+        return this._isValidIndex(this.size - 1) ? this._nodes[this.size - 1] : undefined;
+    }
+
+    get size(): number {
+        return this._nodes.length;
+    }
+
+    isEmpty() {
+        return this.size === 0;
+    }
+
+    clear() {
+        this._nodes = [];
+    }
+
+    protected _fix() {
+        for (let i = Math.floor(this.size / 2); i > -1; i--) {
+            this.heapifyDown(i);
+        }
+    }
+
+    // --- start additional functions
+    static heapify<T>(options: HeapOptions<T>) {
+        const heap = new Heap(options);
+        heap._fix();
+        return heap;
+    }
+
+
+    clone(): Heap<T> {
+        return new Heap<T>({nodes: this._nodes, comparator: this._comparator});
+    }
+
+    toArray(): T[] {
+        return this._nodes;
     }
 
     isValid(): boolean {
@@ -173,13 +176,13 @@ export abstract class Heap<T extends number | HeapNode<V>, V> {
 
             if (this._hasLeftChild(parentIndex)) {
                 const leftChildIndex = (parentIndex * 2) + 1;
-                if (!this.compare(parentIndex, leftChildIndex)) return false;
+                if (!this._compare(parentIndex, leftChildIndex)) return false;
                 isValidLeft = isValidRecursive(leftChildIndex);
             }
 
             if (this._hasRightChild(parentIndex)) {
                 const rightChildIndex = (parentIndex * 2) + 2;
-                if (!this.compare(parentIndex, rightChildIndex)) return false;
+                if (!this._compare(parentIndex, rightChildIndex)) return false;
                 isValidRight = isValidRecursive(rightChildIndex);
             }
 
@@ -189,165 +192,94 @@ export abstract class Heap<T extends number | HeapNode<V>, V> {
         return isValidRecursive(0);
     }
 
-    toArray(): T[] {
-        return this._nodes;
-    }
-
-    peek(): T | null {
-        return this.isValidNode(0) ? this._nodes[0] : null;
-    }
-
-    leaf(): T | null {
-        return this.isValidNode(this.size() - 1) ? this._nodes[this.size() - 1] : null;
-    }
-
-    size(): number {
-        return this._nodes.length;
-    }
-
-    isEmpty() {
-        return this.size() === 0;
-    }
-
-    // --- start additional functions
-    sort(): number[];
-    sort(nodeOrPropertyName: 'id'): number[];
-    sort(nodeOrPropertyName: 'val'): (V | null)[];
-    sort(nodeOrPropertyName: 'node'): HeapNode<V>[];
-    sort(nodeOrPropertyName?: HeapNodeOrPropertyName) {
-        const visitedId: (number | string)[] = [];
-        const visitedVal: (V | null)[] = [];
-        const visitedNode: HeapNode<V>[] = [];
-        const visitedNumber: number[] = [];
-
-
-        const pushByValueType = (node: number | HeapNode<V>) => {
-            switch (nodeOrPropertyName) {
-                case 'id':
-                    if (node instanceof HeapNode) {
-                        visitedId.push(node.id);
-                    }
-                    break;
-                case 'val':
-                    if (node instanceof HeapNode) {
-                        visitedVal.push(node.val);
-                    }
-                    break;
-                case 'node':
-                    if (node instanceof HeapNode) {
-                        visitedNode.push(node);
-                    }
-                    break;
-                default:
-                    if (typeof node === 'number') {
-                        visitedNumber.push(node);
-                    }
-                    break;
-            }
-        };
-
-        // while (!this.isEmpty()) {
-        //     this._swap(0, this.size() - 1);
-        //     pushByValueType(this.size() - 1);
-        //     this._nodes.pop();
-        //     this.heapifyDown(0);
-        // }
-
+    sort(): T[] {
+        const visitedNode: T[] = [];
         while (!this.isEmpty()) {
             const top = this.poll();
             if (top) {
-                pushByValueType(top);
+                visitedNode.push(top);
             }
         }
 
-
-        switch (nodeOrPropertyName) {
-            case 'id':
-                return visitedId;
-            case 'val':
-                return visitedVal;
-            case 'node':
-                return visitedNode;
-            default:
-                return visitedNumber;
-        }
+        return visitedNode;
     }
 
-    DFS(dfsMode: DFSMode): number[];
-    DFS(dfsMode: DFSMode, nodeOrPropertyName: 'id'): number[];
-    DFS(dfsMode: DFSMode, nodeOrPropertyName: 'val'): (V | null)[];
-    DFS(dfsMode: DFSMode, nodeOrPropertyName: 'node'): HeapNode<V>[];
-    DFS(dfsMode: DFSMode, nodeOrPropertyName?: HeapNodeOrPropertyName) {
-        const visitedId: (number | string)[] = [];
-        const visitedVal: (V | null)[] = [];
-        const visitedNode: HeapNode<V>[] = [];
-        const visitedNumber: number[] = [];
-
-        const pushByValueType = (index: number) => {
-            const node: number | HeapNode<V> = this._nodes[index];
-            switch (nodeOrPropertyName) {
-                case 'id':
-                    if (node instanceof HeapNode) {
-                        visitedId.push(node.id);
-                    }
-                    break;
-                case 'val':
-                    if (node instanceof HeapNode) {
-                        visitedVal.push(node.val);
-                    }
-                    break;
-                case 'node':
-                    if (node instanceof HeapNode) {
-                        visitedNode.push(node);
-                    }
-                    break;
-                default:
-                    if (typeof node === 'number') {
-                        visitedNumber.push(node);
-                    }
-                    break;
-            }
-        };
+    DFS(dfsMode: HeapDFSOrderPattern): T[] {
+        const visitedNode: T[] = [];
 
         const _traverse = (cur: number) => {
             const leftChildIndex = cur * 2 + 1;
             const rightChildIndex = cur * 2 + 2;
             switch (dfsMode) {
                 case 'in':
-                    if (this.isValidNode(leftChildIndex)) _traverse(leftChildIndex);
-                    pushByValueType(cur);
-                    if (this.isValidNode(rightChildIndex)) _traverse(rightChildIndex);
+                    if (this._isValidIndex(leftChildIndex)) _traverse(leftChildIndex);
+                    visitedNode.push(this._nodes[cur]);
+                    if (this._isValidIndex(rightChildIndex)) _traverse(rightChildIndex);
                     break;
                 case 'pre':
-                    pushByValueType(cur);
-                    if (this.isValidNode(leftChildIndex)) _traverse(leftChildIndex);
-                    if (this.isValidNode(rightChildIndex)) _traverse(rightChildIndex);
+                    visitedNode.push(this._nodes[cur]);
+                    if (this._isValidIndex(leftChildIndex)) _traverse(leftChildIndex);
+                    if (this._isValidIndex(rightChildIndex)) _traverse(rightChildIndex);
                     break;
                 case 'post':
-                    if (this.isValidNode(leftChildIndex)) _traverse(leftChildIndex);
-                    if (this.isValidNode(rightChildIndex)) _traverse(rightChildIndex);
-                    pushByValueType(cur);
+                    if (this._isValidIndex(leftChildIndex)) _traverse(leftChildIndex);
+                    if (this._isValidIndex(rightChildIndex)) _traverse(rightChildIndex);
+                    visitedNode.push(this._nodes[cur]);
                     break;
             }
 
         };
 
-        this.isValidNode(0) && _traverse(0);
-        switch (nodeOrPropertyName) {
-            case 'id':
-                return visitedId;
-            case 'val':
-                return visitedVal;
-            case 'node':
-                return visitedNode;
-            default:
-                return visitedNumber;
-        }
-    }
-
-    clear() {
-        this._nodes = [];
+        this._isValidIndex(0) && _traverse(0);
+        return visitedNode;
     }
 
     // --- end additional functions
+}
+
+class MinHeap {
+    nodes: number[] = [];
+
+    private getParentIndex(childIndex: number): number {
+        return Math.floor((childIndex - 1) / 2);
+    }
+
+
+    private compare(parentIndex: number, childIndex: number): boolean {
+        const {nodes} = this;
+        return nodes[parentIndex] < nodes[childIndex];
+    }
+
+    private shouldSwap(parentIndex: number, childIndex: number): boolean {
+        const {nodes} = this;
+        return nodes[parentIndex] !== undefined && nodes[childIndex] !== undefined && this.compare(parentIndex, childIndex);
+    }
+
+    private swap(i: number, j: number) {
+        const {nodes} = this;
+        [nodes[i], nodes[j]] = [nodes[j], nodes[i]];
+    }
+
+    private heapifyUp(childIndex: number) {
+        let parentIndex = this.getParentIndex(childIndex);
+        while (this.shouldSwap(parentIndex, childIndex)) {
+            this.swap(parentIndex, childIndex);
+            childIndex = parentIndex;
+            parentIndex = this.getParentIndex(childIndex);
+        }
+    }
+
+    insert(val: number) {
+        const {nodes} = this;
+        nodes.push(val);
+        this.heapifyUp(nodes.length - 1);
+    }
+
+    peek(): number | undefined {
+        return this.nodes[0];
+    }
+
+    get size(): number {
+        return this.nodes.length;
+    }
 }

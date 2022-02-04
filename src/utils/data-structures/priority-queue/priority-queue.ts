@@ -1,13 +1,14 @@
-import {Heap, HeapNode} from '../heap';
+import {Heap} from '../heap';
 
 export interface PriorityQueueOptions<T> {
     priority?: (element: T) => number;
 }
 
 export interface PriorityQueueItem<T> {
-    priority: number | string;
+    priority: number;
     element: T | null;
 }
+
 
 /**
  * @copyright 2020 Eyas Ranjous <eyas.ranjous@gmail.com>
@@ -17,7 +18,7 @@ export interface PriorityQueueItem<T> {
  * @class PriorityQueue
  */
 export abstract class PriorityQueue<T> {
-    protected abstract _heap: Heap<HeapNode<T>, T>;
+    protected abstract _heap: Heap<PriorityQueueItem<T>>;
     protected _priorityCb: (element: T) => number;
 
     /**
@@ -42,10 +43,10 @@ export abstract class PriorityQueue<T> {
      * @private
      * @returns {object}
      */
-    _getElementWithPriority(node: HeapNode<T>): PriorityQueueItem<T> {
+    private _getElementWithPriority(node: PriorityQueueItem<T>): PriorityQueueItem<T> {
         return {
-            priority: node.id,
-            element: node.val
+            priority: node.priority,
+            element: node.element
         };
     }
 
@@ -53,8 +54,8 @@ export abstract class PriorityQueue<T> {
      * @public
      * @returns {number}
      */
-    size(): number {
-        return this._heap.size();
+    get size(): number {
+        return this._heap.size;
     }
 
     /**
@@ -98,14 +99,16 @@ export abstract class PriorityQueue<T> {
      * @param priority
      * @throws {Error} if priority is not a valid number
      */
-    enqueue(element: T, priority?: number | string): PriorityQueue<T> {
-        if (typeof element === 'number' || typeof element === 'string') {
+    enqueue(element: T, priority?: number): PriorityQueue<T> {
+        if (typeof element === 'number') {
             priority = element;
+        } else {
+            if (priority === undefined) {
+                throw new Error('.enqueue expects a numeric priority');
+            }
         }
 
-        if (priority === undefined) {
-            throw new Error('.enqueue expects a numeric priority');
-        }
+
         if (priority && Number.isNaN(+priority)) {
             throw new Error('.enqueue expects a numeric priority');
         }
@@ -118,7 +121,7 @@ export abstract class PriorityQueue<T> {
         }
 
         const _priority = !Number.isNaN(+priority) ? priority : this._priorityCb(element);
-        this._heap.insert(new HeapNode<T>(_priority, element));
+        this._heap.insert({priority: _priority, element});
         return this;
     }
 
@@ -136,16 +139,12 @@ export abstract class PriorityQueue<T> {
     }
 
     /**
-     * Returns a sorted list of elements from highest to lowest priority
+     * Returns a sorted list of elements
      * @public
      * @returns {array}
      */
     toArray(): PriorityQueueItem<T>[] {
-        return this._heap
-            .clone()
-            .sort('node')
-            .map((n) => this._getElementWithPriority(n))
-            .reverse();
+        return this._heap.toArray();
     }
 
     /**

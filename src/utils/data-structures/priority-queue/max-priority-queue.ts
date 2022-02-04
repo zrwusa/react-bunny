@@ -3,18 +3,18 @@
  * @license MIT
  */
 
-import {HeapNode, MaxHeap} from '../heap';
-import {PriorityQueue, PriorityQueueOptions} from './priority-queue';
+import {PriorityQueue, PriorityQueueItem, PriorityQueueOptions} from './priority-queue';
+import {Heap} from '../heap';
 
 /**
  * @class MaxPriorityQueue
  * @extends PriorityQueue
  */
 export class MaxPriorityQueue<T> extends PriorityQueue<T> {
-    protected _heap: MaxHeap<HeapNode<T>, T>;
+    protected _heap: Heap<PriorityQueueItem<T>>;
 
     constructor(options?: PriorityQueueOptions<T>) {
         super(options);
-        this._heap = new MaxHeap();
+        this._heap = new Heap<PriorityQueueItem<T>>({comparator: (a, b) => b.priority - a.priority});
     }
 }

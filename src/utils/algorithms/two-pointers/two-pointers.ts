@@ -75,5 +75,56 @@ const runAllSubarraysWithKDistinct = async () => {
 };
 
 // runAllSubarraysWithKDistinct().then();
+
+// 76. Minimum Window Substring
+function minWindow(s: string, t: string): string {
+
+    const A = 'A'.charCodeAt(0);
+    const z = 'z'.charCodeAt(0);
+
+    const index = (s: string, i: number): number => {
+        return s.charCodeAt(i) - A;
+    };
+
+    const countChars = (s: string): number[] => {
+        const arr = new Array(z - A + 1).fill(0);
+
+        for (let i = 0; i < s.length; i++) {
+            arr[index(s, i)] += 1;
+        }
+
+        return arr;
+    };
+    const tCounts = countChars(t);
+    let minStart = 0, minLength = Number.MAX_SAFE_INTEGER;
+    let start = 0, end = 0;
+    let counter = t.length;
+
+    while (end < s.length) {
+        if (tCounts[index(s, end)] > 0) {
+            counter--;
+        }
+        tCounts[index(s, end)]--;
+        end++;
+
+        while (counter === 0) {
+            if (end - start < minLength) {
+                minStart = start;
+                minLength = end - start;
+            }
+            tCounts[index(s, start)]++;
+            if (tCounts[index(s, start)] > 0) {
+                counter++;
+            }
+            start++;
+        }
+    }
+
+    if (minLength !== Number.MAX_SAFE_INTEGER) {
+        return s.substr(minStart, minLength);
+    }
+    return '';
+}
+
 /* --- end Two Pointers --- */
-export {};
+

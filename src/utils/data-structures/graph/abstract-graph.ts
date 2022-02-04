@@ -1,5 +1,5 @@
 import {arrayRemove, uuidV4} from '../../utils';
-import {HeapNode, MinHeap} from '../heap';
+import {Heap} from '../heap';
 
 export type VertexId = string | number;
 export type DijkstraResult<V> =
@@ -452,8 +452,8 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
             distMap.set(v, Infinity);
         }
 
-        const heap = new MinHeap<HeapNode<V>, V>();
-        heap.insert(new HeapNode(0, srcVertex));
+        const heap = new Heap<{ id: number, val: V }>({comparator: (a, b) => a.id - b.id});
+        heap.insert({id: 0, val: srcVertex});
 
         distMap.set(srcVertex, 0);
         preMap.set(srcVertex, null);
@@ -472,11 +472,11 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
             }
         };
 
-        while (heap.size() > 0) {
+        while (heap.size > 0) {
             const curHeapNode = heap.poll();
             const dist = curHeapNode?.id;
             const cur = curHeapNode?.val;
-            if (dist !== undefined && typeof dist === 'number') {
+            if (dist !== undefined) {
                 if (cur) {
                     seen.add(cur);
                     if (destVertex && destVertex === cur) {
@@ -496,7 +496,7 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
                                 const distSrcToNeighbor = distMap.get(neighbor);
                                 if (distSrcToNeighbor) {
                                     if (dist + weight < distSrcToNeighbor) {
-                                        heap.insert(new HeapNode(dist + weight, neighbor));
+                                        heap.insert({id: dist + weight, val: neighbor});
                                         preMap.set(neighbor, cur);
                                         distMap.set(neighbor, dist + weight);
                                     }

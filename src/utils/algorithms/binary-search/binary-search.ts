@@ -147,3 +147,61 @@ function searchInRotatedSortedArrayNonIncrease(nums: number[], target: number): 
     }
     return -1;
 }
+
+// 378. Kth Smallest Element in a Sorted Matrix
+function kthSmallest(matrix: number[][], k: number): number {
+    const n = matrix.length;
+    let l = matrix[0][0] - 1, r = matrix[n - 1][n - 1];
+
+    function countLTE(x: number) {
+        let count = 0;
+        let i = n - 1, j = 0;
+        while (i >= 0 && j < n) {
+            if (matrix[i][j] <= x) {
+                j++;
+                count += i + 1;
+            } else {
+                i--;
+            }
+        }
+        return count;
+    }
+
+    while (l + 1 < r) {
+        const mid = l + Math.floor((r - l) / 2);
+        const count = countLTE(mid);
+
+        if (count < k) {
+            l = mid;
+        } else {
+            r = mid;
+        }
+    }
+
+    return countLTE(l) === k ? l : r;
+}
+
+// 668. Kth Smallest Number in Multiplication Table
+function findKthNumber(m: number, n: number, k: number): number {
+    let l = 0, r = m * n;
+
+    function countLTE(target: number) {
+        let count = 0;
+        for (let i = 1; i <= m; i++) {
+            count += Math.min(Math.floor(target / i), n);
+        }
+        return count;
+    }
+
+    while (l + 1 < r) {
+        const mid = l + Math.floor((r - l) / 2);
+        const count = countLTE(mid);
+
+        if (count >= k) {
+            r = mid;
+        } else {
+            l = mid;
+        }
+    }
+    return r;
+}

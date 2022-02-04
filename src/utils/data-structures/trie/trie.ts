@@ -1,12 +1,12 @@
 export class TrieNode {
-    protected _keys: Map<string, TrieNode> = new Map<string, TrieNode>();
+    protected _children: Map<string, TrieNode> = new Map<string, TrieNode>();
 
-    get keys(): Map<string, TrieNode> {
-        return this._keys;
+    get children(): Map<string, TrieNode> {
+        return this._children;
     }
 
-    set keys(v: Map<string, TrieNode>) {
-        this._keys = v;
+    set children(v: Map<string, TrieNode>) {
+        this._children = v;
     }
 
     protected _isEnd = false;
@@ -27,56 +27,91 @@ export class Trie {
         this._root = new TrieNode();
     }
 
-    add(input: string, node: TrieNode = this._root): boolean {
-        if (input.length === 0) {
-            node.isEnd = true;
-            return false;
-        } else if (!node.keys.has(input[0])) {
-            node.keys.set(input[0], new TrieNode());
-            this.add(input.substr(1), node.keys.get(input[0]));
-        } else {
-            this.add(input.substr(1), node.keys.get(input[0]));
+    insert(input: string): boolean {
+        let cur = this._root;
+        for (const c of input) {
+            let nodeC = cur.children.get(c);
+            if (!nodeC) {
+                nodeC = new TrieNode();
+                cur.children.set(c, nodeC);
+            }
+            cur = nodeC;
+        }
+        cur.isEnd = true;
+        return true;
+    }
+
+    /**
+     * Only can present as a prefix, not a word
+     * @param input
+     */
+    isAbsPrefix(input: string): boolean {
+        let cur = this._root;
+        for (const c of input) {
+            const nodeC = cur.children.get(c);
+            if (!nodeC) {
+                return false;
+            }
+            cur = nodeC;
+        }
+        return !cur.isEnd;
+    }
+
+    /**
+     * Can present as a prefix or word
+     * @param input
+     */
+    isPrefix(input: string): boolean {
+        let cur = this._root;
+        for (const c of input) {
+            const nodeC = cur.children.get(c);
+            if (!nodeC) {
+                return false;
+            }
+            cur = nodeC;
         }
         return true;
     }
 
-    isWord(input: string): boolean {
-        let node = this._root;
-
-        while (input.length > 1) {
-            const ret = node.keys.get(input[0]);
-            if (!ret) {
+    search(input: string): boolean {
+        let cur = this._root;
+        for (const c of input) {
+            const nodeC = cur.children.get(c);
+            if (!nodeC) {
                 return false;
-            } else {
-                node = ret;
-                input = input.substr(1);
             }
-
+            cur = nodeC;
         }
-        const target = node.keys.get(input);
-        return !!(target && target.isEnd);
+        return cur.isEnd;
     }
 
-    getWords(): string[] | null {
+    getAllWords(prefix = ''): string[] {
         const words: string[] = [];
-        const search = (node: TrieNode, word: string) => {
-            if (node.keys.size !== 0) {
-                for (const letter of node.keys.keys()) {
-                    // TODO after no-non-null-assertion not ensure the logic
-                    const letterNode = node.keys.get(letter);
-                    if (letterNode !== undefined) {
-                        search(letterNode, word.concat(letter));
-                    }
-                }
-                if (node.isEnd) {
-                    words.push(word);
-                }
-            } else {
-                word.length > 0 && words.push(word);
-            }
 
-        };
-        search(this._root, '');
-        return words.length > 0 ? words : null;
+        function dfs(node: TrieNode, word: string) {
+            for (const char of node.children.keys()) {
+                const charNode = node.children.get(char);
+                if (charNode !== undefined) {
+                    dfs(charNode, word.concat(char));
+                }
+            }
+            if (node.isEnd) {
+                words.push(word);
+            }
+        }
+
+        let startNode = this._root;
+
+        if (prefix) {
+            for (const c of prefix) {
+                const nodeC = startNode.children.get(c);
+                if (nodeC) {
+                    startNode = nodeC;
+                }
+            }
+        }
+
+        dfs(startNode, prefix);
+        return words;
     }
 }
