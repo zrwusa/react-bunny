@@ -14,9 +14,10 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "@typescript-eslint/no-unused-vars" : "off",
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off", //const fun(var1: string) => 0 Missing return type on function
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    //const fun(var1: string) => 0 Missing return type on function
     "@typescript-eslint/ban-ts-comment": "off",
     "no-debugger": "off",
     //    "@typescript-eslint/no-non-null-assertion": "off",  // e.g. variable!

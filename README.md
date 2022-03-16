@@ -2,7 +2,8 @@
 
 React,Typescript,Webpack 5,Redux,SASS,Mock server,JWT Auth,Autoprefixer,Eslint,Stylelint.
 
-I know you don't want a complicated project, what you want is a collection of samples based on cutting-edge technology.Your happy use is my goal！
+I know you don't want a complicated project, what you want is a collection of samples based on cutting-edge
+technology.Your happy use is my goal！
 <table>
 <thead><tr><th>Name</th><th>Desc</th></tr></thead>
 <tbody>
@@ -27,7 +28,9 @@ I know you don't want a complicated project, what you want is a collection of sa
 </div>
 
 ## Installation
+
 For development
+
 ```sh
 // with npm
 npm install
@@ -39,6 +42,7 @@ yarn start
 ```
 
 For http-server RESTFul mock server with JWT auth
+
 ```sh
 // with npm
 npm mock
@@ -48,6 +52,7 @@ yarn mock
 ```
 
 For simulating a web server serving path '/public' as a web at local.
+
 ```sh
 // with npm
 npm web
@@ -55,13 +60,14 @@ npm web
 // with yarn
 yarn web
 ```
+
 You can test you app as a real production env,and use a performance tool E.g. Lighthouse to test the performance.
 ![](https://raw.githubusercontent.com/zrwusa/assets/master/images/Screen%20Shot%202020-12-13%20at%2014.26.36.png)
 
 ![](https://raw.githubusercontent.com/zrwusa/assets/master/images/Screen%20Shot%202020-12-13%20at%2014.27.37.png)
 
-
 For CLI
+
 ```sh
 // with npm
 npm install -g react-bunny-cli
@@ -74,10 +80,7 @@ react-bunny-cli init product-name
 
 [CLI repository](https://github.com/zrwusa/react-bunny-cli)
 
-
 [Check online deployed](https://react-bunny.vercel.app/)
-
-
 
 Yes, it's really all you need to get started as you can see in this live and interactive demo:
 

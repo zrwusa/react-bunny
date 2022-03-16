@@ -572,3 +572,34 @@ export const arrayRemove = function <T>(array: T[], predicate: (item: T, index: 
 
     return result;
 };
+
+export function memo() {
+    const cache: { [k: string]: any } = {};
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
+        const originalMethod = descriptor.value;
+        descriptor.value = function (...args: any[]) {
+            const cacheKey = `__cacheKey__${args.toString()}`;
+            // eslint-disable-next-line no-prototype-builtins
+            if (!cache.hasOwnProperty(cacheKey)) {
+                cache[cacheKey] = originalMethod.apply(this, args);
+            }
+            return cache[cacheKey];
+        }
+    }
+}
+
+export function zip<T = number, T1 = number>(array1: T[], array2: T1[], options?: { isToObj: boolean }) {
+    const zipped: [T, T1][] = [];
+    const zippedObjCoords: { x: T, y: T1 }[] = [];
+    const {isToObj} = options ? options : {isToObj: false};
+    for (let i = 0; i < array1.length; i++) {
+        if (isToObj) {
+            zippedObjCoords.push({x: array1[i], y: array2[i]})
+        } else {
+            zipped.push([array1[i], array2[i]]);
+        }
+    }
+    return isToObj ? zippedObjCoords : zipped;
+}
+

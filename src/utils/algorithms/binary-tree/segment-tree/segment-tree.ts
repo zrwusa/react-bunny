@@ -10,7 +10,7 @@ export const testSegmentTree = (values: number[], update1: [number, number], que
 };
 
 export const runAllTestSegmentTree = async () => {
-    await runAlgorithm(testSegmentTree, false, ...testSegmentTreeCase1);
+    await runAlgorithm(testSegmentTree, false, testSegmentTreeCase1);
 };
 
 

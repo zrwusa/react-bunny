@@ -71,12 +71,12 @@ function subarraysWithKDistinct(nums: number[], k: number): number {
 }
 
 const runAllSubarraysWithKDistinct = async () => {
-    await runAlgorithm(subarraysWithKDistinct, false, ...subarraysWithKDistinctCase6);
+    await runAlgorithm(subarraysWithKDistinct, false, subarraysWithKDistinctCase6);
 };
 
 // runAllSubarraysWithKDistinct().then();
 
-// 76. Minimum Window Substring
+// 76. Minimum Window Substring TODO not fully understood
 function minWindow(s: string, t: string): string {
 
     const A = 'A'.charCodeAt(0);

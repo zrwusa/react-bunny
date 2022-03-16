@@ -36,18 +36,6 @@ export abstract class PriorityQueue<T> {
         } else {
             this._priorityCb = (el) => +el;
         }
-
-    }
-
-    /**
-     * @private
-     * @returns {object}
-     */
-    private _getElementWithPriority(node: PriorityQueueItem<T>): PriorityQueueItem<T> {
-        return {
-            priority: node.priority,
-            element: node.element
-        };
     }
 
     /**
@@ -76,7 +64,7 @@ export abstract class PriorityQueue<T> {
         if (!peek) {
             return null;
         }
-        return this._getElementWithPriority(peek);
+        return peek;
     }
 
     /**
@@ -89,7 +77,7 @@ export abstract class PriorityQueue<T> {
         if (!leaf) {
             return null;
         }
-        return this._getElementWithPriority(leaf);
+        return leaf;
     }
 
     /**
@@ -107,7 +95,6 @@ export abstract class PriorityQueue<T> {
                 throw new Error('.enqueue expects a numeric priority');
             }
         }
-
 
         if (priority && Number.isNaN(+priority)) {
             throw new Error('.enqueue expects a numeric priority');
@@ -135,7 +122,7 @@ export abstract class PriorityQueue<T> {
         if (!top) {
             return null;
         }
-        return this._getElementWithPriority(top);
+        return top;
     }
 
     /**

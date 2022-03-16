@@ -1,11 +1,11 @@
-import path from "path";
-import webpack from "webpack";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import {CleanWebpackPlugin} from "clean-webpack-plugin";
-import autoPreFixer from "autoprefixer";
-import StylelintPlugin from "stylelint-webpack-plugin";
+import path from 'path';
+import webpack from 'webpack';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import {CleanWebpackPlugin} from 'clean-webpack-plugin';
+import autoPreFixer from 'autoprefixer';
+import StylelintPlugin from 'stylelint-webpack-plugin';
 
 function configFactory(): webpack.Configuration {
     const ext = {
@@ -13,14 +13,14 @@ function configFactory(): webpack.Configuration {
         image: /\.(png|svg|jpg|jpeg|gif)$/i,
         sass: /\.s[ac]ss$/i,
     };
-    const buildPath = "public";
-    const devMode = process.env.NODE_ENV === "development";
-    const prodMode = process.env.NODE_ENV === "production";
+    const buildPath = 'public';
+    const devMode = process.env.NODE_ENV === 'development';
+    const prodMode = process.env.NODE_ENV === 'production';
 
     return {
-        entry: "./src/index.tsx",
-        mode: devMode ? "development" : prodMode ? "production" : "none",
-        devtool: devMode ? "source-map" : false,
+        entry: './src/index.tsx',
+        mode: devMode ? 'development' : prodMode ? 'production' : 'none',
+        devtool: devMode ? 'source-map' : false,
         devServer: devMode ? {
             contentBase: path.join(__dirname, buildPath),
             compress: false,
@@ -29,9 +29,9 @@ function configFactory(): webpack.Configuration {
             open: true, // "Google Chrome"
             historyApiFallback: true,
             proxy: {  // Front-end and back-end separation
-                "/api": {
-                    target: "http://localhost:8000",
-                    pathRewrite: {"^/api": ""}
+                '/api': {
+                    target: 'http://localhost:8000',
+                    pathRewrite: {'^/api': ''}
                 }
             }
         } : {},
@@ -40,17 +40,17 @@ function configFactory(): webpack.Configuration {
                 {
                     test: ext.image,
                     exclude: /node_modules/,
-                    loader: "url-loader",
+                    loader: 'url-loader',
                     options: {
                         limit: 500,
-                        name: "images/[name]_[hash:7].[ext]",
+                        name: 'images/[name]_[hash:7].[ext]',
                     }
                 },
                 {
                     test: ext.ts,
                     exclude: /node_modules/,
                     use: {
-                        loader: "babel-loader",
+                        loader: 'babel-loader',
                         options: {
                             // presets: [
                             //     "@babel/preset-env",
@@ -74,7 +74,7 @@ function configFactory(): webpack.Configuration {
                         },
                         // "style-loader",
                         {
-                            loader: "css-loader",
+                            loader: 'css-loader',
                             options: {
                                 // modules: true,
                                 sourceMap: devMode,
@@ -83,7 +83,7 @@ function configFactory(): webpack.Configuration {
                         },
 
                         {
-                            loader: "postcss-loader",
+                            loader: 'postcss-loader',
                             options: {
                                 postcssOptions: {
                                     plugins: [autoPreFixer()],
@@ -93,7 +93,7 @@ function configFactory(): webpack.Configuration {
                         },
 
                         {
-                            loader: "sass-loader",
+                            loader: 'sass-loader',
                             options: {
                                 sourceMap: devMode,
                             }
@@ -104,23 +104,23 @@ function configFactory(): webpack.Configuration {
             ],
         },
         resolve: {
-            modules: ["node_modules", "react"],
-            extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
-            alias: {"react-dom": "@hot-loader/react-dom"},
+            modules: ['node_modules', 'react'],
+            extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+            alias: {'react-dom': '@hot-loader/react-dom'},
         },
         output: {
             path: path.resolve(__dirname, buildPath),
-            filename: devMode ? "[name].js" : "[name].[chunkhash].js",
-            publicPath: "/"
+            filename: devMode ? '[name].js' : '[name].[chunkhash].js',
+            publicPath: '/'
         },
         optimization: {
             minimize: prodMode,
             minimizer: [
                 `...`, // For webpack@5 extend existing minimizers
             ],
-            runtimeChunk: devMode ? "single" : undefined,
+            runtimeChunk: devMode ? 'single' : undefined,
             splitChunks: {
-                chunks: "all",
+                chunks: 'all',
                 maxInitialRequests: Infinity,
                 minSize: 0,
                 cacheGroups: {
@@ -131,7 +131,7 @@ function configFactory(): webpack.Configuration {
                                 const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];                            // get the name node_modules/packageName
                                 return `npm.${packageName.replace('@', '')}`;                            // npm package names are URL-safe, but some servers don't like @ symbols
                             } :
-                            "vendor"
+                            'vendor'
                     },
                 },
             }
@@ -139,28 +139,28 @@ function configFactory(): webpack.Configuration {
         plugins: [
             prodMode ? new CleanWebpackPlugin() : Function(),
             new HtmlWebpackPlugin({
-                title: "React-Bunny",
-                filename: "index.html",
-                template: "./src/index.html"
+                title: 'React-Bunny',
+                filename: 'index.html',
+                template: './src/index.html'
             }),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output both options are optional
-                filename: devMode ? "[name].css" : "[name].[contenthash].css",
-                chunkFilename: devMode ? "[id].css" : "[id].[contenthash].css",
+                filename: devMode ? '[name].css' : '[name].[contenthash].css',
+                chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
             }),
             new ForkTsCheckerWebpackPlugin({
                 async: false,
                 eslint: {
-                    files: "./src/**/*.{ts,tsx}",
+                    files: './src/**/*.{ts,tsx}',
                 },
             }),
             new StylelintPlugin({
-                context: "./src",
-                files: ["**/*.{scss,sass}"]
+                context: './src',
+                files: ['**/*.{scss,sass}']
             })
             // devMode?new webpack.HotModuleReplacementPlugin():Function()
         ],
-        target: devMode ? "web" : "browserslist", //default being 'browserlist' since 5.0.0-rc.1,Set to "web" when developing with react-hot-loader
+        target: devMode ? 'web' : 'browserslist', //default being 'browserlist' since 5.0.0-rc.1,Set to "web" when developing with react-hot-loader
     };
 }
 

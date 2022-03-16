@@ -542,13 +542,13 @@ export const ladderLengthTwoWayBFS = function (beginWord: string, endWord: strin
 };
 
 const runAllLadderLength = async () => {
-    await runAlgorithm(ladderLengthTwoWayBFS, false, ...ladderLengthCase1);
-    await runAlgorithm(ladderLengthTwoWayBFS, false, ...ladderLengthCase2);
-    await runAlgorithm(ladderLengthTwoWayBFS, false, ...ladderLengthCase3);
-    await runAlgorithm(ladderLengthTwoWayBFS, false, ...ladderLengthCase4);
-    await runAlgorithm(ladderLengthTwoWayBFS, false, ...ladderLengthCase5);
-    await runAlgorithm(ladderLengthTwoWayBFS, false, ...ladderLengthCase6);
-    await runAlgorithm(ladderLengthTwoWayBFS, false, ...ladderLengthCase7);
+    await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase1);
+    await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase2);
+    await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase3);
+    await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase4);
+    await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase5);
+    await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase6);
+    await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase7);
 };
 // runAllLadderLength().then()
 
@@ -648,14 +648,14 @@ export const updateMatrixByIndex = (mat: number[][]): number[][] => {
 };
 
 const runAllUpdateMatrix = async () => {
-    await runAlgorithm(updateMatrix, false, ...updateMatrixCase1);
-    await runAlgorithm(updateMatrixByIndex, false, ...updateMatrixCase1);
-    await runAlgorithm(updateMatrix, false, ...updateMatrixCase2);
-    await runAlgorithm(updateMatrixByIndex, false, ...updateMatrixCase2);
-    await runAlgorithm(updateMatrix, false, ...updateMatrixCase3);
-    await runAlgorithm(updateMatrixByIndex, false, ...updateMatrixCase3);
-    await runAlgorithm(updateMatrix, false, ...updateMatrixCase4);
-    await runAlgorithm(updateMatrixByIndex, false, ...updateMatrixCase4);
+    await runAlgorithm(updateMatrix, false, updateMatrixCase1);
+    await runAlgorithm(updateMatrixByIndex, false, updateMatrixCase1);
+    await runAlgorithm(updateMatrix, false, updateMatrixCase2);
+    await runAlgorithm(updateMatrixByIndex, false, updateMatrixCase2);
+    await runAlgorithm(updateMatrix, false, updateMatrixCase3);
+    await runAlgorithm(updateMatrixByIndex, false, updateMatrixCase3);
+    await runAlgorithm(updateMatrix, false, updateMatrixCase4);
+    await runAlgorithm(updateMatrixByIndex, false, updateMatrixCase4);
 };
 // runAllUpdateMatrix().then()
 
@@ -854,26 +854,26 @@ function cutOffTreeByIndex(forest: number[][]): number {
 }
 
 const runAllCutOffTree = async () => {
-    await runAlgorithm(cutOffTree, false, ...cutOffTreeCase1);
-    await runAlgorithm(cutOffTreeByIndex, false, ...cutOffTreeCase1);
+    await runAlgorithm(cutOffTree, false, cutOffTreeCase1);
+    await runAlgorithm(cutOffTreeByIndex, false, cutOffTreeCase1);
 
-    await runAlgorithm(cutOffTree, false, ...cutOffTreeCase2);
-    await runAlgorithm(cutOffTreeByIndex, false, ...cutOffTreeCase2);
+    await runAlgorithm(cutOffTree, false, cutOffTreeCase2);
+    await runAlgorithm(cutOffTreeByIndex, false, cutOffTreeCase2);
 
-    await runAlgorithm(cutOffTree, false, ...cutOffTreeCase3);
-    await runAlgorithm(cutOffTreeByIndex, false, ...cutOffTreeCase3);
+    await runAlgorithm(cutOffTree, false, cutOffTreeCase3);
+    await runAlgorithm(cutOffTreeByIndex, false, cutOffTreeCase3);
 
-    await runAlgorithm(cutOffTree, false, ...cutOffTreeCase4);
-    await runAlgorithm(cutOffTreeByIndex, false, ...cutOffTreeCase4);
+    await runAlgorithm(cutOffTree, false, cutOffTreeCase4);
+    await runAlgorithm(cutOffTreeByIndex, false, cutOffTreeCase4);
 
-    await runAlgorithm(cutOffTree, false, ...cutOffTreeCase5);
-    await runAlgorithm(cutOffTreeByIndex, false, ...cutOffTreeCase5);
+    await runAlgorithm(cutOffTree, false, cutOffTreeCase5);
+    await runAlgorithm(cutOffTreeByIndex, false, cutOffTreeCase5);
 
-    await runAlgorithm(cutOffTree, false, ...cutOffTreeCase6);
-    await runAlgorithm(cutOffTreeByIndex, false, ...cutOffTreeCase6);
+    await runAlgorithm(cutOffTree, false, cutOffTreeCase6);
+    await runAlgorithm(cutOffTreeByIndex, false, cutOffTreeCase6);
 
-    await runAlgorithm(cutOffTree, false, ...cutOffTreeCase7);
-    await runAlgorithm(cutOffTreeByIndex, false, ...cutOffTreeCase7);
+    await runAlgorithm(cutOffTree, false, cutOffTreeCase7);
+    await runAlgorithm(cutOffTreeByIndex, false, cutOffTreeCase7);
 };
 // runAllCutOffTree().then()
 

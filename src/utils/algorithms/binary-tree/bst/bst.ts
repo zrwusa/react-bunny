@@ -136,7 +136,7 @@ export async function testBST(arr: number[], proxyHandler?: TProxyHandler) {
 }
 
 const runTestBST = async () => {
-    await runAlgorithm(testBST, false, ...testBSTCase1);
+    await runAlgorithm(testBST, false, testBSTCase1);
 };
 
 // runTestBST().then()
@@ -312,7 +312,7 @@ export async function trimABST(data: Array<number | null>, low: number, high: nu
 }
 
 const runTrimABST = async () => {
-    await runAlgorithm(trimABST, false, ...trimABSTCase1);
+    await runAlgorithm(trimABST, false, trimABSTCase1);
 };
 
 // runTrimABST().then();

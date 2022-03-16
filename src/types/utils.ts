@@ -1,4 +1,4 @@
-export type AnyFunction = (...args: any[]) => any;
+export type AnyFunction<A extends any[] = any[], R = any> = (...args: A) => R;
 export type Primitive =
     | number
     | string

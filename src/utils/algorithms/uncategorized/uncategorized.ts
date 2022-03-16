@@ -402,17 +402,17 @@ function wordBreakIIDfsDPLoopS(s: string, wordDict: string[]): string[] {
 }
 
 export const runAllWordBreakII = async () => {
-    // await runAlgorithm(wordBreakIIBruteForce, false, ...breakWordIICase4);
-    // await runAlgorithm(wordBreakIIBruteForce, false, ...breakWordIICase7);
-    await runAlgorithm(wordBreakIIBruteForce, false, ...breakWordIICase8);
+    // await runAlgorithm(wordBreakIIBruteForce, false, breakWordIICase4);
+    // await runAlgorithm(wordBreakIIBruteForce, false, breakWordIICase7);
+    await runAlgorithm(wordBreakIIBruteForce, false, breakWordIICase8);
 
-    // await runAlgorithm(wordBreakIIDfsDPLoopS, false, ...breakWordIICase4);
-    // await runAlgorithm(wordBreakIIDfsDPLoopS, false, ...breakWordIICase7);
-    // await runAlgorithm(wordBreakIIDfsDPLoopS, false, ...breakWordIICase8);
+    // await runAlgorithm(wordBreakIIDfsDPLoopS, false, breakWordIICase4);
+    // await runAlgorithm(wordBreakIIDfsDPLoopS, false, breakWordIICase7);
+    // await runAlgorithm(wordBreakIIDfsDPLoopS, false, breakWordIICase8);
 
-    // await runAlgorithm(wordBreakIIDfsDPLoopWordDict, false, ...breakWordIICase7);
-    await runAlgorithm(wordBreakIIDfsDPLoopWordDict, false, ...breakWordIICase8);
+    // await runAlgorithm(wordBreakIIDfsDPLoopWordDict, false, breakWordIICase7);
+    await runAlgorithm(wordBreakIIDfsDPLoopWordDict, false, breakWordIICase8);
 
-    // await runAlgorithm(wordBreakIIDfsDPLoopS, false, ...breakWordIICase7);
-    await runAlgorithm(wordBreakIIDfsDPLoopS, false, ...breakWordIICase8);
+    // await runAlgorithm(wordBreakIIDfsDPLoopS, false, breakWordIICase7);
+    await runAlgorithm(wordBreakIIDfsDPLoopS, false, breakWordIICase8);
 };

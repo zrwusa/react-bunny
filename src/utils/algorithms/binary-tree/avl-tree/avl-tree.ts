@@ -148,7 +148,7 @@ export const testAVLTree = async (arr: number[], proxyHandler?: TProxyHandler) =
 
 };
 const runTestAVLTree = async () => {
-    await runAlgorithm(testAVLTree, false, ...testBSTCase1);
+    await runAlgorithm(testAVLTree, false, testBSTCase1);
 };
 
 // runTestAVLTree().then();

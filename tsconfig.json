@@ -12,13 +12,12 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-
-//    "allowJs": true,
-//    "skipLibCheck": true,
-//    "forceConsistentCasingInFileNames": true,
-//    "resolveJsonModule": true,
-//    "isolatedModules": true,
-//    "downlevelIteration": true,
+    //    "allowJs": true,
+    //    "skipLibCheck": true,
+    //    "forceConsistentCasingInFileNames": true,
+    //    "resolveJsonModule": true,
+    //    "isolatedModules": true,
+    //    "downlevelIteration": true,
 
     "typeRoots": [
       "src/types/patches",

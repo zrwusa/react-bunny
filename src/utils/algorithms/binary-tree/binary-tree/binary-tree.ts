@@ -111,7 +111,7 @@ export async function testBinaryTree(arr: number[], proxyHandler?: TProxyHandler
 }
 
 const runTestBinaryTree = async () => {
-    await runAlgorithm(testBinaryTree, false, ...testBSTCase1);
+    await runAlgorithm(testBinaryTree, false, testBSTCase1);
 };
 
 // runTestBinaryTree().then()
@@ -147,7 +147,7 @@ export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?
 }
 
 const runTestSymmetricTree = async () => {
-    await runAlgorithm(testSymmetricTree, false, ...testSymmetricTreeCase1);
+    await runAlgorithm(testSymmetricTree, false, testSymmetricTreeCase1);
 };
 
 // runTestSymmetricTree().then();
@@ -361,7 +361,7 @@ export async function pathSumIII(data: Array<number | null>, targetSum: number, 
 }
 
 const runPathSumIII = async () => {
-    await runAlgorithm(pathSumIII, false, ...pathSumIIICase3);
+    await runAlgorithm(pathSumIII, false, pathSumIIICase3);
 };
 
 
@@ -387,7 +387,7 @@ export async function deleteLeaves(data: Array<number | null>, target: number, p
 }
 
 const runDeleteLeaves = async () => {
-    await runAlgorithm(deleteLeaves, false, ...deleteLeavesCase1);
+    await runAlgorithm(deleteLeaves, false, deleteLeavesCase1);
 };
 
 // runPathSumIII().then();

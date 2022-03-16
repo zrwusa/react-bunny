@@ -39,10 +39,10 @@ export function findKthLargestMinHeap(nums: number[], k: number): number {
 }
 
 const runAllFindKthLargest = async () => {
-    await runAlgorithm(findKthLargestMinHeap, false, ...findKthLargestCase1);
-    await runAlgorithm(findKthLargestMinHeap, false, ...findKthLargestCase2);
-    await runAlgorithm(findKthLargestMinHeap, false, ...findKthLargestCase3);
-    await runAlgorithm(findKthLargestMinHeap, false, ...findKthLargestCase9);
+    await runAlgorithm(findKthLargestMinHeap, false, findKthLargestCase1);
+    await runAlgorithm(findKthLargestMinHeap, false, findKthLargestCase2);
+    await runAlgorithm(findKthLargestMinHeap, false, findKthLargestCase3);
+    await runAlgorithm(findKthLargestMinHeap, false, findKthLargestCase9);
 };
 
 // runAllFindKthLargest().then();
@@ -87,8 +87,8 @@ function mergeKLists(lists: SinglyLinkedListNode[]): SinglyLinkedListNode | null
 }
 
 const runAllMergeKLists = async () => {
-    await runAlgorithm(mergeKLists, false, ...mergeKListsCase1);
-    await runAlgorithm(mergeKLists, false, ...mergeKListsCase2);
+    await runAlgorithm(mergeKLists, false, mergeKListsCase1);
+    await runAlgorithm(mergeKLists, false, mergeKListsCase2);
 };
 
 // runAllMergeKLists().then();
@@ -170,8 +170,8 @@ function topKFrequentByBucket(nums: number[], k: number): number[] {
 }
 
 const runAllTopKFrequent = async () => {
-    await runAlgorithm(topKFrequent, false, ...topKFrequentCase1);
-    await runAlgorithm(topKFrequentByBucket, false, ...topKFrequentCase1);
+    await runAlgorithm(topKFrequent, false, topKFrequentCase1);
+    await runAlgorithm(topKFrequentByBucket, false, topKFrequentCase1);
 };
 
 // runAllTopKFrequent().then();
@@ -332,7 +332,7 @@ function reorganizeString(s: string): string {
 }
 
 const runAllReorganizeString = async () => {
-    await runAlgorithm(reorganizeString, false, ...reorganizeStringCase1);
+    await runAlgorithm(reorganizeString, false, reorganizeStringCase1);
 };
 
 // runAllReorganizeString().then();

@@ -37,6 +37,8 @@ import {
 import {BinaryTree, BinaryTreeNode, SinglyLinkedList} from '../../utils/data-structures';
 import {runAllWordBreakII} from '../../utils/algorithms/uncategorized';
 import {AlgorithmPanel} from '../../components/AlgorithmPanel/AlgorithmPanel';
+import {canPartition} from '../../utils/algorithms/dp/dynamic-programing';
+import {canPartitionCase3} from '../../utils/algorithms/dp/cases';
 
 export function AlgorithmScreen() {
 
@@ -103,6 +105,8 @@ export function AlgorithmScreen() {
             <AlgorithmPanel algorithm={trimABST} testCase={trimABSTCase2} buttonLabel={'Trim a BST'}/>
             <AlgorithmPanel algorithm={deleteLeaves} testCase={deleteLeavesCase1}
                             buttonLabel={'Delete Leaves With a Given Value'}/>
+            <AlgorithmPanel algorithm={canPartition} testCase={canPartitionCase3}
+                            buttonLabel={'Partition Equal Subset Sum'}/>
         </div>
     );
 }

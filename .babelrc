@@ -6,7 +6,9 @@
   ],
   "plugins": [
     "react-hot-loader/babel",
-    ["@babel/transform-runtime"],
+    [
+      "@babel/transform-runtime"
+    ],
     "@babel/plugin-proposal-class-properties"
   ]
 }

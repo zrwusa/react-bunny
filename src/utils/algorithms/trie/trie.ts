@@ -22,7 +22,7 @@ export const testTrie = (words: string[]) => {
 
 
 async function runTestTrie() {
-    await runAlgorithm(testTrie, false, ...testTrieCase1)
+    await runAlgorithm(testTrie, false, testTrieCase1)
 }
 
-runTestTrie().then();
+// runTestTrie().then();

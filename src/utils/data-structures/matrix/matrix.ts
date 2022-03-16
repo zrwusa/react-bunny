@@ -1,12 +1,13 @@
-// TODO Consider whether to discard
-export class Matrix<T> {
-    private readonly _elements: T[][];
+// todo need to be improved
+export class MatrixNTI2D<T = number> {
+    private readonly _matrix: Array<Array<T>>;
 
-    constructor(array: T[][]) {
-        this._elements = array;
+    constructor(options: { row: number, col: number, initialVal?: T }) {
+        const {row, col, initialVal} = options;
+        this._matrix = new Array(row).fill(undefined).map(() => new Array(col).fill(initialVal || 0));
     }
 
-    toArray(): T[][] {
-        return this._elements;
+    toArray(): Array<Array<T>> {
+        return this._matrix;
     }
 }

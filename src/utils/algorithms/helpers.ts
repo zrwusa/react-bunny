@@ -169,9 +169,15 @@ import {AnyFunction} from '../../types';
 // AVL Tree	            Θ(log(n))	Θ(log(n))	Θ(log(n))	Θ(log(n))	O(log(n))	O(log(n))	O(log(n))	O(log(n))	O(n)
 // KD Tree	            Θ(log(n))	Θ(log(n))	Θ(log(n))	Θ(log(n))	O(n)	    O(n)	    O(n)	    O(n)	    O(n)
 
-export const runAlgorithm = async (algorithm: AnyFunction, output: boolean | 'stringify' = true, ...args: any) => {
+export const runAlgorithm = async <T extends any[]>(algorithm: AnyFunction, output: boolean | 'stringify' = true, args?: T) => {
     const startTime = timeStart();
-    const result = await algorithm(...args);
+    let result: ReturnType<typeof algorithm>;
+    if (args) {
+        result = await algorithm(...args);
+    } else {
+        result = await algorithm();
+    }
+
     const timeSpent = (performance ? performance.now() : new Date().getTime()) - startTime;
     bunnyConsole.log(algorithm.name, 'result -> ', output === 'stringify' ? JSON.stringify(result) : output ? result : '', 'time spent -> ', timeSpent.toFixed(2) + 'ms');
     return result;
@@ -400,3 +406,11 @@ export const getDirectionVector = (from?: Coordinate, to?: Coordinate): { x: Hor
     }
     return {x: horizontal, y: vertical};
 };
+
+export const nthSameBefore = (i: number, str: string) => {
+    let count = 0;
+    for (let s = 0; s < i + 1; s++) {
+        if (str[s] === str[i]) count++;
+    }
+    return count;
+}

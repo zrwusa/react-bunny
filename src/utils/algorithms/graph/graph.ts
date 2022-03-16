@@ -270,10 +270,10 @@ function canFinishByGraph(numCourses: number, prerequisites: number[][]): boolea
 
 
 const runAllCanFinish = async () => {
-    await runAlgorithm(canFinish, false, ...canFinishCase1);
-    await runAlgorithm(canFinishByGraph, false, ...canFinishCase1);
-    await runAlgorithm(canFinish, false, ...canFinishCase3);
-    await runAlgorithm(canFinishByGraph, false, ...canFinishCase3);
+    await runAlgorithm(canFinish, false, canFinishCase1);
+    await runAlgorithm(canFinishByGraph, false, canFinishCase1);
+    await runAlgorithm(canFinish, false, canFinishCase3);
+    await runAlgorithm(canFinishByGraph, false, canFinishCase3);
 };
 
 // runAllCanFinish().then()
@@ -447,8 +447,8 @@ function criticalConnectionsByGraph(n: number, connections: number[][]): number[
 }
 
 const runAllCriticalConnections = async () => {
-    await runAlgorithm(criticalConnections, false, ...criticalConnectionsCase1);
-    await runAlgorithm(criticalConnectionsByGraph, false, ...criticalConnectionsCase1);
+    await runAlgorithm(criticalConnections, false, criticalConnectionsCase1);
+    await runAlgorithm(criticalConnectionsByGraph, false, criticalConnectionsCase1);
 };
 // runAllCriticalConnections().then();
 // 943	Find the Shortest Superstring	★★★★★	980	996				Hamiltonian path (DFS / DP)

@@ -202,17 +202,17 @@ export const countSmallerBST = async (nums: number[], proxyHandler: TProxyHandle
 };
 
 const runAllCountSmaller = async () => {
-    await runAlgorithm(countSmallerBIT, false, ...countSmallerCase1);
-    await runAlgorithm(countSmallerBIT, false, ...countSmallerCase2);
-    await runAlgorithm(countSmallerBIT, false, ...countSmallerCase3);
-    await runAlgorithm(countSmallerBIT, false, ...countSmallerCase4);
-    await runAlgorithm(countSmallerBIT, false, ...countSmallerCase5);
-    await runAlgorithm(countSmallerBIT, false, ...countSmallerCase7);
+    await runAlgorithm(countSmallerBIT, false, countSmallerCase1);
+    await runAlgorithm(countSmallerBIT, false, countSmallerCase2);
+    await runAlgorithm(countSmallerBIT, false, countSmallerCase3);
+    await runAlgorithm(countSmallerBIT, false, countSmallerCase4);
+    await runAlgorithm(countSmallerBIT, false, countSmallerCase5);
+    await runAlgorithm(countSmallerBIT, false, countSmallerCase7);
 };
 // runAllCountSmaller().then()
 (async () => {
-    // await runAlgorithm(countSmallerBIT, false, ...countSmallerCase8);
-    // await runAlgorithm(countSmallerBST, false, ...countSmallerCase8);
+    // await runAlgorithm(countSmallerBIT, false, countSmallerCase8);
+    // await runAlgorithm(countSmallerBST, false, countSmallerCase8);
 })();
 
 
