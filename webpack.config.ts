@@ -13,7 +13,7 @@ function configFactory(): webpack.Configuration {
         image: /\.(png|svg|jpg|jpeg|gif)$/i,
         sass: /\.s[ac]ss$/i,
     };
-    const buildPath = 'public';
+    const buildPath = 'build';
     const devMode = process.env.NODE_ENV === 'development';
     const prodMode = process.env.NODE_ENV === 'production';
 
