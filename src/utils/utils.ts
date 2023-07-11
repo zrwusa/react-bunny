@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {AnyFunction} from '../types';
+import {AnyFunction, CurryFunc, DeepProxy, DeepProxyOnChange, DeepProxyOnGet} from '../types';
 
 export type JSONSerializable = {
     [key: string]: any
@@ -602,4 +602,52 @@ export function zip<T = number, T1 = number>(array1: T[], array2: T1[], options?
     }
     return isToObj ? zippedObjCoords : zipped;
 }
+
+export function deepProxy<T extends object>(target: T,
+                                            onChange?: DeepProxyOnChange,
+                                            onGet?: DeepProxyOnGet): DeepProxy<T> {
+    const handler: ProxyHandler<T> = {
+        // get?(target: T, p: string | symbol, receiver: any): any;
+        get(target, property, receiver) {
+            const value = Reflect.get(target, property, receiver);
+            if (onGet) onGet(target, property, value, receiver, undefined, true);
+            if (typeof value === 'object' && value !== null) {
+                return deepProxy(value, onChange, onGet);
+            }
+            return value;
+        },
+        // set?(target: T, p: string | symbol, value: any, receiver: any): boolean;
+        set(target, property, value, receiver) {
+            const result = Reflect.set(target, property, value, receiver);
+            if (onChange) onChange(target, property, value, receiver, undefined, result);
+            return result;
+        },
+        // deleteProperty?(target: T, p: string | symbol): boolean;
+        deleteProperty(target, property) {
+            const result = Reflect.deleteProperty(target, property);
+            if (onChange) onChange(target, property, undefined, undefined, undefined, result);
+            return result;
+        },
+        // // defineProperty?(target: T, p: string | symbol, attributes: PropertyDescriptor): boolean;
+        // defineProperty(target, property, descriptor) {
+        //     const result = Reflect.defineProperty(target, property, descriptor);
+        //     if (onChange) onChange(target, property, undefined, undefined,descriptor, result);
+        //     return result;
+        // }
+    }
+    return new Proxy(target, handler) as DeepProxy<T>;
+}
+
+function curry<T extends (...args: any[]) => any>(fn: T): CurryFunc<T> {
+    return function curried(this: any, ...args: any[]): any {
+        if (args.length >= fn.length) {
+            return fn.apply(this, args);
+        } else {
+            return function (this: any, ...moreArgs: any[]): any {
+                return curried.apply(this, args.concat(moreArgs));
+            };
+        }
+    } as CurryFunc<T>;
+}
+
 

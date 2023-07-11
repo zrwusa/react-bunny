@@ -1,15 +1,12 @@
 .idea/
 node_modules/
-#note.txt
+
 build/
 public/
 .DS_Store
 
 yarn-error.log
 tsconfig.tsbuildinfo
-yarn-backup.lock
 
-react-bunny.txt
-react-bunny2.txt
-expo-bunny.txt
-
+src/learnings
+notes/
