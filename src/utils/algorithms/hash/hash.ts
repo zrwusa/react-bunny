@@ -2,7 +2,7 @@
 
 // Using Hash Tables TODO
 // 3. Longest Substring Without Repeating Characters
-import {TProxyHandler} from '@qiwi/deep-proxy/typings/interface';
+import {TProxyHandler} from '@qiwi/deep-proxy';
 import {DeepProxy} from '@qiwi/deep-proxy';
 import {wait} from '../../utils';
 

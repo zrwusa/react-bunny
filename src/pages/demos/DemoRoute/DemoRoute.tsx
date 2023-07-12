@@ -1,19 +1,15 @@
-import React, {Component} from 'react';
-import {RouteComponentProps} from 'react-router-dom';
+import React from 'react';
+import {RouteProps, useParams} from 'react-router';
 
-type IProps = { id: string, };
 type IStates = { name: string, }
-
-class DemoRoute extends Component<RouteComponentProps<IProps>, IStates> {
-    constructor(props: RouteComponentProps<IProps>) {
-        super(props);
-    }
-
-    render(): React.ReactNode {
+type IProps = RouteProps & {
+    id: string;
+}
+const DemoRoute: React.FC = () => {
+    const params = useParams();
         return (<div>
-            <h1 className={'demo-home__title--des'}>Demo Route Page id = {this.props.match.params.id}</h1>
+            <h1 className={'demo-home__title--des'}>Demo Route Page id = {params.id}</h1>
         </div>);
-    }
 }
 
 export default DemoRoute;

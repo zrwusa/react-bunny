@@ -100,23 +100,23 @@
   }
 }
 
-@include media('>=tablet') {
-  @include grid-layout-responsive-loose;
-}
+//@include media('>=tablet') {
+//  @include grid-layout-responsive-loose;
+//}
 
-@include media('<tablet', '>=phone', 'landscape') {
-  @include grid-layout-responsive-loose;
-}
-
-@include media('<=phone') {
-  @include grid-layout-responsive-compact;
-}
+//@include media('<tablet', '>=phone', 'landscape') {
+//  @include grid-layout-responsive-loose;
+//}
+//
+//@include media('<=phone') {
+//  @include grid-layout-responsive-compact;
+//}
 
 .grid-layout-with-side {
-  @include media('>=tablet') {
-    @include grid-layout-responsive-loose-with-side;
-  }
-  @include media('<=phone') {
-    @include grid-layout-responsive-compact-with-side;
-  }
+  //@include media('>=tablet') {
+  //  @include grid-layout-responsive-loose-with-side;
+  //}
+  //@include media('<=phone') {
+  //  @include grid-layout-responsive-compact-with-side;
+  //}
 }

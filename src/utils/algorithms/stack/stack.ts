@@ -1,5 +1,5 @@
 /* --- start stack --- */
-import {TProxyHandler} from '@qiwi/deep-proxy/typings/interface';
+import {TProxyHandler} from '@qiwi/deep-proxy';
 import {Stack} from '../../data-structures/stack';
 import {DeepProxy} from '@qiwi/deep-proxy';
 import {wait} from '../../utils';

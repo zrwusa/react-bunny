@@ -1,11 +1,11 @@
 import './DemoFCReduxHook.scss';
-import React from 'react';
+import React, {ComponentType} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {demoHelloStateAction1} from '../../../stores/demo-hello/actions';
 import {IRootState} from '../../../stores/models';
 
+const DemoFCReduxHook: React.FC<IRootState> = () => {
 
-const DemoFCReduxHook: React.FunctionComponent<IRootState> = () => {
     const dispatch = useDispatch();
     const demoHelloState = useSelector((store: IRootState) => store.demoHelloState);
     return (<div>

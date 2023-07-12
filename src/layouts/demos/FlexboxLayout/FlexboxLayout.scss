@@ -59,11 +59,11 @@
   }
 }
 
-@include media('>=tablet') {
-  @include flexbox-layout-responsive-loose;
-}
-
-@include media('<tablet', '>=phone', 'landscape') {
-  @include flexbox-layout-responsive-loose;
-}
+//@include media('>=tablet') {
+//  @include flexbox-layout-responsive-loose;
+//}
+//
+//@include media('<tablet', '>=phone', 'landscape') {
+//  @include flexbox-layout-responsive-loose;
+//}
 

@@ -1,23 +1,19 @@
 import './DemoHome.scss';
 import React, {Component} from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import FCCard from '../../../components/demos/FCCard';
 import CCClock from '../../../components/demos/CCClock';
 import Request from '../../../components/demos/Request';
 
-type IProps = { title?: string }
+type IProps = { title?: string; }
 type IStates = { name: string }
 
-class DemoHome extends Component<IProps, IStates> {
-    constructor(props: IProps) {
-        super(props);
-    }
+const DemoHome: React.FC<IProps> = () => {
 
-    render(): React.ReactNode {
         return (<div className={'demo-home'}>
             <h1 className={'demo-home__title--des'}>Demo Home Page</h1>
             <div className="demo-home__component--panel">
-                <FCCard title="FCCard is a FunctionComponent" paragraph="I am paragraph"/>
+                <FCCard title="FCCard is a FunctionComponent" paragraph="I am paragraph"><span>children</span></FCCard>
             </div>
             <div className="demo-home__component--panel">
                 <CCClock title="CCClock is a ClassComponent"/>
@@ -40,7 +36,6 @@ class DemoHome extends Component<IProps, IStates> {
             </div>
 
         </div>);
-    }
 }
 
 export default DemoHome;

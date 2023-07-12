@@ -5,10 +5,11 @@ import NavLinks from '../NavContent';
 import Header from './Header';
 
 interface IProps {
-    title?: string,
+    title: string;
+    children: React.ReactNode;
 }
 
-const GridLayout: React.FunctionComponent<IProps> = ({title, children}) => {
+const GridLayout: React.FC<IProps> = ({title, children}) => {
     return (
         <div className={cs({'grid-layout__container': true, 'grid-layout-with-side': false})}>
             <Header title={title}/>

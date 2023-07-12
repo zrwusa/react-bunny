@@ -256,17 +256,17 @@ $im-no-media-expressions: ('screen', 'portrait', 'landscape') !default;
 }
 
 
-@mixin media($conditions...) {
-  @if ($im-media-support and length($conditions) == 0) or
-      (not $im-media-support and im-intercepts-static-breakpoint($conditions...)) {
-    @content;
-  } @else if ($im-media-support and length($conditions) > 0) {
-    @media #{unquote(parse-expression(nth($conditions, 1)))} {
-      // Recursive call
-      @include media(slice($conditions, 2)
-      ...) {
-        @content;
-      }
-    }
-  }
-}
+//@mixin media($conditions...) {
+//  @if ($im-media-support and length($conditions) == 0) or
+//      (not $im-media-support and im-intercepts-static-breakpoint($conditions...)) {
+//    @content;
+//  } @else if ($im-media-support and length($conditions) > 0) {
+//    @media #{unquote(parse-expression(nth($conditions, 1)))} {
+//      // Recursive call
+//      @include media(slice($conditions, 2)
+//      ...) {
+//        @content;
+//      }
+//    }
+//  }
+//}

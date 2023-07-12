@@ -102,7 +102,7 @@ export class BST<T> extends BinaryTree<T> implements I_BST<T> {
                         //Duplicates are not accepted.
                         traversing = false;
                         inserted = (cur);
-                    } else if (val < cur.val) {
+                    } else if (val !== undefined && cur.val !== undefined && val < cur.val) {
                         if (newNode) {
                             this._autoAllLesserSum && cur.right && this.subTreeAdd(cur.right, newNode.count, 'allLesserSum');
                             if (this._autoAllLesserSum) cur.allLesserSum += newNode.count;
@@ -123,7 +123,7 @@ export class BST<T> extends BinaryTree<T> implements I_BST<T> {
                             //Traverse the left of the current node
                             if (cur.left) cur = cur.left;
                         }
-                    } else if (val > cur.val) {
+                    } else if (cur.val !== undefined && val !== undefined && val > cur.val) {
                         // Traverse right of the node
                         if (cur.right === undefined) {
                             if (newNode) {
@@ -335,11 +335,13 @@ export class BST<T> extends BinaryTree<T> implements I_BST<T> {
 
             if (!cur.left && !cur.right) return null;
             if (propertyName === 'id') {
-                if (nodeProperty < cur.id) {
-                    cur.left ? _traverse(cur.left) : null;
-                }
-                if (nodeProperty > cur.id) {
-                    cur.right ? _traverse(cur.right) : null;
+                if (typeof nodeProperty === 'number') {
+                    if (nodeProperty < cur.id) {
+                        cur.left ? _traverse(cur.left) : null;
+                    }
+                    if (nodeProperty > cur.id) {
+                        cur.right ? _traverse(cur.right) : null;
+                    }
                 }
             } else {
                 cur.left ? _traverse(cur.left) : null;

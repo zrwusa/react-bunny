@@ -10,7 +10,7 @@
 
 //206. Reverse Linked List
 import {SinglyLinkedListNode} from '../../data-structures/linked-list';
-import {TProxyHandler} from '@qiwi/deep-proxy/typings/interface';
+import {TProxyHandler} from '@qiwi/deep-proxy';
 import {DeepProxy} from '@qiwi/deep-proxy';
 import {wait} from '../../utils';
 

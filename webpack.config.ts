@@ -1,13 +1,16 @@
 import path from 'path';
-import webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 import autoPreFixer from 'autoprefixer';
 import StylelintPlugin from 'stylelint-webpack-plugin';
+import type { Configuration as DevServerConfiguration } from "webpack-dev-server";
+import type { Configuration } from "webpack";
+import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
-function configFactory(): webpack.Configuration {
+
+function configFactory(): Configuration {
     const ext = {
         ts: /\.(ts)x?$/,
         image: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -17,24 +20,29 @@ function configFactory(): webpack.Configuration {
     const devMode = process.env.NODE_ENV === 'development';
     const prodMode = process.env.NODE_ENV === 'production';
 
+    const devServer: DevServerConfiguration = devMode ? {
+        static: path.join(__dirname, buildPath),
+        compress: false,
+        port: 3006,
+        open: true, // "Google Chrome"
+        historyApiFallback: true,
+        client: {
+            overlay: false,
+            logging: 'warn' // Want to set this to 'warn' or 'error'
+        },
+        proxy: {  // Front-end and back-end separation
+            '/api': {
+                target: 'http://localhost:8000',
+                pathRewrite: {'^/api': ''}
+            }
+        }
+    } : {};
+
     return {
         entry: './src/index.tsx',
         mode: devMode ? 'development' : prodMode ? 'production' : 'none',
         devtool: devMode ? 'source-map' : false,
-        devServer: devMode ? {
-            contentBase: path.join(__dirname, buildPath),
-            compress: false,
-            port: 3006,
-            hot: true,
-            open: true, // "Google Chrome"
-            historyApiFallback: true,
-            proxy: {  // Front-end and back-end separation
-                '/api': {
-                    target: 'http://localhost:8000',
-                    pathRewrite: {'^/api': ''}
-                }
-            }
-        } : {},
+
         module: {
             rules: [
                 {
@@ -103,10 +111,10 @@ function configFactory(): webpack.Configuration {
 
             ],
         },
+        devServer,
         resolve: {
             modules: ['node_modules', 'react'],
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
-            alias: {'react-dom': '@hot-loader/react-dom'},
         },
         output: {
             path: path.resolve(__dirname, buildPath),
@@ -137,6 +145,7 @@ function configFactory(): webpack.Configuration {
             }
         },
         plugins: [
+            devMode && new ReactRefreshPlugin(),
             prodMode ? new CleanWebpackPlugin() : Function(),
             new HtmlWebpackPlugin({
                 title: 'React-Bunny',
@@ -150,14 +159,17 @@ function configFactory(): webpack.Configuration {
             }),
             new ForkTsCheckerWebpackPlugin({
                 async: false,
-                eslint: {
-                    files: './src/**/*.{ts,tsx}',
-                },
+                // eslint: {
+                //     files: './src/**/*.{ts,tsx}',
+                // },
             }),
-            new StylelintPlugin({
-                context: './src',
-                files: ['**/*.{scss,sass}']
-            })
+            // new StylelintPlugin({
+            //     files: ['**/*.{scss,sass}'],
+            //     configFile: 'stylelint.config.js',
+            //     // context: 'src',
+            //     // failOnError: true,
+            //     // quiet: false,
+            // }),
             // devMode?new webpack.HotModuleReplacementPlugin():Function()
         ],
         target: devMode ? 'web' : 'browserslist', //default being 'browserlist' since 5.0.0-rc.1,Set to "web" when developing with react-hot-loader

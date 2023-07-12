@@ -4,10 +4,11 @@ import NavLinks from '../NavContent';
 import Header from './Header';
 
 interface IProps {
-    title?: string,
+    title: string;
+    children: React.ReactNode;
 }
 
-const FlexboxLayout: React.FunctionComponent<IProps> = ({title, children}) => {
+const FlexboxLayout: React.FC<IProps> = ({title, children}) => {
     return (
         <div className="flexbox-layout__container">
             <Header title={title}/>

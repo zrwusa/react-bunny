@@ -40,7 +40,7 @@ import {AlgorithmPanel} from '../../components/AlgorithmPanel/AlgorithmPanel';
 import {canPartition} from '../../utils/algorithms/dp/dynamic-programing';
 import {canPartitionCase3} from '../../utils/algorithms/dp/cases';
 
-export function AlgorithmScreen() {
+export const AlgorithmScreen: React.FC = () => {
 
     const binaryTreeNode1 = new BinaryTreeNode<number>(1, 1);
     const binaryTree = new BinaryTree<number>(binaryTreeNode1);
