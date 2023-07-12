@@ -4,6 +4,7 @@ import {AnyFunction, CurryFunc, DeepProxy, DeepProxyOnChange, DeepProxyOnGet} fr
 export type JSONSerializable = {
     [key: string]: any
 }
+
 export type JSONValue = string | number | boolean | undefined | JSONObject;
 
 export interface JSONObject {
@@ -328,7 +329,6 @@ export function randomDate(start?: Date, end?: Date, specificProbabilityStart?: 
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
-
 export const capitalizeWords = (str: string) => {
     return str.replace(/(?:^|\s)\S/g, (a: string) => a.toUpperCase());
 };
@@ -529,7 +529,6 @@ export const deepAdd = (obj: JSONSerializable, keyReducerMap: { [key in string]:
 
 const styleString = (color: string) => `color: ${color}; font-weight: bold`;
 
-
 const styleHeader = (header: string) => `%c[${header}]`;
 
 export const bunnyConsole = {
@@ -543,7 +542,6 @@ export const bunnyConsole = {
         return console.error(styleHeader(headerLog), styleString('red'), ...args);
     }
 };
-
 
 export const timeStart = () => {
     return performance ? performance.now() : new Date().getTime();
@@ -628,12 +626,6 @@ export function deepProxy<T extends object>(target: T,
             if (onChange) onChange(target, property, undefined, undefined, undefined, result);
             return result;
         },
-        // // defineProperty?(target: T, p: string | symbol, attributes: PropertyDescriptor): boolean;
-        // defineProperty(target, property, descriptor) {
-        //     const result = Reflect.defineProperty(target, property, descriptor);
-        //     if (onChange) onChange(target, property, undefined, undefined,descriptor, result);
-        //     return result;
-        // }
     }
     return new Proxy(target, handler) as DeepProxy<T>;
 }

@@ -5,10 +5,9 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 import autoPreFixer from 'autoprefixer';
 import StylelintPlugin from 'stylelint-webpack-plugin';
-import type { Configuration as DevServerConfiguration } from "webpack-dev-server";
-import type { Configuration } from "webpack";
+import type {Configuration as DevServerConfiguration} from 'webpack-dev-server';
+import type {Configuration} from 'webpack';
 import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-
 
 function configFactory(): Configuration {
     const ext = {
@@ -16,11 +15,11 @@ function configFactory(): Configuration {
         image: /\.(png|svg|jpg|jpeg|gif)$/i,
         sass: /\.s[ac]ss$/i,
     };
-    const buildPath = 'build';
-    const devMode = process.env.NODE_ENV === 'development';
-    const prodMode = process.env.NODE_ENV === 'production';
+    const buildPath = 'dist';
+    const isDev = process.env.NODE_ENV === 'development';
+    const isProd = process.env.NODE_ENV === 'production';
 
-    const devServer: DevServerConfiguration = devMode ? {
+    const devServer: DevServerConfiguration = isDev ? {
         static: path.join(__dirname, buildPath),
         compress: false,
         port: 3006,
@@ -40,9 +39,8 @@ function configFactory(): Configuration {
 
     return {
         entry: './src/index.tsx',
-        mode: devMode ? 'development' : prodMode ? 'production' : 'none',
-        devtool: devMode ? 'source-map' : false,
-
+        mode: isDev ? 'development' : isProd ? 'production' : 'none',
+        devtool: isDev ? 'source-map' : false,
         module: {
             rules: [
                 {
@@ -60,55 +58,41 @@ function configFactory(): Configuration {
                     use: {
                         loader: 'babel-loader',
                         options: {
-                            // presets: [
-                            //     "@babel/preset-env",
-                            //     "@babel/preset-react",
-                            //     "@babel/preset-typescript",
-                            // ],
-                            sourceMap: devMode,
+                            sourceMap: isDev,
                         },
                     },
                 },
                 {
                     test: ext.sass,
                     exclude: /node_modules/,
-                    use: [
-                        {
-                            loader: MiniCssExtractPlugin.loader, // for extracting not for minimizing
-                            options: {
-                                // publicPath: ""
-                                // publicPath: (resourcePath:any, context:any) => path.relative(path.dirname(resourcePath), context) + '/',
-                            },
+                    use: [{
+                        loader: MiniCssExtractPlugin.loader, // for extracting not for minimizing
+                        options: {
+                            // publicPath: ""
+                            // publicPath: (resourcePath:any, context:any) => path.relative(path.dirname(resourcePath), context) + '/',
                         },
-                        // "style-loader",
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                // modules: true,
-                                sourceMap: devMode,
-                                // importLoader: 1   // When using postCSS with nextCSS (no @import resolver) you'll want to set importLoaders. But when using sass, it already handles the @import statements.
-                            }
-                        },
-
-                        {
-                            loader: 'postcss-loader',
-                            options: {
-                                postcssOptions: {
-                                    plugins: [autoPreFixer()],
-                                },
-                                sourceMap: devMode,
-                            }
-                        },
-
-                        {
-                            loader: 'sass-loader',
-                            options: {
-                                sourceMap: devMode,
-                            }
+                    }, {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: isDev,
+                            // importLoader: 1   // When using postCSS with nextCSS (no @import resolver) you'll want to set importLoaders. But when using sass, it already handles the @import statements.
                         }
+                    }, {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [autoPreFixer()],
+                            },
+                            sourceMap: isDev,
+                        }
+                    }, {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: isDev,
+                        }
+                    }
                     ]
                 },
-
             ],
         },
         devServer,
@@ -118,15 +102,15 @@ function configFactory(): Configuration {
         },
         output: {
             path: path.resolve(__dirname, buildPath),
-            filename: devMode ? '[name].js' : '[name].[chunkhash].js',
+            filename: isDev ? '[name].js' : '[name].[chunkhash].js',
             publicPath: '/'
         },
         optimization: {
-            minimize: prodMode,
+            minimize: isProd,
             minimizer: [
                 `...`, // For webpack@5 extend existing minimizers
             ],
-            runtimeChunk: devMode ? 'single' : undefined,
+            runtimeChunk: isDev ? 'single' : undefined,
             splitChunks: {
                 chunks: 'all',
                 maxInitialRequests: Infinity,
@@ -134,7 +118,7 @@ function configFactory(): Configuration {
                 cacheGroups: {
                     vendor: {
                         test: /[\\/]node_modules[\\/]/,
-                        name: devMode ?
+                        name: isDev ?
                             (module: any) => {
                                 const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];                            // get the name node_modules/packageName
                                 return `npm.${packageName.replace('@', '')}`;                            // npm package names are URL-safe, but some servers don't like @ symbols
@@ -145,8 +129,8 @@ function configFactory(): Configuration {
             }
         },
         plugins: [
-            devMode && new ReactRefreshPlugin(),
-            prodMode ? new CleanWebpackPlugin() : Function(),
+            isDev && new ReactRefreshPlugin(),
+            isProd ? new CleanWebpackPlugin() : Function(),
             new HtmlWebpackPlugin({
                 title: 'React-Bunny',
                 filename: 'index.html',
@@ -154,8 +138,8 @@ function configFactory(): Configuration {
             }),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output both options are optional
-                filename: devMode ? '[name].css' : '[name].[contenthash].css',
-                chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
+                filename: isDev ? '[name].css' : '[name].[contenthash].css',
+                chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
             }),
             new ForkTsCheckerWebpackPlugin({
                 async: false,
@@ -163,16 +147,18 @@ function configFactory(): Configuration {
                 //     files: './src/**/*.{ts,tsx}',
                 // },
             }),
-            // new StylelintPlugin({
-            //     files: ['**/*.{scss,sass}'],
-            //     configFile: 'stylelint.config.js',
-            //     // context: 'src',
-            //     // failOnError: true,
-            //     // quiet: false,
-            // }),
-            // devMode?new webpack.HotModuleReplacementPlugin():Function()
+            new StylelintPlugin({
+                files: ['**/*.{scss,sass}'],
+                configFile: 'stylelint.config.js',
+            }),
         ],
-        target: devMode ? 'web' : 'browserslist', //default being 'browserlist' since 5.0.0-rc.1,Set to "web" when developing with react-hot-loader
+        target: isDev ? 'web' : 'browserslist', //default being 'browserlist' since 5.0.0-rc.1,Set to "web" when developing with react-hot-loader
+        watchOptions: {
+            // for some systems, watching many files can result in a lot of CPU or memory usage
+            // https://webpack.js.org/configuration/watch/#watchoptionsignored
+            // don't use this pattern, if you have a monorepo with linked packages
+            ignored: /node_modules/,
+        }
     };
 }
 

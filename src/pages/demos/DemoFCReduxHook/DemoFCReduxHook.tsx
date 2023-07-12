@@ -1,5 +1,5 @@
 import './DemoFCReduxHook.scss';
-import React, {ComponentType} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {demoHelloStateAction1} from '../../../stores/demo-hello/actions';
 import {IRootState} from '../../../stores/models';

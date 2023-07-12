@@ -2,8 +2,7 @@
 
 
 // 94 Binary Tree Inorder Traversal	★ 144 145 429 589 590 987 1302 traversal
-import {TProxyHandler} from '@qiwi/deep-proxy';
-import {DeepProxy} from '@qiwi/deep-proxy';
+import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
 import {wait} from '../../utils';
 import {BinaryTreeNode, Queue, Stack} from '../../data-structures';
 import {

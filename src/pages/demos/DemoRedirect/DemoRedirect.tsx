@@ -1,14 +1,14 @@
 import './DemoRedirect.scss';
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router';
+import {useLocation, useNavigate} from 'react-router';
 
 interface IProps {
     title?: string;
 }
 
-const DemoRedirect: React.FC<IProps> = ({ title }) => {
+const DemoRedirect: React.FC<IProps> = ({title}) => {
     const location = useLocation();
-    const { from } = location.state || { from: { pathname: '' } };
+    const {from} = location.state || {from: {pathname: ''}};
     const navigate = useNavigate();
     if (from.pathname !== '') {
         navigate(from.pathname);

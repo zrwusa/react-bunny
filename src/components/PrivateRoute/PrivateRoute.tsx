@@ -1,14 +1,13 @@
 import * as React from 'react';
-import {Route, RouteProps, useNavigate} from 'react-router';
-import {useLocation} from 'react-router';
-import { Navigate } from 'react-router-dom'
+import {RouteProps, useLocation, useNavigate} from 'react-router';
+import {Navigate} from 'react-router-dom'
 import store from '../../stores';
 
 type IProps = RouteProps & {
     redirectPath: string;
     children: React.ReactNode;
 }
-const Protected: React.FC<IProps> = ({ children }) => {
+const Protected: React.FC<IProps> = ({children}) => {
     const navigate = useNavigate();
     // const isAuth = !!localStorage.getItem(`access_token`);
     const isAuth = !!store.getState().userState.user.access_token;
@@ -22,7 +21,7 @@ const Protected: React.FC<IProps> = ({ children }) => {
         //                   return null;
         //               }}/>;
 
-        return <Navigate to="/" replace />
+        return <Navigate to="/" replace/>
     }
     return children;
 }

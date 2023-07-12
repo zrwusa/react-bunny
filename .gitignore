@@ -2,11 +2,12 @@
 node_modules/
 
 build/
+dist/
 public/
 .DS_Store
 
-notes/yarn-error.log
 tsconfig.tsbuildinfo
+yarn-error.log
 
 src/learnings
 notes/

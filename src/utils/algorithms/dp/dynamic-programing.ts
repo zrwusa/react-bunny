@@ -328,7 +328,7 @@ function numDistinct3(s: string, t: string): number {
     }
 
     const ans = dfs(0, 0);
-    console.log(`m*n:${m * n} rcs:${rcs} hit:${hit} dp.len:${Object.keys(dp).length}`);
+    // console.log(`m*n:${m * n} rcs:${rcs} hit:${hit} dp.len:${Object.keys(dp).length}`);
     return ans;
 }
 
@@ -379,5 +379,3 @@ export const runAllDp = async () => {
     // await runAllCanPartition();
     // await runAllMinCostTickets();
 }
-
-runAllDp().then();

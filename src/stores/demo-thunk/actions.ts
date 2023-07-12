@@ -4,7 +4,6 @@ import {AxiosError} from 'axios';
 import {IThunkResult} from '../thunk';
 import api from '../../helpers/api';
 
-
 export interface IDemoThunkSuccessAction {
     type: EDemoThunkAction.ACTION_DEMO_THUNK_SUCCESS;
     payload: IDemoThunkSuccessPayload;
@@ -30,15 +29,13 @@ export const demoThunkFailAction: (payload: AxiosError) => IDemoThunkFailAction 
 };
 
 export const demoThunkAction = (data: IReqDemoThunkPayload): IThunkResult<Promise<void>> => (dispatch) => {
-    const retPromise = api.post(`/demo_thunks`, data)
+    return api.post(`/demo_thunks`, data)
         .then((res) => {
             dispatch(demoThunkSuccessAction(res.data));
         })
         .catch((err: AxiosError) => {
             dispatch(demoThunkFailAction(err));
         });
-    return retPromise;
 };
-
 
 export type IDemoThunkAction = IDemoThunkSuccessAction | IDemoThunkFailAction;

@@ -1,16 +1,22 @@
-@import "../../../helpers/include-media";
 @import "../../../helpers/variables";
 
-.flexbox-layout__title--des {
-  color: $color-title-font;
-  margin: $number-thin-e 0;
+.flexbox-layout {
+  &__title--des {
+    color: $color-title-font;
+    margin: $number-thin-e 0;
+  }
+
+  &__container {
+    display: flex;
+    flex-flow: row wrap;
+    font-weight: bold;
+  }
+
+  &__sidebar {
+    flex: 1 0 0;
+  }
 }
 
-.flexbox-layout__container {
-  display: flex;
-  flex-flow: row wrap;
-  font-weight: bold;
-}
 
 .flexbox-layout-panel {
   flex: 1 100%;
@@ -19,9 +25,6 @@
   border: solid $number-thin-a $color-light-gray;
 }
 
-.flexbox-layout__sidebar {
-  flex: 1 0 0;
-}
 
 @mixin flexbox-layout-responsive-loose {
   .flexbox-layout__content {
@@ -31,31 +34,32 @@
 
   }
 
-  .flexbox-layout__nav {
-    order: 1;
-    overflow-y: auto;
-  }
+  .flexbox-layout {
+    &__nav {
+      order: 1;
+      overflow-y: auto;
+    }
 
+    &__ad {
+      order: 3;
+    }
 
-  .flexbox-layout__ad {
-    order: 3;
-  }
+    &__footer {
+      order: 4;
+      height: $footer-height;
 
-  .flexbox-layout__footer {
-    order: 4;
-    height: $footer-height;
+    }
 
-  }
+    &__header {
+      height: $header-height;
+      display: flex;
+      justify-items: center;
+      justify-content: space-between;
+    }
 
-  .flexbox-layout__header {
-    height: $header-height;
-    display: flex;
-    justify-items: center;
-    justify-content: space-between;
-  }
-
-  .flexbox-layout__nav, .flexbox-layout__content, .flexbox-layout__ad {
-    height: calc(#{$screen-height} - #{$header-height} - #{$footer-height} - #{6*$panel-gap});
+    &__nav, &__content, &__ad {
+      height: calc(#{$screen-height} - #{$header-height} - #{$footer-height} - #{6*$panel-gap});
+    }
   }
 }
 
