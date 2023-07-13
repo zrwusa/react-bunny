@@ -3,8 +3,8 @@
 
 // 94 Binary Tree Inorder Traversal	★ 144 145 429 589 590 987 1302 traversal
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {wait} from '../../utils';
-import {BinaryTreeNode, Queue, Stack} from '../../data-structures';
+import {wait, WaitManager} from '../../utils';
+import {BinaryTreeNode, Queue, Stack} from 'data-structure-typed';
 import {
     Coordinate,
     Direction,
@@ -17,6 +17,7 @@ import {
     runAlgorithm
 } from '../helpers';
 import {
+    combinationCase2,
     cutOffTreeCase1,
     cutOffTreeCase2,
     cutOffTreeCase3,
@@ -31,12 +32,16 @@ import {
     ladderLengthCase5,
     ladderLengthCase6,
     ladderLengthCase7,
+    permutationCase2,
     updateMatrixCase1,
     updateMatrixCase2,
     updateMatrixCase3,
     updateMatrixCase4
 } from './cases';
 import {OrderType, TreeNode} from '../../../types';
+
+const waitManager = new WaitManager(10);
+const {time2} = waitManager;
 
 export async function binaryTreeInorderTraversal(root: BinaryTreeNode<number> | undefined, proxyHandler: TProxyHandler): Promise<number[]> {
     type Variables = {
@@ -50,16 +55,15 @@ export async function binaryTreeInorderTraversal(root: BinaryTreeNode<number> | 
     }
 
     const leftResult = root.left && await binaryTreeInorderTraversal(root.left, proxyHandler);
-    await wait(500);
+    await wait(time2);
     proxyVariables.node = root.left;
 
-    await wait(500);
+    await wait(time2);
     proxyVariables.node = root;
 
     const rightResult = root.right && await binaryTreeInorderTraversal(root.right, proxyHandler);
-    await wait(500);
+    await wait(time2);
     proxyVariables.node = root.right;
-
 
     if (leftResult && rightResult) {
         return [
@@ -103,14 +107,14 @@ export const DFS = async (node: TreeNode<number>, type: OrderType, proxyHandler:
                 await DFS(left, type, proxyHandler);
                 // console.log(node.id);
                 variablesProxy.nodeNeedPrint = node;
-                await wait(500);
+                await wait(time2);
 
                 await DFS(right, type, proxyHandler);
                 break;
             case 'PreOrder':
                 // console.log(node.id);
                 variablesProxy.nodeNeedPrint = node;
-                await wait(500);
+                await wait(time2);
 
                 await DFS(left, type, proxyHandler);
                 await DFS(right, type, proxyHandler);
@@ -120,7 +124,7 @@ export const DFS = async (node: TreeNode<number>, type: OrderType, proxyHandler:
                 await DFS(right, type, proxyHandler);
                 // console.log(node.id);
                 variablesProxy.nodeNeedPrint = node;
-                await wait(500);
+                await wait(time2);
 
                 break;
         }
@@ -137,16 +141,16 @@ export const BFS = async (node: TreeNode<number>, proxyHandler: TProxyHandler) =
 
     if (node) {
         const queue = new Queue<TreeNode<number>>();
-        queue.enqueue(node);
+        queue.offer(node);
         while (!queue.isEmpty()) {
-            const item = queue.dequeue() as TreeNode<number>;
+            const item = queue.poll() as TreeNode<number>;
             nodes.push(item);
             variablesProxy.node = item;
-            await wait(500);
+            await wait(time2);
             const {children} = item;
             if (children) {
                 for (let i = 0; i < children.length; i++) {
-                    queue.enqueue(children[i]);
+                    queue.offer(children[i]);
                 }
             }
         }
@@ -190,7 +194,7 @@ export async function letterCombinations(digits: string, proxyHandler: TProxyHan
             // recursive rule
             accumulated.push(char);
             await dfs(level + 1, accumulated);
-            await wait(500);
+            await wait(time2);
             accumulated.pop();
         }
     };
@@ -202,7 +206,7 @@ export async function letterCombinations(digits: string, proxyHandler: TProxyHan
 
 
 // 46	Permutations	★★	47	784	943	996				Permutation
-const permute = function <T>(nums: T[]) {
+export const permute = function <T>(nums: T[]) {
     if (nums.length === 1) {
         return [nums];
     }
@@ -230,7 +234,7 @@ const permute = function <T>(nums: T[]) {
     return result;
 };
 
-const permuteMN = function <T>(nums: T[], n: number, excludeSelf = true) {
+export const permuteMN = function <T>(nums: T[], n: number, excludeSelf = true) {
     if (n > nums.length) {
         return [];
     }
@@ -269,7 +273,7 @@ const permuteMN = function <T>(nums: T[], n: number, excludeSelf = true) {
 
 
 // Combination
-const combineMN = function <T>(nums: T[], n: number, excludeSelf = true) {
+export const combineMN = function <T>(nums: T[], n: number, excludeSelf = true) {
     if (n > nums.length) {
         return [];
     }
@@ -313,7 +317,7 @@ const combineMN = function <T>(nums: T[], n: number, excludeSelf = true) {
 // console.log(combineMN(['(','(',')',')'], 4, false))
 
 // 22	Generate Parentheses	★★★	301							DFS
-function generateParenthesis(n: number): string[] {
+export function generateParenthesis(n: number): string[] {
     // corner case
     if (n === 1) {
         return ['()'];
@@ -339,7 +343,7 @@ function generateParenthesis(n: number): string[] {
             accumulated = accumulated.substr(0, accumulated.length - 1);
         }
 
-        if (level != 0) {
+        if (level !== 0) {
             if (openCount > closeCount) {
                 accumulated += ')';
                 closeCount++;
@@ -432,13 +436,13 @@ export const ladderLengthPlagiarized = function (beginWord: string, endWord: str
                     for (let j = 0; j < eleChar.length; j++) {
                         if (wordChar[j] !== eleChar[j]) {
                             count++;
-                            if (count == 2) {
+                            if (count === 2) {
                                 break;
                             }
                         }
                     }
-                    if (count == 1) {
-                        if (wordList[i] == endWord) {
+                    if (count === 1) {
+                        if (wordList[i] === endWord) {
                             return level + 1;
                         }
                         if (!map[wordList[i]]) {
@@ -540,7 +544,7 @@ export const ladderLengthTwoWayBFS = function (beginWord: string, endWord: strin
     return 0;
 };
 
-const runAllLadderLength = async () => {
+export const runAllLadderLength = async () => {
     await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase1);
     await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase2);
     await runAlgorithm(ladderLengthTwoWayBFS, false, ladderLengthCase3);
@@ -646,7 +650,7 @@ export const updateMatrixByIndex = (mat: number[][]): number[][] => {
     return costMat;
 };
 
-const runAllUpdateMatrix = async () => {
+export const runAllUpdateMatrix = async () => {
     await runAlgorithm(updateMatrix, false, updateMatrixCase1);
     await runAlgorithm(updateMatrixByIndex, false, updateMatrixCase1);
     await runAlgorithm(updateMatrix, false, updateMatrixCase2);
@@ -852,7 +856,7 @@ function cutOffTreeByIndex(forest: number[][]): number {
     return -1;
 }
 
-const runAllCutOffTree = async () => {
+export const runAllCutOffTree = async () => {
     await runAlgorithm(cutOffTree, false, cutOffTreeCase1);
     await runAlgorithm(cutOffTreeByIndex, false, cutOffTreeCase1);
 
@@ -907,4 +911,43 @@ export const treeMaxDepth = (node: TreeNode<number>): number => {
         return 1;
     }
 };
+
+export const combination = (nums: number[]): number[][] => {
+    const ans: number[][] = [];
+
+    const dfs = (acc: number[], rest: number[]) => {
+        ans.push(acc);
+        for (let i = 0; i < rest.length; i++) {
+            const num = rest[i];
+            const newAcc = acc.concat(num);
+            const newRest = rest.slice(i + 1);
+            dfs(newAcc, newRest);
+        }
+    }
+
+    dfs([], nums);
+    return ans;
+}
+
+export const permutation = (nums: number[]): number[][] => {
+    const ans: number[][] = [];
+
+    const dfs = (acc: number[], rest: number[]) => {
+        ans.push(acc);
+        for (let i = 0; i < rest.length; i++) {
+            const num = rest[i];
+            const newAcc = acc.concat(num);
+            const newRest = rest.slice(0, i).concat(rest.slice(i + 1));
+            dfs(newAcc, newRest);
+        }
+    }
+
+    dfs([], nums);
+    return ans;
+}
+
+export const runCombinationPermutation = async () => {
+    await runAlgorithm(combination, false, combinationCase2);
+    await runAlgorithm(permutation, false, permutationCase2);
+}
 /* --- end tree ---*/

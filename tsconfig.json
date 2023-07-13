@@ -23,8 +23,13 @@
       "src/types/patches",
       "node_modules/@types"
     ],
-    "incremental": true
+    "incremental": true,
+    "baseUrl": "./src",
+    "paths": {
+      "data-structure-typed": ["utils/data-structures"]
+    }
   },
+
   "include": [
     "src"
   ]

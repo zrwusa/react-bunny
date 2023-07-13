@@ -1,92 +1,139 @@
-import {Queue} from './queue';
+import {DoublyLinkedList} from '../linked-list';
 
-// TODO not perfect
-export class Deque<T> extends Queue<T> {
+// O(n) time complexity of obtaining the value
+// O(1) time complexity of adding at the beginning and the end
+export class Deque<T> extends DoublyLinkedList<T> {
 
-    add(element: T): Deque<T> {
-        this.enqueue(element);
-        return this;
+}
+
+// O(1) time complexity of obtaining the value
+// O(n) time complexity of adding at the beginning and the end
+// todo tested slowest one
+export class ObjectDeque<T> {
+    protected _nodes: { [key: number]: T } = {};
+    protected _capacity = Number.MAX_SAFE_INTEGER;
+    protected _first: number = -1;
+    protected _last: number = -1;
+    protected _size: number = 0;
+
+    constructor(capacity?: number) {
+        if (capacity !== undefined) this._capacity = capacity;
     }
 
-    addFirst(element: T) {
-        this.enqueue(element);
-        return this;
+    size() {
+        return this._size;
     }
 
-    addLast(element: T) {
-        this._elements.unshift(element);
+    offerFirst(value: T) {
+        if (this._size === 0) {
+            const mid = Math.floor(this._capacity / 2);
+            this._first = mid;
+            this._last = mid;
+        } else {
+            this._first--;
+        }
+        this._nodes[this._first] = value;
+        this._size++;
     }
 
-    contains(element: T) {
-        return this._elements.indexOf(element) > -1;
+    offerLast(value: T) {
+        if (this._size === 0) {
+            const mid = Math.floor(this._capacity / 2);
+            this._first = mid;
+            this._last = mid;
+        } else {
+            this._last++;
+        }
+        this._nodes[this._last] = value;
+        this._size++;
     }
 
-    element(): T | null {
-        return null;
+    pollFirst() {
+        if (!this._size) return;
+        const value = this.peekFirst();
+        delete this._nodes[this._first];
+        this._first++;
+        this._size--;
+        return value;
     }
 
-    getFirst(): T | null {
-        return this.peekFirst();
+    peekFirst() {
+        if (this._size) return this._nodes[this._first];
     }
 
-    getLast(): T | null {
-        return this.peekLast();
+    pollLast() {
+        if (!this._size) return;
+        const value = this.peekLast();
+        delete this._nodes[this._last];
+        this._last--;
+        this._size--;
+
+        return value;
     }
 
-    offer(element: T) {
-        return this.addFirst(element);
+    peekLast() {
+        if (this._size) return this._nodes[this._last];
     }
 
-    offerFirst(element: T) {
-        return this.addFirst(element);
+    get(index: number) {
+        return this._nodes[this._first + index] || null;
     }
 
-    offerLast(element: T) {
-        return this.addLast(element);
+    isEmpty() {
+        return this._size <= 0;
+    }
+}
+
+// O(1) time complexity of obtaining the value
+// O(n) time complexity of adding at the beginning and the end
+export class ArrayDeque<T> {
+    protected _nodes: T[] = [];
+
+    get size() {
+        return this._nodes.length;
     }
 
-    peekFirst(): T | null {
-        return super.front();
-    }
-
-    peekLast(): T | null {
-        return super.back();
-    }
-
-    poll(): T | null {
-        return super.dequeue();
-    }
-
-    pollFirst(): T | null {
-        return this.poll();
+    offerLast(value: T) {
+        return this._nodes.push(value);
     }
 
     pollLast(): T | null {
-        if (this.size() === 0) return null;
-
-        const last = this.back();
-        this._offset = this._elements.length - 1;
-
-        // only remove dequeued elements when reaching half size
-        // to decrease latency of shifting elements.
-        this._elements = this._elements.slice(0, this._offset);
-        this._offset = 0;
-        return last;
+        return this._nodes.pop() ?? null;
     }
 
-    pop(): T | null {
-        return this.dequeue();
+    pollFirst(): T | null {
+        return this._nodes.shift() ?? null;
     }
 
-    push(element: T): number {
-        return this._elements.unshift(element);
+    offerFirst(value: T) {
+        return this._nodes.unshift(value);
     }
 
-    removeFirst() {
-        this.poll();
+    peekFirst(): T | null {
+        return this._nodes[0] ?? null;
     }
 
-    removeLast() {
-        this.pollLast();
+    peekLast(): T | null {
+        return this._nodes[this._nodes.length - 1] ?? null;
+    }
+
+    get(index: number): T | null {
+        return this._nodes[index] ?? null;
+    }
+
+    set(index: number, value: T) {
+        return this._nodes[index] = value;
+    }
+
+    insert(index: number, value: T) {
+        return this._nodes.splice(index, 0, value);
+    }
+
+    remove(index: number) {
+        return this._nodes.splice(index, 1);
+    }
+
+    isEmpty() {
+        return this._nodes.length === 0;
     }
 }

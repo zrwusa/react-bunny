@@ -1,131 +1,47 @@
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {BinaryTree, BinaryTreeNode} from '../../../data-structures';
+import {BinaryTree, BinaryTreeNode} from 'data-structure-typed';
 import {wait, WaitManager} from '../../../utils';
 import {runAlgorithm} from '../../helpers';
 import {deleteLeavesCase1, pathSumIIICase3, testBSTCase1, testSymmetricTreeCase1} from '../bst';
+import {testBinaryTreeCase6} from './cases';
 
-const waitManager = new WaitManager(10);
-const {time1, time2, time3} = waitManager;
+const waitManager = new WaitManager(100);
+const {time1} = waitManager;
 
 export async function testBinaryTree(arr: number[], proxyHandler?: TProxyHandler) {
     const clonedData = [...arr];
-    // const rest = clonedData.splice(1);
-    // console.log('---rest', rest)
-    const proxyVariables: { binaryTree: BinaryTree<number> } = new DeepProxy({
-        binaryTree: new BinaryTree<number>(clonedData, false)
+
+    const proxy: { tree: BinaryTree<number> } = new DeepProxy({
+        tree: new BinaryTree<number>({})
     }, proxyHandler);
+    proxy.tree.fill(clonedData)
 
-    // for (let i = 0; i < rest.length; i++) {
-    //     console.log(`insert ${i}`, proxyVariables.binaryTree.insert(i + 1, rest[i]));
-    //     await wait(time1);
-    // }
-
-    const node6 = proxyVariables.binaryTree.getNode(6);
-    console.log('getHeight(getNode 6)', node6 && proxyVariables.binaryTree.getHeight(node6));
-    console.log('getDepth(getNode 6)', node6 && proxyVariables.binaryTree.getDepth(node6));
-    await wait(time2);
-    const getNodeById = proxyVariables.binaryTree.getNode(10, 'id');
-    console.log('getNode, 10, id', getNodeById);
-
-    await wait(time2);
-    const getNodesByCount = proxyVariables.binaryTree.getNodes(1, 'count');
-    console.log('getNodes, 1, count', getNodesByCount);
-
-    await wait(time2);
-    const getNodesByLeftSum = proxyVariables.binaryTree.getNodes(2, 'allLesserSum');
-    console.log('getNodes, 2, allLesserSum', getNodesByLeftSum);
-
-    await wait(time2);
-    const node1 = proxyVariables.binaryTree.getNode(1);
-    const subTreeSum = node1 && proxyVariables.binaryTree.subTreeSum(node1, 'val');
-    console.log('subTreeSum, 1', subTreeSum);
-
-    await wait(time3);
-    console.log('DFS ,in, node', proxyVariables.binaryTree.DFS('in', 'node'));
-
-    await wait(time1);
-    console.log('DFSIterative, in', proxyVariables.binaryTree.DFSIterative('in'));
-
-    await wait(time3);
-    console.log('DFS ,pre, node', proxyVariables.binaryTree.DFS('pre', 'node'));
-
-    await wait(time1);
-    console.log('DFSIterative, pre', proxyVariables.binaryTree.DFSIterative('pre'));
-
-    await wait(time1);
-    console.log('levelIterative, node', proxyVariables.binaryTree.levelIterative(null, 'node'));
-
-    await wait(time1);
-    console.log('levelIterative, id', proxyVariables.binaryTree.levelIterative(null, 'id'));
-
-    await wait(time1);
-    console.log('levelIterative, val', proxyVariables.binaryTree.levelIterative(null, 'val'));
-
-    await wait(time1);
-    console.log('levelIterative, count', proxyVariables.binaryTree.levelIterative(null, 'count'));
-
-    await wait(time1);
-    console.log('levelIterative, allLesserSum', proxyVariables.binaryTree.levelIterative(null, 'allLesserSum'));
-
-    await wait(time1);
-    console.log('listLevels, node', proxyVariables.binaryTree.listLevels(null, 'node'));
-
-    await wait(time1);
-    console.log('listLevels, id', proxyVariables.binaryTree.listLevels(null, 'id'));
-
-    await wait(time1);
-    console.log('listLevels, val', proxyVariables.binaryTree.listLevels(null, 'val'));
-
-    await wait(time1);
-    console.log('listLevels, count', proxyVariables.binaryTree.listLevels(null, 'count'));
-
-    await wait(time1);
-    console.log('listLevels, allLesserSum', proxyVariables.binaryTree.listLevels(null, 'allLesserSum'));
-
-    await wait(time1);
-    console.log('morris, in, node', proxyVariables.binaryTree.morris('in', 'node'));
-
-    await wait(time1);
-    console.log('morris, pre', proxyVariables.binaryTree.morris('pre'));
-
-    await wait(time1);
-    console.log('morris, post', proxyVariables.binaryTree.morris('post'));
-
-    await wait(time3);
-    console.log('DFS ,post, node', proxyVariables.binaryTree.DFS('post', 'node'));
-
-    await wait(time1);
-    console.log('DFSIterative, post, node', proxyVariables.binaryTree.DFSIterative('post', 'node'));
-
-    console.log('waiting for balancing');
-
-    await wait(time3);
-
-    await wait(time1);
-    console.log('BFS, val', proxyVariables.binaryTree.BFS('val'));
-
-    await wait(time1);
-    console.log('BFS, node', proxyVariables.binaryTree.BFS('node'));
-
-    return proxyVariables.binaryTree;
+    await testBinaryTreeCase6(proxy);
+    return proxy.tree;
 }
 
-const runTestBinaryTree = async () => {
+export async function showBinaryTree(arr: number[], proxyHandler?: TProxyHandler) {
+    const clonedData = [...arr];
+
+    const proxy: { tree: BinaryTree<number> } = new DeepProxy({
+        tree: new BinaryTree<number>({autoIncrementId: true})
+    }, proxyHandler);
+    proxy.tree.fill(clonedData)
+
+    return proxy.tree;
+}
+
+export const runTestBinaryTree = async () => {
     await runAlgorithm(testBinaryTree, false, testBSTCase1);
 };
 
-// runTestBinaryTree().then()
 export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?: TProxyHandler) {
     const clonedData = [...arr];
-    // const rest = clonedData.splice(1);
-    const proxyVariables: { binaryTree: BinaryTree<number | null> } = new DeepProxy({binaryTree: new BinaryTree<number | null>(clonedData)}, proxyHandler);
 
-    // const binaryTree = new BinaryTree<number>(0, clonedData[0]);
-    // for (let i = 0; i < rest.length; i++) {
-    //     proxyVariables.binaryTree.insert(i + 1, rest[i]);
-    // }
+    const proxy: { tree: BinaryTree<number | null> } = new DeepProxy({tree: new BinaryTree<number | null>({})}, proxyHandler);
 
-    const root = proxyVariables.binaryTree.root;
+    proxy.tree.fill(clonedData)
+    const root = proxy.tree.getRoot();
 
     if (root) {
         return symmetricHelper(root.left, root.right);
@@ -146,15 +62,12 @@ export async function testSymmetricTree(arr: Array<number | null>, proxyHandler?
 
 }
 
-const runTestSymmetricTree = async () => {
+export const runTestSymmetricTree = async () => {
     await runAlgorithm(testSymmetricTree, false, testSymmetricTreeCase1);
 };
 
-// runTestSymmetricTree().then();
-
-
 // 543. Diameter of Binary Tree
-function diameterOfBinaryTree(root: BinaryTreeNode<number> | null | undefined): number {
+export function diameterOfBinaryTree(root: BinaryTreeNode<number> | null | undefined): number {
     let ans = 0;
 
     function dfs(cur: BinaryTreeNode<number> | null | undefined): number {
@@ -172,7 +85,7 @@ function diameterOfBinaryTree(root: BinaryTreeNode<number> | null | undefined): 
 }
 
 // 687. Longest Univalue Path
-function longestUnivaluePath(root: BinaryTreeNode<number> | null): number {
+export function longestUnivaluePath(root: BinaryTreeNode<number> | null): number {
     let ans = 0;
 
     function dfs(cur: BinaryTreeNode<number> | null | undefined, parentVal: number): number {
@@ -197,7 +110,7 @@ function longestUnivaluePath(root: BinaryTreeNode<number> | null): number {
 }
 
 // 337. House Robber III
-function rob(root: BinaryTreeNode<number> | null | undefined): number {
+export function rob(root: BinaryTreeNode<number> | null | undefined): number {
     function dfs(cur: BinaryTreeNode<number> | null | undefined): [number, number] {
         if (!cur) {
             return [0, 0];
@@ -216,7 +129,7 @@ function rob(root: BinaryTreeNode<number> | null | undefined): number {
 }
 
 // 979. Distribute Coins in Binary Tree
-function distributeCoins(root: BinaryTreeNode<number> | null): number {
+export function distributeCoins(root: BinaryTreeNode<number> | null): number {
     let ans = 0;
 
     function reqDFS(cur: BinaryTreeNode<number> | null | undefined): number {
@@ -234,7 +147,7 @@ function distributeCoins(root: BinaryTreeNode<number> | null): number {
 }
 
 // 113. Path Sum II
-function pathSum(root: BinaryTreeNode<number> | null, targetSum: number): number[][] {
+export function pathSum(root: BinaryTreeNode<number> | null, targetSum: number): number[][] {
     const ans: number[][] = [];
 
     function dfs(cur: BinaryTreeNode<number>, acc: number[], rest: number) {
@@ -258,7 +171,7 @@ function pathSum(root: BinaryTreeNode<number> | null, targetSum: number): number
 }
 
 // 437. Path Sum III (Brute force)
-function pathSumIIIBruteForce1(root: BinaryTreeNode<number> | null, targetSum: number): number {
+export function pathSumIIIBruteForce1(root: BinaryTreeNode<number> | null, targetSum: number): number {
     const nodes: BinaryTreeNode<number>[] = [];
 
     function flatDFS(cur: BinaryTreeNode<number> | null | undefined): void {
@@ -292,7 +205,7 @@ function pathSumIIIBruteForce1(root: BinaryTreeNode<number> | null, targetSum: n
     return ans;
 }
 
-function pathSumIIIBruteForce2(root: BinaryTreeNode<number> | null, targetSum: number): number {
+export function pathSumIIIBruteForce2(root: BinaryTreeNode<number> | null, targetSum: number): number {
     let ans = 0;
 
     function pathDFS(cur: BinaryTreeNode<number> | null, rest: number): void {
@@ -323,15 +236,18 @@ function pathSumIIIBruteForce2(root: BinaryTreeNode<number> | null, targetSum: n
 
 export async function pathSumIII(data: Array<number | null>, targetSum: number, proxyHandler?: TProxyHandler): Promise<number> {
     const clonedData = [...data];
-    const proxy: { binaryTree: BinaryTree<number | null> } = new DeepProxy({
-        binaryTree: new BinaryTree<number | null>({
-            id: 0,
-            val: clonedData[0]
+    const proxy: { tree: BinaryTree<number | null> } = new DeepProxy({
+        tree: new BinaryTree<number | null>({
+            // nodeOrData: {
+            //     id: 0,
+            //     val: clonedData[0]
+            // }
         })
     }, proxyHandler);
-    proxy.binaryTree.insertMany(clonedData.slice(1));
+    proxy.tree.fill(clonedData)
+    // proxy.tree.insertMany(clonedData.slice(1));
     await wait(time1);
-    const root = proxy.binaryTree.root;
+    const root = proxy.tree.getRoot();
 
     const freq: { [key in number]: number } = {0: 1};
     let ans = 0;
@@ -360,7 +276,7 @@ export async function pathSumIII(data: Array<number | null>, targetSum: number, 
     return ans;
 }
 
-const runPathSumIII = async () => {
+export const runPathSumIII = async () => {
     await runAlgorithm(pathSumIII, false, pathSumIIICase3);
 };
 
@@ -369,8 +285,10 @@ const runPathSumIII = async () => {
 export async function deleteLeaves(data: Array<number | null>, target: number, proxyHandler?: TProxyHandler): Promise<BinaryTreeNode<number | null> | null> {
     const clonedData = [...data];
     const proxy: { bst: BinaryTree<number | null> } = new DeepProxy({
-        bst: new BinaryTree<number | null>(clonedData)
+        bst: new BinaryTree<number | null>()
     }, proxyHandler);
+
+    proxy.bst.fill(clonedData)
 
     function dfs(root: BinaryTreeNode<number | null> | null) {
         if (!root) return null;
@@ -382,15 +300,32 @@ export async function deleteLeaves(data: Array<number | null>, target: number, p
         return root;
     }
 
-    const ans = dfs(proxy.bst.root);
-    return ans;
+    return dfs(proxy.bst.getRoot());
 }
 
-const runDeleteLeaves = async () => {
+export const runDeleteLeaves = async () => {
     await runAlgorithm(deleteLeaves, false, deleteLeavesCase1);
 };
 
-// runPathSumIII().then();
+// 124. Binary Tree Maximum Path Sum
+export function maxPathSum(root: BinaryTreeNode<number> | null): number {
+    if (!root) return 0;
+
+    let maxSum = Number.MIN_SAFE_INTEGER;
+
+    const asPortionMax = (curr?: BinaryTreeNode<number> | null): number => {
+        if (!curr) return 0;
+
+        const lPMax = asPortionMax(curr.left);
+        const rPMax = asPortionMax(curr.right);
+        maxSum = Math.max(maxSum, curr.val + Math.max(0, lPMax, rPMax, lPMax + rPMax));
+        return curr.val + Math.max(0, lPMax, rPMax);
+    }
+
+    asPortionMax(root);
+
+    return maxSum;
+}
 
 
 

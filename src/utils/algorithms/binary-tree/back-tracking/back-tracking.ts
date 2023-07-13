@@ -1,4 +1,4 @@
-function permute(nums: number[]): number[][] {
+export function permute(nums: number[]): number[][] {
     const ans: number[][] = [], len = nums.length;
 
     function dfs(acc: number[], visited: (number | true)[]) {

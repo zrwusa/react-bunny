@@ -11,7 +11,7 @@ import {
     UndirectedGraph,
     UndirectedVertex,
     VertexId
-} from '../../data-structures/graph';
+} from 'data-structure-typed';
 import {timeEnd, timeStart, wait, WaitManager} from '../../utils';
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
 import {canFinishCase1, canFinishCase3, criticalConnectionsCase1} from './cases';
@@ -501,6 +501,36 @@ export async function regionsBySlashes(grid: string[], proxyHandler?: TProxyHand
 const runAllRegionsBySlashes = async () => {
     await runAlgorithm(regionsBySlashes, false);
 };
+
 // runAllRegionsBySlashes().then();
+
+
+class Node {
+    val: number
+    neighbors: Node[]
+
+    constructor(val?: number, neighbors?: Node[]) {
+        this.val = (val === undefined ? 0 : val)
+        this.neighbors = (neighbors === undefined ? [] : neighbors)
+    }
+}
+
+// 133. Clone Graph
+export const cloneGraph = (node: Node | null): Node | null => {
+    const dfs = (node: Node, map: Map<Node, Node> = new Map()): Node => {
+        const copied = map.get(node);
+        if (copied) return copied;
+
+        const copy = new Node(node.val);
+        map.set(node, copy);
+
+        for (const n of node.neighbors) copy.neighbors.push(dfs(n, map));
+
+        return copy;
+    }
+
+    return node === null ? null : dfs(node);
+}
+
 /* --- end Graph --- */
 

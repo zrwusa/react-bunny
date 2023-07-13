@@ -302,3 +302,176 @@ class NumArrayMySecond {
         return sum;
     }
 }
+
+function spiralOrder(matrix: number[][]): number[] {
+    const VISITED = Number.MIN_SAFE_INTEGER;
+    let i = 0, j = 0;
+    const ans = [matrix[0][0]];
+    matrix[0][0] = VISITED;
+
+    type Dir = 'up' | 'right' | 'down' | 'left';
+    const moveFac = (dir: Dir) => {
+        return () => {
+            switch (dir) {
+                case 'up':
+                    i--;
+                    break;
+                case 'right':
+                    j++;
+                    break;
+                case 'down':
+                    i++;
+                    break;
+                case 'left':
+                    j--;
+                    break;
+            }
+            ans.push(matrix[i][j]);
+            matrix[i][j] = VISITED;
+        }
+    }
+
+    const canMoveFac = (dir: Dir): () => boolean => {
+        let forward: number, row;
+        switch (dir) {
+            case 'up':
+                row = matrix[i - 1];
+                if (!row) return () => false;
+                forward = row[j];
+                break;
+            case 'right':
+                forward = matrix[i][j + 1];
+                break;
+            case 'down':
+                row = matrix[i + 1];
+                if (!row) return () => false;
+                forward = row[j];
+                break;
+            case 'left':
+                forward = matrix[i][j - 1];
+                break;
+        }
+        return () => forward !== undefined && forward !== VISITED;
+    }
+
+    const turningFac = (dir: Dir) => {
+        switch (dir) {
+            case 'up':
+                return () => new Navigator('right')
+            case 'right':
+                return () => new Navigator('down')
+            case 'down':
+                return () => new Navigator('left')
+            case 'left':
+                return () => new Navigator('up')
+        }
+    }
+
+    class Navigator {
+        canMove: () => boolean;
+        move: () => void;
+        turning: () => Navigator;
+
+        constructor(dir: 'up' | 'right' | 'down' | 'left') {
+            this.canMove = canMoveFac(dir);
+            this.move = moveFac(dir);
+            this.turning = turningFac(dir);
+        }
+    }
+
+    let cur = new Navigator('right');
+
+    while (cur.canMove() || cur.turning().canMove()) {
+        if (cur.canMove()) {
+            cur.move();
+        } else if (cur.turning().canMove()) {
+            cur = cur.turning();
+        }
+    }
+
+    return ans;
+}
+
+// 56. Merge Intervals
+export function mergeIntervals(intervals: number[][]): number[][] {
+    const merged = [];
+    const sorted = intervals.sort((a, b) => a[0] - b[0])
+
+    for (const cur of sorted) {
+        const last = merged[merged.length - 1];
+        if (last && last[1] >= cur[0]) {
+            last[1] = Math.max(cur[1], last[1]);
+            continue;
+        }
+        merged.push(cur);
+    }
+    return merged
+}
+
+// (todo looks like O(n) ?)
+export function mergeIntervalsBigON(intervals: number[][]): number[][] {
+    const counts: { [key: number]: [number, number] } = {};
+    let max = -1;
+
+    for (const [start, end] of intervals) {
+        if (!counts[start]) counts[start] = [1, 0];
+        else counts[start][0]++;
+
+        if (!counts[end]) counts[end] = [0, 1];
+        else counts[end][1]++;
+
+        max = Math.max(max, end);
+    }
+
+    const ans: number[][] = [], stack: number[] = [];
+    let mergedStart = -1, i = 0;
+
+    while (i <= max) {
+        const countI = counts[i];
+        if (countI) {
+            let [startCount, endCount] = countI;
+
+            while (startCount > 0) {
+                if (stack.length === 0) {
+                    mergedStart = i;
+                }
+                stack.push(1);
+                startCount--;
+            }
+
+            while (endCount > 0) {
+                const top = stack[stack.length - 1];
+                if (top === 1) {
+                    stack.pop();
+                    if (stack.length === 0) {
+                        ans.push([mergedStart, i]);
+                        mergedStart = -1;
+                    }
+                }
+                endCount--;
+            }
+        }
+        i++;
+    }
+
+    return ans;
+}
+
+export function insertToIntervals(intervals: number[][], newInterval: number[]): number[][] {
+    const front = [], tail = [], len = intervals.length;
+    let i = 0;
+
+    while (i < len) {
+        const cur = intervals[i];
+        const [ns, ne] = newInterval;
+        if (cur[1] < ns) front.push(cur);
+        else if (cur[1] >= ns && cur[0] <= ne) {
+            newInterval[0] = Math.min(ns, cur[0]);
+            newInterval[1] = Math.max(ne, cur[1]);
+        } else tail.push(intervals[i]);
+        i++;
+    }
+
+    front.push(newInterval);
+    return front.concat(tail);
+}

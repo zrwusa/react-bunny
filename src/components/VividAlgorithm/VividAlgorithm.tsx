@@ -6,23 +6,24 @@ import {
     AbstractVertex,
     BinaryTree,
     BinaryTreeNode,
+    DirectedEdge,
     DirectedGraph,
     SinglyLinkedListNode,
     Stack,
-    UndirectedGraph
-} from '../../utils/data-structures';
+    UndirectedEdge
+} from 'data-structure-typed';
 import {Coordinate, getDirectionVector} from '../../utils/algorithms';
 import {uuidV4} from '../../utils/utils';
 
-export interface VividAlgorithmProps<T> {
-    data?: T,
+export interface VividAlgorithmProps {
+    data?: { [key in string]: any },
     referenceData?: any,
-    relatedNodeKey?: string,
-    relatedRouteKey?: string,
+    relatedNodeKey?: string | undefined,
+    relatedRouteKey?: string | undefined,
     isDebug?: boolean
 }
 
-export const VividAlgorithm = function <T extends { [key in string]: any }>(props: VividAlgorithmProps<T>) {
+export const VividAlgorithm = function (props: VividAlgorithmProps) {
     const {data, referenceData, relatedNodeKey, relatedRouteKey, isDebug = false} = props;
 
     const textFillColor = '#333333';
@@ -243,7 +244,9 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                                     const to = relatedMatrixRoutes?.[routeIndex]?.[cellIndex + 1];
                                     const deviationVector = getDirectionVector(from, to);
                                     if (from && to) {
+                                        // eslint-disable-next-line react/prop-types
                                         const src = new Coordinate((from.y + 0.5 + deviationVector.y * arrowCut) * rectSize, (from.x + 0.5 + deviationVector.x * arrowCut) * rectSize);
+                                        // eslint-disable-next-line react/prop-types
                                         const dest = new Coordinate((to.y + 0.5 - deviationVector.y * arrowCut) * rectSize, (to.x + 0.5 - deviationVector.x * arrowCut) * rectSize);
 
                                         return <LineWithArrow key={src.y + ',' + src.x + dest.y + dest.x}
@@ -404,8 +407,8 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                 <circle r={circleR} cx={offsetX} cy={offsetY}
                         fill={isActive ? circleFillActiveColor : circleFillColor}
                         onClick={(e) => {
-                            const {id, val, count, allLesserSum} = node;
-                            console.info({id, val, count, allLesserSum});
+                            const {id, val, count} = node;
+                            console.info({id, val, count});
                         }}
                 />
                 {
@@ -419,8 +422,8 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                             y={offsetY + fontOffsetY}
                             textAnchor="middle"
                             onClick={(e) => {
-                                const {id, val, count, allLesserSum} = node;
-                                console.info({id, val, count, allLesserSum});
+                                const {id, val, count} = node;
+                                console.info({id, val, count});
                             }}
                         >
                             {/*<tspan x={offsetX} y={offsetY + fontOffsetY}>{node.id}</tspan>*/}
@@ -438,7 +441,7 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
     };
 
 
-    const VividGraphDrawer: React.FC<{ graph: AbstractGraph<any, any> }> = ({graph}) => {
+    const VividGraphDrawer: React.FC<{ graph: AbstractGraph<AbstractVertex, AbstractEdge> }> = ({graph}) => {
         const vertexDistance = 80;
         const vertices = graph.vertexSet();
         const vertexCount = vertices.size;
@@ -482,8 +485,8 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                         );
                     })}
                 {
-                    edges.map((edge: { hashCode: string | number | null | undefined; }) => {
-                        if (graph instanceof UndirectedGraph) {
+                    edges.map((edge) => {
+                        if (edge instanceof UndirectedEdge) {
                             const ends = graph.getEndsOfEdge(edge);
                             if (ends && ends.length > 1) {
                                 const v1Coordinate = coordsMap.get(ends[0]);
@@ -498,18 +501,18 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                                     </g>;
                                 }
                             }
-                        } else if (graph instanceof DirectedGraph) {
+                        } else if (graph instanceof DirectedGraph && edge instanceof DirectedEdge) {
                             const src = graph.getEdgeSrc(edge);
                             const dest = graph.getEdgeDest(edge);
                             if (src && dest) {
                                 const srcCod = coordsMap.get(src);
                                 const destCod = coordsMap.get(dest);
                                 const edge = graph.getEdge(src, dest);
-                                if (srcCod && destCod) {
+                                if (edge && srcCod && destCod) {
                                     return <LineWithArrow
                                         key={edge.hashCode}
                                         from={srcCod} to={destCod}
-                                        weight={edge?.weight}
+                                        weight={edge!.weight!}
                                         delta={circleR}
                                     />;
                                 }
@@ -564,7 +567,7 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
     const VividLinkedListNode: React.FC<{ data: SinglyLinkedListNode }> = ({data}) => {
         return (
             <div>
-                <div key={data.index}>
+                <div key={data.index || -1}>
                     <span>{data.index}</span>
                     <span>{data.value}</span>
                 </div>
@@ -608,11 +611,11 @@ export const VividAlgorithm = function <T extends { [key in string]: any }>(prop
                 } else if (item instanceof BinaryTreeNode) {
                     return <VividBinaryTreeNode data={item}/>;
                 } else if (item instanceof BinaryTree) {
-                    return <VividBinaryTree node={item.root} maxHeight={item.getHeight()}/>;
+                    return <VividBinaryTree node={item.getRoot()} maxHeight={item.getHeight()}/>;
                 } else if (item instanceof SinglyLinkedListNode) {
                     return <VividLinkedListNode data={item}/>;
                 } else if (item instanceof Map) {
-                    return <VividArray data={Array.from(item)}/>;
+                    return <VividArray data={Array.from(item.entries())}/>;
                 } else if (item instanceof Stack) {
                     return <VividArray data={item.toArray()}/>;
                 } else if (item instanceof Array) {

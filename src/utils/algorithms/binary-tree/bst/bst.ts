@@ -1,141 +1,56 @@
-import {BinaryTreeNodeId, BST, BSTNode} from '../../../data-structures';
+import {BinaryTreeNodeId, BST, BSTNode} from 'data-structure-typed';
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {testBSTCase1, trimABSTCase1} from './cases';
+import {testBSTCase1, testBSTCase6, trimABSTCase1} from './cases';
 import {runAlgorithm} from '../../helpers';
 import {wait, WaitManager} from '../../../utils';
 
 const waitManager = new WaitManager(6);
-const {time1, time2, time3} = waitManager;
+const {time1} = waitManager;
 
 export async function testBST(arr: number[], proxyHandler?: TProxyHandler) {
     const clonedData = [...arr];
-    const rest = clonedData.splice(1);
-    const proxyVariables: { bst: BST<number> } = new DeepProxy({
-        bst: new BST<number>({
-            id: clonedData[0],
-            val: clonedData[0]
-        }, false, true)
+    const proxy = new DeepProxy({
+        tree: new BST<number>({
+            // nodeOrData: {
+            //     id: clonedData[0],
+            //     val: clonedData[0]
+            // },
+            // comparator: (a, b) => b - a,
+            // loopType: LoopType.recursive
+        })
     }, proxyHandler);
-
-    for (const i of rest) {
-        proxyVariables.bst.insert(i, i);
+    // proxy.tree.put(clonedData[0], clonedData[0])
+    for (const i of clonedData) {
+        proxy.tree.put(i, i);
         await wait(time1);
     }
 
-    const node6 = proxyVariables.bst.getNode(6);
-    console.log('getHeight(getNode 6)', node6 && proxyVariables.bst.getHeight(node6));
-    console.log('getDepth(getNode 6)', node6 && proxyVariables.bst.getDepth(node6));
-    await wait(time2);
-    const getNodeById = proxyVariables.bst.getNode(10, 'id');
-    console.log('getNode, 10, id', getNodeById);
+    await testBSTCase6(proxy);
 
-    await wait(time2);
-    const getNodesByCount = proxyVariables.bst.getNodes(1, 'count');
-    console.log('getNodes, 1, count', getNodesByCount);
-
-    await wait(time2);
-    const getNodesByLeftSum = proxyVariables.bst.getNodes(2, 'allLesserSum');
-    console.log('getNodes, 2, allLesserSum', getNodesByLeftSum);
-
-    await wait(time2);
-    const getMinNodeByRoot = proxyVariables.bst.getMinNode();
-    console.log('getMinNode', getMinNodeByRoot);
-
-    await wait(time2);
-    const node15 = proxyVariables.bst.getNode(15);
-    const getMinNodeBySpecificNode = node15 && proxyVariables.bst.getMinNode(node15);
-    console.log('getMinNode, 15', getMinNodeBySpecificNode);
-
-    await wait(time2);
-    const subTreeSum = node15 && proxyVariables.bst.subTreeSum(node15);
-    console.log('subTreeSum, 15', subTreeSum);
-
-    await wait(time2);
-    const lesserSum = proxyVariables.bst.lesserSum(10);
-    console.log('lesserSum, 10', lesserSum);
-
-    await wait(time2);
-    const subTreeAdd = node15 && proxyVariables.bst.subTreeAdd(node15, 1, 'count');
-    console.log('subTreeAdd, getNode(15)', subTreeAdd);
-
-    await wait(time3);
-    const node11 = proxyVariables.bst.getNode(11);
-    const allGreaterNodesAdd = node11 && proxyVariables.bst.allGreaterNodesAdd(node11, 2, 'count');
-    console.log('allGreaterNodesAdd, getNode(11), 2, count', allGreaterNodesAdd);
-
-    await wait(time3);
-    console.log('DFS ,in, node', proxyVariables.bst.DFS('in', 'node'));
-    console.log('waiting for balancing');
-    await wait(time3);
-    proxyVariables.bst.balance();
-    console.log('balanced BFS, node', proxyVariables.bst.BFS('node'));
-
-    await wait(time3);
-    console.log('remove, 11', proxyVariables.bst.remove(11));
-    console.log('isBalance', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight, getNode(15)', node15 && proxyVariables.bst.getHeight(node15));
-    await wait(time3);
-    console.log('remove, 1', proxyVariables.bst.remove(1));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 4', proxyVariables.bst.remove(4));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 10', proxyVariables.bst.remove(10));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 15', proxyVariables.bst.remove(15));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 5', proxyVariables.bst.remove(5));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 13', proxyVariables.bst.remove(13));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 3', proxyVariables.bst.remove(3));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 8', proxyVariables.bst.remove(8));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 6', proxyVariables.bst.remove(6));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 7', proxyVariables.bst.remove(7));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 9', proxyVariables.bst.remove(9));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-    console.log('remove, 14', proxyVariables.bst.remove(14));
-    console.log('isAVLBalanced', proxyVariables.bst.isAVLBalanced());
-    console.log('getHeight', proxyVariables.bst.getHeight());
-    await wait(time3);
-
-    await wait(time1);
-    console.log('isAVLBalanced()', proxyVariables.bst.isAVLBalanced());
-    await wait(time1);
-    console.log('BFS', proxyVariables.bst.BFS());
-
-    await wait(time1);
-    console.log('BFS, node', proxyVariables.bst.BFS('node'));
-
-    return proxyVariables.bst;
+    return proxy.tree;
 }
 
-const runTestBST = async () => {
+export async function testBST2(nums: [], proxyHandler?: TProxyHandler) {
+    const proxy = new DeepProxy({
+        tree: new BST<number>()
+    }, proxyHandler);
+
+    for (const i of nums) {
+        await wait(time1);
+        proxy.tree.put(i, i);
+    }
+
+    await wait(time1);
+    console.log(proxy.tree.remove(1));
+
+    await wait(time1);
+    console.log(proxy.tree.remove(2));
+    console.log(proxy.tree)
+
+    return proxy.tree;
+}
+
+export const runTestBST = async () => {
     await runAlgorithm(testBST, false, testBSTCase1);
 };
 
@@ -144,7 +59,7 @@ const runTestBST = async () => {
 /** --- start BST --- **/
 
 //98	Validate Binary Search Tree	★★	530					DFS/inorder
-const isValidBST = (root: BSTNode<number> | null | undefined): boolean => {
+export const isValidBST = (root: BSTNode<number> | null | undefined): boolean => {
     if (!root) return true;
 
     function dfs(cur: BSTNode<number> | null | undefined, min: BinaryTreeNodeId, max: BinaryTreeNodeId): boolean {
@@ -157,7 +72,7 @@ const isValidBST = (root: BSTNode<number> | null | undefined): boolean => {
 };
 
 // 700	Search in a Binary Search Tree	★★	701				binary search
-function searchBST(root: BSTNode<number> | null, id: number): BSTNode<number> | null {
+export function searchBST(root: BSTNode<number> | null, id: number): BSTNode<number> | null {
     let ans = null;
     if (root === null) return ans;
     const dfs = (cur: BSTNode<number>) => {
@@ -174,7 +89,7 @@ function searchBST(root: BSTNode<number> | null, id: number): BSTNode<number> | 
 }
 
 // 230	Kth Smallest Element in a BST	★★★					inorder
-function kthSmallest(root: BSTNode<number> | null, k: number): number {
+export function kthSmallest(root: BSTNode<number> | null, k: number): number {
     let rank = 0, target = 0;
     const dfsInOrder = (cur: BSTNode<number>) => {
         cur.left && dfsInOrder(cur.left);
@@ -190,7 +105,7 @@ function kthSmallest(root: BSTNode<number> | null, k: number): number {
 }
 
 // 99	Recover Binary Search Tree	★★★						inorder
-function recoverTree(root: BSTNode<number> | null | undefined): void {
+export function recoverTree(root: BSTNode<number> | null | undefined): void {
 
     const swap = (nodeA: BSTNode<number>, nodeB: BSTNode<number>) => {
         const tempVal = nodeA.val;
@@ -241,7 +156,7 @@ function recoverTree(root: BSTNode<number> | null | undefined): void {
 }
 
 // 108  Convert Sorted Array to Binary Search Tree ★★★				build BST
-function sortedArrayToBST(nums: number[]): BSTNode<number> | null {
+export function sortedArrayToBST(nums: number[]): BSTNode<number> | null {
     const dfs = (left: number, right: number): BSTNode<number> | null => {
         if (left > right) return null;
         const mid = left + Math.floor((right - left) / 2);
@@ -255,7 +170,7 @@ function sortedArrayToBST(nums: number[]): BSTNode<number> | null {
 }
 
 // 501	Find Mode in Binary Search Tree	★★★						inorder
-function findMode(root: BSTNode<number> | null): number[] {
+export function findMode(root: BSTNode<number> | null): number[] {
     let max = 0;
     let count = 0;
     let prev = -Infinity;
@@ -285,36 +200,37 @@ function findMode(root: BSTNode<number> | null): number[] {
 
 
 // 669. Trim a Binary Search Tree
-export async function trimABST(data: Array<number | null>, low: number, high: number, proxyHandler?: TProxyHandler): Promise<BSTNode<number> | null> {
+export async function trimABST(data: Array<number | null>, low: number, high: number, proxyHandler?: TProxyHandler): Promise<BSTNode<number | null> | null> {
     const clonedData = [...data];
-    const proxy: { binaryTree: BST<number> } = new DeepProxy({
-        binaryTree: new BST<number>(clonedData)
+    const proxy: { tree: BST<number | null> } = new DeepProxy({
+        tree: new BST({comparator: (a, b) => a - b})
     }, proxyHandler);
+    proxy.tree.fill(clonedData);
 
-    async function trimBST(cur: BSTNode<number> | null | undefined, low: number, high: number): Promise<BSTNode<number> | null> {
+    async function trimBST(cur: BSTNode<number | null> | null | undefined, low: number, high: number): Promise<BSTNode<number | null> | null> {
         await wait(time1);
         if (!cur) return null;
 
-        if (cur.val < low) return await trimBST(cur.right, low, high);
-        if (cur.val > high) return await trimBST(cur.left, low, high);
-
+        if (cur.val && cur.val < low) return await trimBST(cur.right, low, high);
+        if (cur.val && cur.val > high) return await trimBST(cur.left, low, high);
 
         cur.left = await trimBST(cur.left, low, high);
         cur.right = await trimBST(cur.right, low, high);
         return cur;
     }
 
-    const ans = await trimBST(proxy.binaryTree.root, low, high);
-    proxy.binaryTree.root = ans;
+    const ans = await trimBST(proxy.tree.getRoot(), low, high);
+
     // TODO proxy bug needs to be fixed, last time not effective, with a DFS hack can apply another effect
-    proxy.binaryTree.DFS();
+    proxy.tree.DFS();
     return ans;
 }
 
-const runTrimABST = async () => {
+export const runTrimABST = async () => {
     await runAlgorithm(trimABST, false, trimABSTCase1);
 };
 
 // runTrimABST().then();
+
 
 /** --- end BST --- **/

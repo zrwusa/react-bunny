@@ -1,4 +1,4 @@
-import {SegmentTree} from '../../../data-structures/binary-tree';
+import {SegmentTree} from 'data-structure-typed';
 import {runAlgorithm} from '../../helpers';
 import {testSegmentTreeCase1} from './cases';
 
@@ -12,5 +12,3 @@ export const testSegmentTree = (values: number[], update1: [number, number], que
 export const runAllTestSegmentTree = async () => {
     await runAlgorithm(testSegmentTree, false, testSegmentTreeCase1);
 };
-
-

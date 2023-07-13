@@ -1,21 +1,21 @@
 import path from 'path';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 import autoPreFixer from 'autoprefixer';
 import StylelintPlugin from 'stylelint-webpack-plugin';
-import type {Configuration as DevServerConfiguration} from 'webpack-dev-server';
-import type {Configuration} from 'webpack';
+import {Configuration as DevServerConfiguration} from 'webpack-dev-server';
+import {Configuration} from 'webpack';
 import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 
 function configFactory(): Configuration {
     const ext = {
         ts: /\.(ts)x?$/,
         image: /\.(png|svg|jpg|jpeg|gif)$/i,
         sass: /\.s[ac]ss$/i,
-    };
-    const buildPath = 'dist';
+    }, buildPath = 'dist';
     const isDev = process.env.NODE_ENV === 'development';
     const isProd = process.env.NODE_ENV === 'production';
 
@@ -23,7 +23,7 @@ function configFactory(): Configuration {
         static: path.join(__dirname, buildPath),
         compress: false,
         port: 3006,
-        open: true, // "Google Chrome"
+        open: true,  // Open the default browser when there is no browser open
         historyApiFallback: true,
         client: {
             overlay: false,
@@ -55,22 +55,19 @@ function configFactory(): Configuration {
                 {
                     test: ext.ts,
                     exclude: /node_modules/,
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            sourceMap: isDev,
-                        },
-                    },
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                            options: {
+                                sourceMap: isDev,
+                            }
+                        }],
                 },
                 {
                     test: ext.sass,
                     exclude: /node_modules/,
                     use: [{
                         loader: MiniCssExtractPlugin.loader, // for extracting not for minimizing
-                        options: {
-                            // publicPath: ""
-                            // publicPath: (resourcePath:any, context:any) => path.relative(path.dirname(resourcePath), context) + '/',
-                        },
                     }, {
                         loader: 'css-loader',
                         options: {
@@ -99,6 +96,7 @@ function configFactory(): Configuration {
         resolve: {
             modules: ['node_modules', 'react'],
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+            alias: {'data-structure-typed': path.resolve(__dirname, './src/utils/data-structures')}
         },
         output: {
             path: path.resolve(__dirname, buildPath),
@@ -141,15 +139,16 @@ function configFactory(): Configuration {
                 filename: isDev ? '[name].css' : '[name].[contenthash].css',
                 chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
             }),
-            new ForkTsCheckerWebpackPlugin({
-                async: false,
-                // eslint: {
-                //     files: './src/**/*.{ts,tsx}',
-                // },
+            // ForkTsChecker v8.0.0 utilizes TypeScript v4.5.5, which means that the checking rules may differ from those in your IDE. For instance, [const edge = edge as DirectedEdge;] does not generate an error in TypeScript v5.1.6, while ForkTsChecker displays an error message stating [Variable 'edge' is used before being assigned.].
+            new ForkTsCheckerWebpackPlugin(), // TypeScript type checking in a separate process, improving build performance by parallelizing the type checking task, while ESLint checks for coding style, potential errors, and enforces best practices in your code. It can catch issues related to code formatting, naming conventions, unused variables, and more. ESLint also supports TypeScript-specific rules through plugins like eslint-plugin-typescript.
+            new ESLintPlugin({
+                extensions: ['js', 'jsx', 'ts', 'tsx'], // Specify the file extensions to lint
+                eslintPath: require.resolve('eslint'), // Specify the path to the eslint module
+                context: path.resolve(__dirname, 'src'), // Specify the directory to lint
+                // Other ESLint options can be configured here
             }),
             new StylelintPlugin({
-                files: ['**/*.{scss,sass}'],
-                configFile: 'stylelint.config.js',
+                files: ['src/**/*.{scss,sass}'],
             }),
         ],
         target: isDev ? 'web' : 'browserslist', //default being 'browserlist' since 5.0.0-rc.1,Set to "web" when developing with react-hot-loader

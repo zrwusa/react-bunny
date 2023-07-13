@@ -8,8 +8,8 @@ export interface AlgorithmPanelProps {
     testCase: any[];
     buttonLabel: string;
     referenceData?: any;
-    relatedNodeKey?: string;
-    relatedRouteKey?: string;
+    relatedNodeKey?: string | undefined;
+    relatedRouteKey?: string | undefined;
     isDebug?: boolean;
 }
 

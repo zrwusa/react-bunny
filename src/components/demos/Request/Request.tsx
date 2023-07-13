@@ -20,9 +20,10 @@ class Request extends Component<IProps, IStates> {
     getEmployees(): void {
         api.get(`/employees`)
             .then(res => {
-                this.setState({
+                this.setState((prevState) => {
+                    return {...prevState,
                     employees: res.data
-                });
+                }});
             });
     }
 

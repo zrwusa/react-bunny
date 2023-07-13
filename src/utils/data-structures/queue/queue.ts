@@ -1,11 +1,11 @@
 /**
  * @license MIT
- * @copyright 2020 Eyas Ranjous <eyas.ranjous@gmail.com>
+ * @copyright 2020 Pablo
  *
  * @class
  */
 export class Queue<T> {
-    protected _elements: T[];
+    protected _nodes: T[];
     protected _offset: number;
 
     /**
@@ -13,8 +13,19 @@ export class Queue<T> {
      * @param {array} [elements]
      */
     constructor(elements?: T[]) {
-        this._elements = elements || [];
+        this._nodes = elements || [];
         this._offset = 0;
+    }
+
+    /**
+     * Creates a queue from an existing array.
+     * @public
+     * @static
+     * @param {array} elements
+     * @return {Queue}
+     */
+    static fromArray<T>(elements: T[]): Queue<T> {
+        return new Queue(elements);
     }
 
     /**
@@ -22,8 +33,8 @@ export class Queue<T> {
      * @public
      * @param {any} element
      */
-    enqueue(element: T): Queue<T> {
-        this._elements.push(element);
+    offer(element: T): Queue<T> {
+        this._nodes.push(element);
         return this;
     }
 
@@ -32,17 +43,17 @@ export class Queue<T> {
      * @public
      * @returns {any}
      */
-    dequeue(): T | null {
+    poll(): T | null {
         if (this.size() === 0) return null;
 
-        const first = this.front();
+        const first = this.peek();
         this._offset += 1;
 
-        if (this._offset * 2 < this._elements.length) return first;
+        if (this._offset * 2 < this._nodes.length) return first;
 
         // only remove dequeued elements when reaching half size
         // to decrease latency of shifting elements.
-        this._elements = this._elements.slice(this._offset);
+        this._nodes = this._nodes.slice(this._offset);
         this._offset = 0;
         return first;
     }
@@ -52,8 +63,8 @@ export class Queue<T> {
      * @public
      * @returns {any}
      */
-    front(): T | null {
-        return this.size() > 0 ? this._elements[this._offset] : null;
+    peek(): T | null {
+        return this.size() > 0 ? this._nodes[this._offset] : null;
     }
 
     /**
@@ -61,8 +72,8 @@ export class Queue<T> {
      * @public
      * @returns {any}
      */
-    back(): T | null {
-        return this.size() > 0 ? this._elements[this._elements.length - 1] : null;
+    peekLast(): T | null {
+        return this.size() > 0 ? this._nodes[this._nodes.length - 1] : null;
     }
 
     /**
@@ -71,7 +82,7 @@ export class Queue<T> {
      * @returns {number}
      */
     size(): number {
-        return this._elements.length - this._offset;
+        return this._nodes.length - this._offset;
     }
 
     /**
@@ -89,7 +100,7 @@ export class Queue<T> {
      * @returns {array}
      */
     toArray(): T[] {
-        return this._elements.slice(this._offset);
+        return this._nodes.slice(this._offset);
     }
 
     /**
@@ -97,7 +108,7 @@ export class Queue<T> {
      * @public
      */
     clear(): void {
-        this._elements = [];
+        this._nodes = [];
         this._offset = 0;
     }
 
@@ -107,17 +118,6 @@ export class Queue<T> {
      * @return {Queue}
      */
     clone(): Queue<T> {
-        return new Queue(this._elements.slice(this._offset));
-    }
-
-    /**
-     * Creates a queue from an existing array.
-     * @public
-     * @static
-     * @param {array} elements
-     * @return {Queue}
-     */
-    static fromArray<T>(elements: T[]): Queue<T> {
-        return new Queue(elements);
+        return new Queue(this._nodes.slice(this._offset));
     }
 }

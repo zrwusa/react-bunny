@@ -28,7 +28,7 @@ export function upperBound(nums: number[], target: number): number {
 
 
 // 34. Find First and Last Position of Element in Sorted Array
-function searchRange(nums: number[], target: number): number[] {
+export function searchRange(nums: number[], target: number): number[] {
     let i = -1;
     const len = nums.length;
 
@@ -62,7 +62,7 @@ function searchRange(nums: number[], target: number): number[] {
     return [prev >= -1 ? prev + 1 : -1, next <= len ? next - 1 : -1];
 }
 
-function searchRangeIterative(nums: number[], target: number): number[] {
+export function searchRangeIterative(nums: number[], target: number): number[] {
     let i = -1;
     const len = nums.length;
 
@@ -93,7 +93,7 @@ function searchRangeIterative(nums: number[], target: number): number[] {
     return [prev >= -1 ? prev + 1 : -1, next <= len ? next - 1 : -1];
 }
 
-function searchRangeBias(nums: number[], target: number): number[] {
+export function searchRangeBias(nums: number[], target: number): number[] {
     function helper(nums: number[], target: number, lBias: boolean) {
         let i = -1;
         const len = nums.length;
@@ -120,7 +120,7 @@ function searchRangeBias(nums: number[], target: number): number[] {
 }
 
 // 33. Search in Rotated Sorted Array
-function searchInRotatedSortedArray(nums: number[], target: number): number {
+export function searchInRotatedSortedArray(nums: number[], target: number): number {
     let l = 0, r = nums.length - 1;
     while (l <= r) {
         const mid = l + Math.floor((r - l) / 2);
@@ -134,7 +134,7 @@ function searchInRotatedSortedArray(nums: number[], target: number): number {
     return -1;
 }
 
-function searchInRotatedSortedArrayNonIncrease(nums: number[], target: number): number {
+export function searchInRotatedSortedArrayNonIncrease(nums: number[], target: number): number {
     let l = 0, r = nums.length - 1;
     while (l <= r) {
         const mid = l + Math.floor((r - l) / 2);
@@ -149,7 +149,7 @@ function searchInRotatedSortedArrayNonIncrease(nums: number[], target: number): 
 }
 
 // 378. Kth Smallest Element in a Sorted Matrix
-function kthSmallest(matrix: number[][], k: number): number {
+export function kthSmallest(matrix: number[][], k: number): number {
     const n = matrix.length;
     let l = matrix[0][0] - 1, r = matrix[n - 1][n - 1];
 
@@ -182,7 +182,7 @@ function kthSmallest(matrix: number[][], k: number): number {
 }
 
 // 668. Kth Smallest Number in Multiplication Table
-function findKthNumber(m: number, n: number, k: number): number {
+export function findKthNumber(m: number, n: number, k: number): number {
     let l = 0, r = m * n;
 
     function countLTE(target: number) {
@@ -205,3 +205,25 @@ function findKthNumber(m: number, n: number, k: number): number {
     }
     return r;
 }
+
+// 658. Find K Closest Elements todo not totally understood
+export function findClosestElements(arr: number[], k: number, x: number): number[] {
+    const n = arr.length;
+    if (k === n) return arr;
+
+    let l = 0, r = n - k;
+
+    while (l < r) {
+        const m = Math.floor((l + r) / 2);
+        if (x - arr[m] > arr[m + k] - x) l = m + 1;
+        else r = m;
+    }
+
+    return arr.slice(l, l + k);
+}
+
+// 410
+// 1231
+// 852
+// 1011
+// 1292

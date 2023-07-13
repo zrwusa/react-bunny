@@ -1,10 +1,9 @@
 import _ from 'lodash';
-import {AnyFunction, CurryFunc, DeepProxy, DeepProxyOnChange, DeepProxyOnGet} from '../types';
+import {AnyFunction} from '../types';
 
 export type JSONSerializable = {
     [key: string]: any
 }
-
 export type JSONValue = string | number | boolean | undefined | JSONObject;
 
 export interface JSONObject {
@@ -153,61 +152,68 @@ export const addDays = (date: Date, days: number): Date => {
 };
 
 export class WaitManager {
+    private _time30 = 20000;
+    private readonly _nXSpeed: number = 1;
+
+    constructor(nXSpeed?: number) {
+        if (nXSpeed === undefined) nXSpeed = 1;
+        this._nXSpeed = nXSpeed;
+    }
+
     private _time1 = 1000;
+
     get time1(): number {
         return this._time1 / this._nXSpeed;
     }
 
     private _time2 = 2000;
+
     get time2(): number {
         return this._time2 / this._nXSpeed;
     }
 
     private _time3 = 3000;
+
     get time3(): number {
         return this._time3 / this._nXSpeed;
     }
 
     private _time4 = 4000;
+
     get time4(): number {
         return this._time4 / this._nXSpeed;
     }
 
     private _time10 = 10000;
+
     get time10(): number {
         return this._time10 / this._nXSpeed;
     }
 
     private _time20 = 20000;
+
     get time20(): number {
         return this._time20 / this._nXSpeed;
     }
-
-    private _time30 = 20000;
 
     get time50(): number {
         return this._time30 / this._nXSpeed;
     }
 
     private _time60 = 60000;
+
     get time60(): number {
         return this._time60 / this._nXSpeed;
     }
 
     private _cusTime = 1000;
+
     get cusTime(): number {
         return this._cusTime / this._nXSpeed;
     }
 
     set cusTime(v: number) {
         this._cusTime = v;
-    }
-
-    private readonly _nXSpeed: number = 1;
-
-    constructor(nXSpeed?: number) {
-        if (nXSpeed === undefined) nXSpeed = 1;
-        this._nXSpeed = nXSpeed;
     }
 }
 
@@ -328,6 +334,7 @@ export function randomDate(start?: Date, end?: Date, specificProbabilityStart?: 
 
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
+
 
 export const capitalizeWords = (str: string) => {
     return str.replace(/(?:^|\s)\S/g, (a: string) => a.toUpperCase());
@@ -529,6 +536,7 @@ export const deepAdd = (obj: JSONSerializable, keyReducerMap: { [key in string]:
 
 const styleString = (color: string) => `color: ${color}; font-weight: bold`;
 
+
 const styleHeader = (header: string) => `%c[${header}]`;
 
 export const bunnyConsole = {
@@ -542,6 +550,7 @@ export const bunnyConsole = {
         return console.error(styleHeader(headerLog), styleString('red'), ...args);
     }
 };
+
 
 export const timeStart = () => {
     return performance ? performance.now() : new Date().getTime();
@@ -600,46 +609,4 @@ export function zip<T = number, T1 = number>(array1: T[], array2: T1[], options?
     }
     return isToObj ? zippedObjCoords : zipped;
 }
-
-export function deepProxy<T extends object>(target: T,
-                                            onChange?: DeepProxyOnChange,
-                                            onGet?: DeepProxyOnGet): DeepProxy<T> {
-    const handler: ProxyHandler<T> = {
-        // get?(target: T, p: string | symbol, receiver: any): any;
-        get(target, property, receiver) {
-            const value = Reflect.get(target, property, receiver);
-            if (onGet) onGet(target, property, value, receiver, undefined, true);
-            if (typeof value === 'object' && value !== null) {
-                return deepProxy(value, onChange, onGet);
-            }
-            return value;
-        },
-        // set?(target: T, p: string | symbol, value: any, receiver: any): boolean;
-        set(target, property, value, receiver) {
-            const result = Reflect.set(target, property, value, receiver);
-            if (onChange) onChange(target, property, value, receiver, undefined, result);
-            return result;
-        },
-        // deleteProperty?(target: T, p: string | symbol): boolean;
-        deleteProperty(target, property) {
-            const result = Reflect.deleteProperty(target, property);
-            if (onChange) onChange(target, property, undefined, undefined, undefined, result);
-            return result;
-        },
-    }
-    return new Proxy(target, handler) as DeepProxy<T>;
-}
-
-function curry<T extends (...args: any[]) => any>(fn: T): CurryFunc<T> {
-    return function curried(this: any, ...args: any[]): any {
-        if (args.length >= fn.length) {
-            return fn.apply(this, args);
-        } else {
-            return function (this: any, ...moreArgs: any[]): any {
-                return curried.apply(this, args.concat(moreArgs));
-            };
-        }
-    } as CurryFunc<T>;
-}
-
 

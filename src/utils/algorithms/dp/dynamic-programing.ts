@@ -1,14 +1,42 @@
 import {runAlgorithm} from '../helpers';
 import {canPartitionCase3, minCostTicketsCase1, numDistinctCase3} from './cases';
+import {TProxyHandler} from '@qiwi/deep-proxy';
+import {WaitManager} from '../../utils';
 
+const waitManager = new WaitManager(2);
+const {time1} = waitManager;
+
+
+export const fibonacci = async (n: number, proxyHandler?: TProxyHandler): Promise<number> => {
+    // const proxy: { bnrTree: BinaryTree<number> } = new DeepProxy({
+    //     bnrTree: new BinaryTree<number>([n], false)
+    // }, proxyHandler);
+
+    // let i = 0;
+    const fib = async (n: number): Promise<number> => {
+        // i++;
+        // proxy.bnrTree.insert(i, n);
+        // await wait(time1);
+        if (n <= 2) {
+            // proxy.bnrTree.remove(i);
+            return 1;
+        }
+
+        const sum = await fib(n - 1) + await fib(n - 2);
+        // proxy.bnrTree.remove(i);
+        return sum;
+    }
+    return await fib(n);
+}
 
 export async function runTestFibonacci() {
     // const dp = new MathExtensions();
     // return await runAlgorithm(dp.fib, false, 40);
 }
 
+
 // 309. Best Time to Buy and Sell Stock with Cool down TODO not fully understood
-function maxProfit(prices: number[]): number {
+export function maxProfit(prices: number[]): number {
     const len = prices.length;
     const dp: Map<string, number> = new Map();
 
@@ -35,7 +63,7 @@ function maxProfit(prices: number[]): number {
 }
 
 // 72. Edit Distance (levenshtein distance)TODO not fully understood
-function minDistance(word1: string, word2: string): number {
+export function minDistance(word1: string, word2: string): number {
     const y = word1.length, x = word2.length;
     const dp: number[][] = Array(y + 1).fill(NaN).map(() => Array(x + 1).fill(NaN));
 
@@ -93,7 +121,7 @@ export const runAllCanPartition = async () => {
 
 // 474
 // 494. Target Sum
-function findTargetSumWays(nums: number[], target: number): number {
+export function findTargetSumWays(nums: number[], target: number): number {
     const len = nums.length;
     const dp: { [key: string]: number } = {};
 
@@ -105,7 +133,7 @@ function findTargetSumWays(nums: number[], target: number): number {
     return dfs(0, 0);
 }
 
-function findTargetSumWaysDP(nums: number[], target: number): number {
+export function findTargetSumWaysDP(nums: number[], target: number): number {
     let sums: Map<number, number> = new Map([[0, 1]]);
 
     for (const num of nums) {
@@ -128,7 +156,7 @@ function findTargetSumWaysDP(nums: number[], target: number): number {
 
 // 1049
 // 322. Coin Change  Unbounded Knapsack
-function coinChange(coins: number[], amount: number): number {
+export function coinChange(coins: number[], amount: number): number {
     const dp = new Array(amount + 1).fill(amount + 1);
     dp[0] = 0;
 
@@ -144,7 +172,7 @@ function coinChange(coins: number[], amount: number): number {
 }
 
 // 518. Coin Change 2 Unbounded Knapsack
-function change(amount: number, coins: number[]): number {
+export function change(amount: number, coins: number[]): number {
     const len = coins.length;
     const dp = Array(len + 1).fill(undefined).map(() => Array(amount + 1).fill(0));
 
@@ -242,7 +270,7 @@ export function longestCommonSubsequence2(text1: string, text2: string): number 
 // 115. Distinct Subsequences   must use totally DP solution to pass
 
 
-function numDistinct1(s: string, t: string): number {
+export function numDistinct1(s: string, t: string): number {
     const sLen = s.length, tLen = t.length;
     const validIndices = (si: number, c: string) => {
         const indices: number[] = [];
@@ -271,7 +299,7 @@ function numDistinct1(s: string, t: string): number {
 }
 
 // numDistinctCase7 m*n:132990 dp.len:120352 rcs:47120008 hit:46751496
-function numDistinct2(s: string, t: string): number {
+export function numDistinct2(s: string, t: string): number {
     const m = s.length, n = t.length;
 
     const validIndices = (si: number, c: string) => {
@@ -328,11 +356,11 @@ function numDistinct3(s: string, t: string): number {
     }
 
     const ans = dfs(0, 0);
-    // console.log(`m*n:${m * n} rcs:${rcs} hit:${hit} dp.len:${Object.keys(dp).length}`);
+    console.log(`m*n:${m * n} rcs:${rcs} hit:${hit} dp.len:${Object.keys(dp).length}`);
     return ans;
 }
 
-function numDistinct4(s: string, t: string): number {
+export function numDistinct4(s: string, t: string): number {
     const m = s.length, n = t.length;
     if (n > m) return 0;
     const dp = Array.from({length: n + 1}, x => Array.from({length: m + 1}, y => 0));
@@ -349,7 +377,7 @@ function numDistinct4(s: string, t: string): number {
     return dp[n][m];
 }
 
-function numDistinct5(s: string, t: string): number {
+export function numDistinct5(s: string, t: string): number {
     const m = s.length, n = t.length;
     if (m < n) return 0;
 
@@ -368,12 +396,131 @@ function numDistinct5(s: string, t: string): number {
     return dp[n - 1];
 }
 
+// 5.Longest Palindromic Substring
+export function longestPalindrome(s: string): string {
+    let maxLen = 1;
+    const len = s.length;
+    let maxStart = 0;
+    if (len === 1) return s;
+    if (len === 2) {
+        if (s[0] === s[1]) return s;
+        else return s[0];
+    }
+
+    const getLongestLenByMid = (l: number, r: number) => {
+        // Using out-of-bounds to combine odd and even operations
+        while (l > -1 && r < len && s[l] === s[r]) {
+            l--;
+            r++;
+        }
+        return r - l - 1;
+    }
+
+    for (let i = 0; i < len; i++) {
+        const curMax = Math.max(getLongestLenByMid(i, i), getLongestLenByMid(i, i + 1));
+        if (curMax > maxLen) {
+            maxLen = curMax;
+            // Using curMax - 1 to combine odd and even operations
+            maxStart = i - Math.floor((curMax - 1) / 2);
+        }
+    }
+
+    return s.substring(maxStart, maxStart + maxLen);
+}
+
+// 53. Maximum Subarray
+function maxSubArray(nums: number[]): number {
+    const len = nums.length, dp = new Array(len);
+    dp[0] = nums[0];
+
+    for (let i = 1; i < len; i++) {
+        dp[i] = dp[i - 1] > 0 ? dp[i - 1] + nums[i] : nums[i];
+    }
+
+    return Math.max(...dp);
+}
+
+// 647. Palindromic Substrings
+export function countSubstrings(s: string): number {
+    const len = s.length;
+    let ans = 0;
+    const getLongestLenByMid = (l: number, r: number) => {
+        // Using out-of-bounds to combine odd and even operations
+        while (l > -1 && r < len && s[l] === s[r]) {
+            ans++;
+            l--;
+            r++;
+        }
+        return r - l - 1;
+    }
+
+    for (let i = 0; i < len; i++) {
+        getLongestLenByMid(i, i);
+        getLongestLenByMid(i, i + 1);
+    }
+
+    return ans;
+}
+
+// 516. Longest Palindromic Subsequence
+export function longestPalindromeSubseq1(s: string): number { // TLE
+    const getLongestLen = (str: string) => {
+        const len = str.length;
+        const isEven = len % 2 === 0;
+        const mid = Math.floor((len - 1) / 2);
+        let l = mid, r = mid;
+        if (isEven) r = mid + 1;
+
+        while (l > -1 && r < len && str[l] === str[r]) {
+            l--;
+            r++;
+        }
+
+        return r - l - 1;
+    }
+    const len = s.length;
+
+    const dfs = (i: number, acc: string): number => {
+        if (i > len - 1) return getLongestLen(acc);
+        return Math.max(dfs(i + 1, acc + s[i]), dfs(i + 1, acc));
+    }
+
+    return dfs(0, '');
+}
+
+export function longestPalindromeSubseq2(s: string): number { // Runtime Error
+    const getLongestLen = (str: string) => {
+        const len = str.length;
+        const isEven = len % 2 === 0;
+        const mid = Math.floor((len - 1) / 2);
+        let l = mid, r = mid;
+        if (isEven) r = mid + 1;
+
+        while (l > -1 && r < len && str[l] === str[r]) {
+            l--;
+            r++;
+        }
+        return r - l - 1;
+    }
+    const len = s.length;
+
+    const dp: { [key: string]: number } = {};
+    const dfs = (i: number, acc: string): number => {
+        if (i > len - 1) return getLongestLen(acc);
+        if (dp[acc] !== undefined) return dp[acc];
+        dp[acc] = Math.max(dfs(i + 1, acc + s[i]), dfs(i + 1, acc));
+        return dp[acc];
+    }
+
+    return dfs(0, '');
+}
 
 export const runAllDp = async () => {
     // await runAlgorithm(longestCommonSubsequence, true, longestCommonSubsequenceCase6);
     // await runAlgorithm(numDistinct1, true, numDistinctCase1);
     // await runAlgorithm(numDistinct3, true, numDistinctCase7);
     // await runAlgorithm(numDistinct2, true, numDistinctCase7);
+    // await runAlgorithm(fibonacci, false, [6]);
     await runAlgorithm(numDistinct3, true, numDistinctCase3);
 
     // await runAllCanPartition();

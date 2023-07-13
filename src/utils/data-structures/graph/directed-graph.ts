@@ -194,7 +194,7 @@ export class DirectedGraph<V extends DirectedVertex, E extends DirectedEdge> ext
         return this.getVertex(e.dest);
     }
 
-    getDestinations(vertex: V | null): V[] {
+    getDestinations(vertex: V | VertexId | null): V[] {
         if (vertex === null) {
             return [];
         }
@@ -215,7 +215,7 @@ export class DirectedGraph<V extends DirectedVertex, E extends DirectedEdge> ext
      * when stored with adjacency list time: O(V+E)
      * when stored with adjacency matrix time: O(V^2)
      */
-    topologicalSort(): V[] | null {
+    topologicalSort(): (V | VertexId)[] | null {
         // vector<vector<int>> g;
         // vector<int> color;
         // int last;
@@ -247,14 +247,14 @@ export class DirectedGraph<V extends DirectedVertex, E extends DirectedEdge> ext
         // }
         // When judging whether there is a cycle in the undirected graph, all nodes with degree of **<= 1** are enqueued
         // When judging whether there is a cycle in the directed graph, all nodes with **in degree = 0** are enqueued
-        const statusMap: Map<V, TopologicalStatus> = new Map<V, TopologicalStatus>();
+        const statusMap: Map<V | VertexId, TopologicalStatus> = new Map<V, TopologicalStatus>();
         for (const entry of this._vertices) {
             statusMap.set(entry[1], 0);
         }
 
-        const sorted: V[] = [];
+        const sorted: (V | VertexId)[] = [];
         let hasCycle = false;
-        const dfs = (cur: V) => {
+        const dfs = (cur: V | VertexId) => {
             statusMap.set(cur, 1);
             const children = this.getDestinations(cur);
             for (const child of children) {

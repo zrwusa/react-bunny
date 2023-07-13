@@ -1,5 +1,5 @@
 import {arrayRemove, uuidV4} from '../../utils';
-import {Heap} from '../heap';
+import {PriorityQueue} from '../priority-queue';
 
 export type VertexId = string | number;
 export type DijkstraResult<V> =
@@ -54,7 +54,12 @@ export interface I_Graph<V, E> {
 }
 
 export class AbstractVertex {
+    constructor(id: VertexId) {
+        this._id = id;
+    }
+
     private _id: VertexId;
+
     public get id(): VertexId {
         return this._id;
     }
@@ -62,15 +67,20 @@ export class AbstractVertex {
     public set id(v: VertexId) {
         this._id = v;
     }
-
-    constructor(id: VertexId) {
-        this._id = id;
-    }
 }
 
 export abstract class AbstractEdge {
 
+    static DEFAULT_EDGE_WEIGHT = 1;
+
+    protected constructor(weight?: number) {
+        if (weight === undefined) weight = AbstractEdge.DEFAULT_EDGE_WEIGHT;
+        this._weight = weight;
+        this._hashCode = uuidV4();
+    }
+
     private _weight: number;
+
     get weight(): number {
         return this._weight;
     }
@@ -88,14 +98,6 @@ export abstract class AbstractEdge {
     set hashCode(v: string) {
         this._hashCode = v;
     }
-
-    protected constructor(weight?: number) {
-        if (weight === undefined) weight = AbstractEdge.DEFAULT_EDGE_WEIGHT;
-        this._weight = weight;
-        this._hashCode = uuidV4();
-    }
-
-    static DEFAULT_EDGE_WEIGHT = 1;
 }
 
 // Connected Component === Largest Connected Sub-Graph
@@ -337,8 +339,9 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
             return null;
         }
 
-        for (const [id, v] of vertices) {
-            distMap.set(v, Infinity);
+        for (const vertex of vertices) {
+            const vertexOrId = vertex[1];
+            if (vertexOrId instanceof AbstractVertex) distMap.set(vertexOrId, Infinity);
         }
         distMap.set(srcVertex, 0);
         preMap.set(srcVertex, null);
@@ -358,16 +361,20 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
         };
 
         const getPaths = (minV: V | null) => {
-            for (const [id, v] of vertices) {
-                const path: V[] = [v];
-                let parent = preMap.get(v);
-                while (parent) {
-                    path.push(parent);
-                    parent = preMap.get(parent);
+            for (const vertex of vertices) {
+                const vertexOrId = vertex[1];
+
+                if (vertexOrId instanceof AbstractVertex) {
+                    const path: V[] = [vertexOrId];
+                    let parent = preMap.get(vertexOrId);
+                    while (parent) {
+                        path.push(parent);
+                        parent = preMap.get(parent);
+                    }
+                    const reversed = path.reverse();
+                    if (vertex[1] === minV) minPath = reversed;
+                    paths.push(reversed);
                 }
-                const reversed = path.reverse();
-                if (v === minV) minPath = reversed;
-                paths.push(reversed);
             }
         };
 
@@ -448,27 +455,32 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
             return null;
         }
 
-        for (const [id, v] of vertices) {
-            distMap.set(v, Infinity);
+        for (const vertex of vertices) {
+            const vertexOrId = vertex[1];
+            if (vertexOrId instanceof AbstractVertex) distMap.set(vertexOrId, Infinity);
         }
 
-        const heap = new Heap<{ id: number, val: V }>({comparator: (a, b) => a.id - b.id});
-        heap.insert({id: 0, val: srcVertex});
+        const heap = new PriorityQueue<{ id: number, val: V }>({comparator: (a, b) => a.id - b.id});
+        heap.offer({id: 0, val: srcVertex});
 
         distMap.set(srcVertex, 0);
         preMap.set(srcVertex, null);
 
         const getPaths = (minV: V | null) => {
-            for (const [id, v] of vertices) {
-                const path: V[] = [v];
-                let parent = preMap.get(v);
-                while (parent) {
-                    path.push(parent);
-                    parent = preMap.get(parent);
+            for (const vertex of vertices) {
+                const vertexOrId = vertex[1];
+                if (vertexOrId instanceof AbstractVertex) {
+                    const path: V[] = [vertexOrId];
+                    let parent = preMap.get(vertexOrId);
+                    while (parent) {
+                        path.push(parent);
+                        parent = preMap.get(parent);
+                    }
+                    const reversed = path.reverse();
+                    if (vertex[1] === minV) minPath = reversed;
+                    paths.push(reversed);
                 }
-                const reversed = path.reverse();
-                if (v === minV) minPath = reversed;
-                paths.push(reversed);
+
             }
         };
 
@@ -496,7 +508,7 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
                                 const distSrcToNeighbor = distMap.get(neighbor);
                                 if (distSrcToNeighbor) {
                                     if (dist + weight < distSrcToNeighbor) {
-                                        heap.insert({id: dist + weight, val: neighbor});
+                                        heap.offer({id: dist + weight, val: neighbor});
                                         preMap.set(neighbor, cur);
                                         distMap.set(neighbor, dist + weight);
                                     }
@@ -551,7 +563,7 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
         let min = Infinity;
         let minPath: V[] = [];
         // TODO
-        let hasNegativeCycle: boolean | undefined = undefined;
+        let hasNegativeCycle: boolean | undefined;
         if (scanNegativeCycle) hasNegativeCycle = false;
         if (!srcVertex) return {hasNegativeCycle, distMap, preMap, paths, min, minPath};
 
@@ -597,16 +609,19 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
         }
 
         if (genPath) {
-            for (const [id, v] of vertices) {
-                const path: V[] = [v];
-                let parent = preMap.get(v);
-                while (parent !== undefined) {
-                    path.push(parent);
-                    parent = preMap.get(parent);
+            for (const vertex of vertices) {
+                const vertexOrId = vertex[1];
+                if (vertexOrId instanceof AbstractVertex) {
+                    const path: V[] = [vertexOrId];
+                    let parent = preMap.get(vertexOrId);
+                    while (parent !== undefined) {
+                        path.push(parent);
+                        parent = preMap.get(parent);
+                    }
+                    const reversed = path.reverse();
+                    if (vertex[1] === minDest) minPath = reversed;
+                    paths.push(reversed);
                 }
-                const reversed = path.reverse();
-                if (v === minDest) minPath = reversed;
-                paths.push(reversed);
             }
         }
 
@@ -721,7 +736,8 @@ export abstract class AbstractGraph<V extends AbstractVertex, E extends Abstract
                     const curFromMap = dfnMap.get(cur);
                     if (childLow !== undefined && curFromMap !== undefined) {
                         if (needArticulationPoints) {
-                            if (cur === root && childCount >= 2 || ((cur !== root) && (childLow >= curFromMap))) {
+                            if ((cur === root && childCount >= 2) || ((cur !== root) && (childLow >= curFromMap))) {
+                                // todo not ensure the logic if (cur === root && childCount >= 2 || ((cur !== root) && (childLow >= curFromMap))) {
                                 articulationPoints.push(cur);
                             }
                         }

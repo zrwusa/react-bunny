@@ -21,7 +21,7 @@ type TMapFunction<NodeData> = (
 export class SinglyLinkedListNode<NodeData = any> {
     constructor(
         /** Data stored on the node */
-        public data: NodeData,
+        public val: NodeData,
         /** The previous node in the list */
         public prev: SinglyLinkedListNode<NodeData> | null,
         /** The next link in the list */
@@ -32,13 +32,13 @@ export class SinglyLinkedListNode<NodeData = any> {
     }
 
     /**
-     * Alias to .data
+     * Alias to .val
      * ```ts
      * new LinkedList(1, 2, 3).head.value; // 1
      * ```
      */
     public get value() {
-        return this.data;
+        return this.val;
     }
 
     /**
@@ -59,25 +59,25 @@ export class SinglyLinkedListNode<NodeData = any> {
      * ```ts
      * new LinkedList(2, 3).head.insertBefore(1); // 1 <=> 2 <=> 3
      * ```
-     * @param data Data to save in the node
+     * @param val Data to save in the node
      */
-    public insertBefore(data: NodeData): SinglyLinkedList<NodeData> {
+    public insertBefore(val: NodeData): SinglyLinkedList<NodeData> {
         return this.list !== null
-            ? this.list.insertBefore(this, data)
-            : new SinglyLinkedList(data, this.data);
+            ? this.list.insertBefore(this, val)
+            : new SinglyLinkedList(val, this.val);
     }
 
     /**
-     * Insert new data after this node
+     * Insert new val after this node
      * ```ts
      * new LinkedList(1, 2).tail.insertAfter(3); // 1 <=> 2 <=> 3
      * ```
-     * @param data Data to be saved in the node
+     * @param val Data to be saved in the node
      */
-    public insertAfter(data: NodeData): SinglyLinkedList<NodeData> {
+    public insertAfter(val: NodeData): SinglyLinkedList<NodeData> {
         return this.list !== null
-            ? this.list.insertAfter(this, data)
-            : new SinglyLinkedList(this.data, data);
+            ? this.list.insertAfter(this, val)
+            : new SinglyLinkedList(this.val, val);
     }
 
     /**
@@ -143,22 +143,22 @@ export class SinglyLinkedList<NodeData = any> {
     }
 
     /**
-     * Get the node data at a specified index, zero based
+     * Get the node val at a specified index, zero based
      * ```ts
      * new LinkedList(1, 2, 3).get(0); // 1
      * ```
-     * @param index to retrieve data at
+     * @param index to retrieve val at
      */
     public get(index: number): NodeData | undefined {
         const node = this.getNode(index);
-        return node !== undefined ? node.data : undefined;
+        return node !== undefined ? node.val : undefined;
     }
 
     /**
      * Get the node at index, zero based
      * ```ts
      * new LinkedList(1, 2, 3).getNode(0);
-     * // { prev: null, data: 1, next: SinglyLinkedListNode }
+     * // { prev: null, val: 1, next: SinglyLinkedListNode }
      * ```
      */
     public getNode(index: number): SinglyLinkedListNode<NodeData> | undefined {
@@ -182,10 +182,10 @@ export class SinglyLinkedList<NodeData = any> {
      * Return the first node and its index in the list that
      * satisfies the testing function
      * ```ts
-     * new LinkedList(1, 2, 3).findNodeIndex(data => data === 1);
+     * new LinkedList(1, 2, 3).findNodeIndex(val => val === 1);
      * // { node: SinglyLinkedListNode, index: 0 }
      * ```
-     * @param f A function to be applied to the data of each node
+     * @param f A function to be applied to the val of each node
      */
     public findNodeIndex(f: TTestFunction<NodeData>): ({
         node: SinglyLinkedListNode<NodeData>,
@@ -194,7 +194,7 @@ export class SinglyLinkedList<NodeData = any> {
         let currentIndex = 0;
         let currentNode = this.head;
         while (currentNode) {
-            if (f(currentNode.data, currentIndex, this)) {
+            if (f(currentNode.val, currentIndex, this)) {
                 return {
                     index: currentIndex,
                     node: currentNode,
@@ -210,10 +210,10 @@ export class SinglyLinkedList<NodeData = any> {
      * Returns the first node in the list that
      * satisfies the provided testing function. Otherwise undefined is returned.
      * ```ts
-     * new LinkedList(1, 2, 3).findNode(data => data === 1);
-     * // { prev: null, data: 1, next: SinglyLinkedListNode }
+     * new LinkedList(1, 2, 3).findNode(val => val === 1);
+     * // { prev: null, val: 1, next: SinglyLinkedListNode }
      * ```
-     * @param f Function to test data against
+     * @param f Function to test val against
      */
     public findNode(f: TTestFunction<NodeData>): SinglyLinkedListNode<NodeData> | undefined {
         const nodeIndex = this.findNodeIndex(f);
@@ -224,22 +224,22 @@ export class SinglyLinkedList<NodeData = any> {
      * Returns the value of the first element in the list that
      * satisfies the provided testing function. Otherwise undefined is returned.
      * ```ts
-     * new LinkedList(1, 2, 3).find(data => data === 1); // 1
+     * new LinkedList(1, 2, 3).find(val => val === 1); // 1
      * ```
-     * @param f Function to test data against
+     * @param f Function to test val against
      */
     public find(f: TTestFunction<NodeData>): NodeData | undefined {
         const nodeIndex = this.findNodeIndex(f);
-        return nodeIndex !== undefined ? nodeIndex.node.data : undefined;
+        return nodeIndex !== undefined ? nodeIndex.node.val : undefined;
     }
 
     /**
      * Returns the index of the first node in the list that
      * satisfies the provided testing function. Ohterwise -1 is returned.
      * ```ts
-     * new LinkedList(1, 2, 3).findIndex(data => data === 3); // 2
+     * new LinkedList(1, 2, 3).findIndex(val => val === 3); // 2
      * ```
-     * @param f Function to test data against
+     * @param f Function to test val against
      */
     public findIndex(f: TTestFunction<NodeData>): number {
         const nodeIndex = this.findNodeIndex(f);
@@ -256,8 +256,8 @@ export class SinglyLinkedList<NodeData = any> {
      * @param args Data to be stored in the node, takes any number of arguments
      */
     public append(...args: NodeData[]): SinglyLinkedList<NodeData> {
-        for (const data of args) {
-            const node = new SinglyLinkedListNode(data, this.tail, null, this);
+        for (const val of args) {
+            const node = new SinglyLinkedListNode(val, this.tail, null, this);
             if (this.head === null) {
                 this.head = node;
             }
@@ -283,7 +283,7 @@ export class SinglyLinkedList<NodeData = any> {
     }
 
     /**
-     * Prepend any number of data arguments to the list. The
+     * Prepend any number of val arguments to the list. The
      * argument list is prepended as a block to reduce confusion:
      * ```javascript
      * new LinkedList(3, 4).prepend(0, 1, 2); // [0, 1, 2, 3, 4]
@@ -292,8 +292,8 @@ export class SinglyLinkedList<NodeData = any> {
      */
     public prepend(...args: NodeData[]): SinglyLinkedList<NodeData> {
         const reverseArgs = Array.from(args).reverse();
-        for (const data of reverseArgs) {
-            const node = new SinglyLinkedListNode(data, null, this.head, this);
+        for (const val of reverseArgs) {
+            const node = new SinglyLinkedListNode(val, null, this.head, this);
             if (this.tail === null) {
                 this.tail = node;
             }
@@ -314,14 +314,14 @@ export class SinglyLinkedList<NodeData = any> {
      * new LinkedList(1, 3).insertAt(1, 2); // 1 <=> 2 <=> 3
      * ```
      * @param index The index to insert the new node at
-     * @param data Data to be stored on the new node
+     * @param val Data to be stored on the new node
      */
-    public insertAt(index: number, data: NodeData): SinglyLinkedList<NodeData> {
+    public insertAt(index: number, val: NodeData): SinglyLinkedList<NodeData> {
         if (this.head === null) {
-            return this.append(data);
+            return this.append(val);
         }
         if (index <= 0) {
-            return this.prepend(data);
+            return this.prepend(val);
         }
 
         let currentNode = this.head;
@@ -330,7 +330,7 @@ export class SinglyLinkedList<NodeData = any> {
             currentIndex += 1;
             currentNode = currentNode.next;
         }
-        currentNode.insertAfter(data);
+        currentNode.insertAfter(val);
         return this;
     }
 
@@ -339,7 +339,7 @@ export class SinglyLinkedList<NodeData = any> {
      * node afterwards.
      * ```ts
      * const list = new LinkedList(1, 2, 3);
-     * list.removeNode(list.tail); // { prev: null, data: 3, next: null, list: null }
+     * list.removeNode(list.tail); // { prev: null, val: 3, next: null, list: null }
      * ```
      * @param node The node to be removed
      */
@@ -374,7 +374,7 @@ export class SinglyLinkedList<NodeData = any> {
     /**
      * Remove the node at the specified index
      * ```ts
-     * new LinkedList(1, 2, 3).removeAt(2); // { prev: null, data: 3, next: null, list: null }
+     * new LinkedList(1, 2, 3).removeAt(2); // { prev: null, val: 3, next: null, list: null }
      * ```
      * @param index Index at which to remove
      */
@@ -390,13 +390,13 @@ export class SinglyLinkedList<NodeData = any> {
      * list.insertBefore(list.tail, 2); // 1 <=> 2 <=> 3
      * ```
      * @param referenceNode The node reference
-     * @param data Data to save in the node
+     * @param val Data to save in the node
      */
     public insertBefore(
         referenceNode: SinglyLinkedListNode<NodeData>,
-        data: NodeData,
+        val: NodeData,
     ): SinglyLinkedList<NodeData> {
-        const node = new SinglyLinkedListNode(data, referenceNode.prev, referenceNode, this);
+        const node = new SinglyLinkedListNode(val, referenceNode.prev, referenceNode, this);
         if (referenceNode.prev === null) {
             this.head = node;
         }
@@ -410,7 +410,7 @@ export class SinglyLinkedList<NodeData = any> {
 
     /**
      * Sorts the linked list using the provided compare function
-     * @param compare A function used to compare the data of two nodes. It should return
+     * @param compare A function used to compare the val of two nodes. It should return
      *                a boolean. True will insert a before b, false will insert b before a.
      *                (a, b) => a < b or (1, 2) => 1 < 2 === true, 2 will be inserted after 1,
      *                the sort order will be ascending.
@@ -430,16 +430,16 @@ export class SinglyLinkedList<NodeData = any> {
             if (start === end) {
                 return;
             }
-            const pivotData = end.data;
+            const pivotData = end.val;
             let current: SinglyLinkedListNode | null = start;
             let split: SinglyLinkedListNode = start;
             while (current && current !== end) {
-                const sort = compare(current.data, pivotData);
+                const sort = compare(current.val, pivotData);
                 if (sort) {
                     if (current !== split) {
-                        const temp = split.data;
-                        split.data = current.data;
-                        current.data = temp;
+                        const temp = split.val;
+                        split.val = current.val;
+                        current.val = temp;
                     }
                     // TODO after no-non-null-assertion not ensure the logic
                     if (split.next) {
@@ -448,8 +448,8 @@ export class SinglyLinkedList<NodeData = any> {
                 }
                 current = current.next;
             }
-            end.data = split.data;
-            split.data = pivotData;
+            end.val = split.val;
+            split.val = pivotData;
 
             if (start.next === end.prev) {
                 return;
@@ -474,13 +474,13 @@ export class SinglyLinkedList<NodeData = any> {
      * list.insertAfter(list.head, 1); // 1 <=> 2 <=> 3
      * ```
      * @param referenceNode The reference node
-     * @param data Data to be saved in the node
+     * @param val Data to be saved in the node
      */
     public insertAfter(
         referenceNode: SinglyLinkedListNode<NodeData>,
-        data: NodeData,
+        val: NodeData,
     ): SinglyLinkedList<NodeData> {
-        const node = new SinglyLinkedListNode(data, referenceNode, referenceNode.next, this);
+        const node = new SinglyLinkedListNode(val, referenceNode, referenceNode.next, this);
         if (referenceNode.next === null) {
             this.tail = node;
         }
@@ -493,7 +493,7 @@ export class SinglyLinkedList<NodeData = any> {
     }
 
     /**
-     * Remove the first node from the list and return the data of the removed node
+     * Remove the first node from the list and return the val of the removed node
      * or undefined
      * ```ts
      * new LinkedList(1, 2, 3).shift(); // 1
@@ -504,7 +504,7 @@ export class SinglyLinkedList<NodeData = any> {
     }
 
     /**
-     * Remove the last node from the list and return the data of the removed node
+     * Remove the last node from the list and return the val of the removed node
      * or undefined if the list was empty
      * ```ts
      * new LinkedList(1, 2, 3).pop(); // 3
@@ -580,7 +580,7 @@ export class SinglyLinkedList<NodeData = any> {
 
         let head: SinglyLinkedListNode<NodeData> | null | undefined = this.getNode(start);
         for (let i = 0; i < finish - start && head !== null && head !== undefined; i++) {
-            list.append(head.data);
+            list.append(head.val);
             head = head.next;
         }
         return list;
@@ -610,7 +610,7 @@ export class SinglyLinkedList<NodeData = any> {
     /**
      * The forEach() method executes a provided function once for each list node.
      * ```ts
-     * new LinkedList(1, 2, 3).forEach(data => log(data)); // 1 2 3
+     * new LinkedList(1, 2, 3).forEach(val => log(val)); // 1 2 3
      * ```
      * @param f Function to execute for each element, taking up to three arguments.
      * @param reverse Indicates if the list should be walked in reverse order, default is false
@@ -621,7 +621,7 @@ export class SinglyLinkedList<NodeData = any> {
         const modifier = reverse ? -1 : 1;
         const nextNode = reverse ? 'prev' : 'next';
         while (currentNode) {
-            f(currentNode.data, currentIndex, this);
+            f(currentNode.val, currentIndex, this);
             currentNode = currentNode[nextNode];
             currentIndex += modifier;
         }
@@ -631,7 +631,7 @@ export class SinglyLinkedList<NodeData = any> {
      * The map() method creates a new list with the results of
      * calling a provided function on every node in the calling list.
      * ```ts
-     * new LinkedList(1, 2, 3).map(data => data + 10); // 11 <=> 12 <=> 13
+     * new LinkedList(1, 2, 3).map(val => val + 10); // 11 <=> 12 <=> 13
      * ```
      * @param f Function that produces an node of the new list, taking up to three arguments
      * @param reverse Indicates if the list should be mapped in reverse order, default is false
@@ -639,7 +639,7 @@ export class SinglyLinkedList<NodeData = any> {
     // eslint-disable-next-line @typescript-eslint/ban-types
     public map(f: TMapFunction<NodeData>, reverse = false): SinglyLinkedList<NodeData | {}> {
         const list = new SinglyLinkedList();
-        this.forEach((data, index) => list.append(f(data, index, this)), reverse);
+        this.forEach((val, index) => list.append(f(val, index, this)), reverse);
         return list;
     }
 
@@ -647,17 +647,17 @@ export class SinglyLinkedList<NodeData = any> {
      * The filter() method creates a new list with all nodes
      * that pass the test implemented by the provided function.
      * ```ts
-     * new LinkedList(1, 2, 3, 4, 5).filter(data => data < 4); // 1 <=> 2 <=> 3
+     * new LinkedList(1, 2, 3, 4, 5).filter(val => val < 4); // 1 <=> 2 <=> 3
      * ```
-     * @param f Function to test each node data in the list. Return true to keep the node
+     * @param f Function to test each node val in the list. Return true to keep the node
      * @param reverse Indicates if the list should be filtered in reverse order, default is false
      */
     // eslint-disable-next-line @typescript-eslint/ban-types
     public filter(f: TTestFunction<NodeData>, reverse = false): SinglyLinkedList<NodeData | {}> {
         const list = new SinglyLinkedList();
-        this.forEach((data, index) => {
-            if (f(data, index, this)) {
-                list.append(data);
+        this.forEach((val, index) => {
+            if (f(val, index, this)) {
+                list.append(val);
             }
         }, reverse);
         return list;
@@ -691,14 +691,14 @@ export class SinglyLinkedList<NodeData = any> {
         if (start !== undefined) {
             result = start;
         } else if (currentElement) {
-            result = currentElement.data;
+            result = currentElement.val;
             currentElement = currentElement[nextNode];
         } else {
             throw new TypeError('Reduce of empty LinkedList with no initial value');
         }
 
         while (currentElement) {
-            result = f(result, currentElement.data, currentIndex, this);
+            result = f(result, currentElement.val, currentIndex, this);
             currentIndex += modifier;
             currentElement = currentElement[nextNode];
         }
@@ -721,30 +721,30 @@ export class SinglyLinkedList<NodeData = any> {
      * ```ts
      * new LinkedList('one', 'two', 'three').toString(' <=> ') === 'one <=> two <=> three';
      * ```
-     * @param separator Optional string to be placed in between data nodes, default is one space
+     * @param separator Optional string to be placed in between val nodes, default is one space
      */
     public toString(separator = ' '): string {
-        return this.reduce((s, data) => `${s}${separator}${data}`);
+        return this.reduce((s, val) => `${s}${separator}${val}`);
     }
 
     /**
      * The iterator implementation
      * ```ts
      * const list = new LinkedList(1, 2, 3);
-     * for (const data of list) { log(data); } // 1 2 3
+     * for (const val of list) { log(val); } // 1 2 3
      * ```
      */
     public* [Symbol.iterator](): IterableIterator<NodeData> {
         let element = this.head;
 
         while (element !== null) {
-            yield element.data;
+            yield element.val;
             element = element.next;
         }
     }
 
     /** Private helper function to reduce duplication of pop() and shift() methods */
     private removeFromAnyEnd(node: SinglyLinkedListNode<NodeData> | null) {
-        return node !== null ? this.removeNode(node).data : undefined;
+        return node !== null ? this.removeNode(node).val : undefined;
     }
 }

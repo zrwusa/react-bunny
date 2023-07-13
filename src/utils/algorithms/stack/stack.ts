@@ -1,6 +1,6 @@
 /* --- start stack --- */
 import {DeepProxy, TProxyHandler} from '@qiwi/deep-proxy';
-import {Stack} from '../../data-structures/stack';
+import {Stack} from 'data-structure-typed';
 import {wait} from '../../utils';
 
 type HashKey = '(' | '{' | '[';

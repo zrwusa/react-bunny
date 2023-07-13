@@ -95,7 +95,7 @@ export class SegmentTree {
     }
 
     updateNode(index: number, sum: number, val?: SegmentTreeNodeVal) {
-        const root = this._root || null;
+        const root = this.root || null;
         if (!root) {
             return;
         }
@@ -124,7 +124,7 @@ export class SegmentTree {
     }
 
     querySumByRange(indexA: number, indexB: number): number {
-        const root = this._root || null;
+        const root = this.root || null;
         if (!root) {
             return 0;
         }

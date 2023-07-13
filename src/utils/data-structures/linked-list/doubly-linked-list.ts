@@ -1,174 +1,193 @@
+// 操作      常见名称       Ada           Java        JavaScript     C++          Python      Perl       PHP             Ruby
+// 尾部插入   inject, snoc Append         offerLast   push          push_back    append      push        array_push      push
+// 头部插入   push, cons   Prepend        offerFirst  unshift       push_front   appendleft  unshift     array_unshift   unshift
+// 尾部删除   eject        Delete_Last    pollLast    pop           pop_back     pop         pop         array_pop       pop
+// 头部删除   pop          Delete_First   pollFirst   shift         pop_front    popleft     shift       array_shift     shift
+// 查看尾部                Last_Element   peekLast    [length - 1]  back         [-1]        $array[-1]  end             last
+// 查看头部                First_Element  peekFirst   [0]           front        [0]         $array[0]   reset           first
+
 export class DoublyLinkedListNode<T> {
-    private _value: T;
-    public get value(): T {
-        return this._value;
-    }
-
-    public set value(v: T) {
-        this._value = v;
-    }
-
-    private _next: DoublyLinkedListNode<T> | undefined;
-    public get next(): DoublyLinkedListNode<T> | undefined {
-        return this._next;
-    }
-
-    public set next(v: DoublyLinkedListNode<T> | undefined) {
-        this._next = v;
-    }
-
-    private _prev: DoublyLinkedListNode<T> | undefined;
-
-    public get previous(): DoublyLinkedListNode<T> | undefined {
-        return this._prev;
-    }
-
-    public set previous(v: DoublyLinkedListNode<T> | undefined) {
-        this._prev = v;
-    }
+    val: T;
+    next: DoublyLinkedListNode<T> | null;
+    prev: DoublyLinkedListNode<T> | null;
 
     constructor(nodeValue: T) {
-        this._value = nodeValue;
-        this._next = undefined;
-        this._prev = undefined;
+        this.val = nodeValue;
+        this.next = null;
+        this.prev = null;
     }
 }
 
+export type DoublyLinkedListGetBy = 'node' | 'val';
+
 export class DoublyLinkedList<T> {
-    //#region " Properties "
-
-    private _head: DoublyLinkedListNode<T> | undefined;
-    public get head(): DoublyLinkedListNode<T> | undefined {
-        return this._head;
+    private _first: DoublyLinkedListNode<T> | null = null;
+    private _last: DoublyLinkedListNode<T> | null = null;
+    private _size = 0;
+    get size(): number {
+        return this._size;
     }
 
-    public set head(node: DoublyLinkedListNode<T> | undefined) {
-        this._head = node;
-    }
-
-    private _tail: DoublyLinkedListNode<T> | undefined;
-    public get tail(): DoublyLinkedListNode<T> | undefined {
-        return this._tail;
-    }
-
-    public set tail(node: DoublyLinkedListNode<T> | undefined) {
-        this._tail = node;
-    }
-
-    private _length = 0;
-    public get length(): number {
-        return this._length;
-    }
-
-    public set length(v: number) {
-        this._length = v;
-    }
-
-    //#endregion
-
-    constructor() {
-        this.head = undefined;
-        this.tail = undefined;
-        this.length = 0;
-    }
-
-    /**
-     * Adds a node to the end of the linked list
-     * @param value Value to be stored in the Doubly linked list node
-     */
-    push(value: T): boolean {
-        const newNode = new DoublyLinkedListNode(value);
-        if (this.length === 0) {
-            this.head = newNode;
-            this.tail = newNode;
-        } else {
-            if (this.tail) this.tail.next = newNode;
-            newNode.previous = this.tail;
-            this.tail = newNode;
-        }
-        this.length++;
-        return true;
-    }
-
-    /**
-     * Removes a node at the end of the linked list and will return the node value
-     */
-    pop(): DoublyLinkedListNode<T> | undefined {
-        if (this.length === 0) return undefined;
-        const poppedNode = this.tail;
-        if (this.length === 1) {
-            this.head = undefined;
-            this.tail = undefined;
-        } else {
-            this.tail = poppedNode?.previous;
-            if (this.tail) this.tail.next = undefined;
-            if (poppedNode) poppedNode.previous = undefined;
-        }
-        this.length--;
-        return poppedNode;
-    }
-
-    /**
-     * Removes a node form the beginning of the linked list and will return the node value
-     */
-    shift(): T | undefined {
-        if (this.length === 0) return undefined;
-        const oldHead = this.head;
-        if (this.length === 1) {
-            this.head = undefined;
-            this.tail = undefined;
-        } else {
-            this.head = oldHead?.next;
-            if (this.head) this.head.previous = undefined;
-            if (oldHead) oldHead.next = undefined;
-        }
-        this.length--;
-        return oldHead?.value;
+    set size(v: number) {
+        this._size = v;
     }
 
     /**
      * Adds a node at the beginning of the linked list
-     * @param value Value to be stored at the beginning of the linked list
+     * @param val Value to be stored at the beginning of the linked list
      */
-    unshift(value: T): boolean {
-        const newNode = new DoublyLinkedListNode(value);
-        if (this.length === 0) {
-            this.head = newNode;
-            this.tail = newNode;
+    offerFirst(val: T): boolean {
+        const newNode = new DoublyLinkedListNode(val);
+        if (this._size === 0) {
+            this._first = newNode;
+            this._last = newNode;
         } else {
-            if (this.head) this.head.previous = newNode;
-            newNode.next = this.head;
-            this.head = newNode;
+            if (this._first) this._first.prev = newNode;
+            newNode.next = this._first;
+            this._first = newNode;
         }
-        this.length++;
+        this._size++;
         return true;
     }
 
+    /**
+     * Adds a node to the end of the linked list
+     * @param val Value to be stored in the Doubly linked list node
+     */
+    offerLast(val: T): boolean {
+        const newNode = new DoublyLinkedListNode(val);
+        if (this._size === 0) {
+            this._first = newNode;
+            this._last = newNode;
+        } else {
+            if (this._last) this._last.next = newNode;
+            newNode.prev = this._last;
+            this._last = newNode;
+        }
+        this._size++;
+        return true;
+    }
+
+    peekFirst(): T | null;
+    peekFirst(by: 'val'): T | null;
+    peekFirst(by: 'node'): DoublyLinkedListNode<T> | null;
+    peekFirst(by?: DoublyLinkedListGetBy): T | DoublyLinkedListNode<T> | null {
+        switch (by) {
+            case 'node':
+                return this._first ?? null;
+            case 'val':
+                return this._first?.val ?? null;
+            default:
+                return this._first?.val ?? null;
+        }
+    }
+
+    peekLast(): T | null;
+    peekLast(by: 'val'): T | null;
+    peekLast(by: 'node'): DoublyLinkedListNode<T> | null;
+    peekLast(by: DoublyLinkedListGetBy = 'val'): T | DoublyLinkedListNode<T> | null {
+        switch (by) {
+            case 'node':
+                return this._last ?? null;
+            case 'val':
+                return this._last?.val ?? null;
+            default:
+                return this._last?.val ?? null;
+        }
+    }
+
+    pollFirst(): T | null;
+    pollFirst(by: 'val'): T | null;
+    pollFirst(by: 'node'): DoublyLinkedListNode<T> | null;
+    /**
+     * Removes a node form the beginning of the linked list and will return the node val
+     */
+    pollFirst(by: DoublyLinkedListGetBy = 'val'): T | DoublyLinkedListNode<T> | null {
+        if (this._size === 0) return null;
+        const oldHead = this._first;
+        if (this._size === 1) {
+            this._first = null;
+            this._last = null;
+        } else {
+            this._first = oldHead?.next ?? null;
+            if (this._first) this._first.prev = null;
+            if (oldHead) oldHead.next = null;
+        }
+        this._size--;
+        switch (by) {
+            case 'node':
+                return oldHead ?? null;
+            case 'val':
+                return oldHead?.val ?? null;
+            default:
+                return oldHead?.val ?? null;
+        }
+    }
+
+    pollLast(): T | null;
+    pollLast(by: 'val'): T | null;
+    pollLast(by: 'node'): DoublyLinkedListNode<T> | null;
+    /**
+     * Removes a node at the end of the linked list and will return the node value
+     */
+    pollLast(by: DoublyLinkedListGetBy = 'val'): DoublyLinkedListNode<T> | T | null {
+        if (this._size === 0) return null;
+        const polled = this._last;
+        if (this._size === 1) {
+            this._first = null;
+            this._last = null;
+        } else {
+            this._last = polled?.prev ?? null;
+            if (this._last) this._last.next = null;
+            if (polled) polled.prev = null;
+        }
+        this._size--;
+        switch (by) {
+            case 'node':
+                return polled ?? null;
+            case 'val':
+                return polled?.val ?? null;
+            default:
+                return polled?.val ?? null;
+        }
+    }
+
+    get(index: number): T | null;
+    get(index: number, by: 'node'): DoublyLinkedListNode<T> | null;
+    get(index: number, by: 'val'): T | null;
     /**
      * Returns the node at the specified index of the linked list.
      * If index = 0; first element in the list is returned.
      * If index = 3; fourth element in the list is returned.
      * @param index Index of the node to be retrieved
+     * @param by Return value type
      */
-    get(index: number): DoublyLinkedListNode<T> | undefined {
-        if (index < 0 || index >= this.length) return undefined;
+    get(index: number, by: DoublyLinkedListGetBy = 'val'): T | DoublyLinkedListNode<T> | null {
+        if (index < 0 || index >= this._size) return null;
         let count, current;
-        if (index <= this.length / 2) {
+        if (index <= this._size / 2) {
             count = 0;
-            current = this.head;
+            current = this._first;
             while (count !== index) {
                 current = current?.next;
                 count++;
             }
         } else {
-            count = this.length - 1;
-            current = this.tail;
+            count = this._size - 1;
+            current = this._last;
             while (count !== index) {
-                current = current?.previous;
+                current = current?.prev;
                 count--;
             }
         }
-        return current;
+        switch (by) {
+            case 'node':
+                return current ?? null;
+            case 'val':
+                return current?.val ?? null;
+            default:
+                return current?.val ?? null;
+        }
     }
 
     /**
@@ -176,37 +195,41 @@ export class DoublyLinkedList<T> {
      * If index = 0; Value of the first element in the list is updated.
      * If index = 3; Value of the fourth element in the list is updated.
      * @param index Index of the node to be updated
-     * @param value New value of the node
+     * @param val New value of the node
      */
-    set(index: number, value: T): boolean {
-        const foundNode = this.get(index);
-        if (foundNode != null) {
-            foundNode.value = value;
+    set(index: number, val: T): boolean {
+        const foundNode = this.get(index, 'node');
+        if (foundNode !== null) {
+            foundNode.val = val;
             return true;
         }
         return false;
     }
 
+    isEmpty() {
+        return this._size === 0;
+    }
+
+    // --- start extra methods ---
     /**
      * Inserts a new node at the specified index.
      * @param index Index at which the new node has to be inserted
-     * @param value Value of the new node to be inserted
+     * @param val Value of the new node to be inserted
      */
-    insert(index: number, value: T): boolean {
-        if (index < 0 || index > this.length) return false;
-        if (index === 0) return !!this.unshift(value);
-        if (index === this.length) return !!this.push(value);
+    insert(index: number, val: T): boolean {
+        if (index < 0 || index > this._size) return false;
+        if (index === 0) return !!this.offerFirst(val);
+        if (index === this._size) return !!this.offerLast(val);
 
-        const newNode = new DoublyLinkedListNode(value);
-        const prevNode = this.get(index - 1);
+        const newNode = new DoublyLinkedListNode(val);
+        const prevNode = this.get(index - 1, 'node');
         const nextNode = prevNode?.next;
 
         if (prevNode) prevNode.next = newNode;
-        newNode.previous = prevNode;
-
-        newNode.next = nextNode;
-        if (nextNode) nextNode.previous = newNode;
-        this.length++;
+        newNode.prev = prevNode;
+        newNode.next = nextNode ?? null;
+        if (nextNode) nextNode.prev = newNode;
+        this._size++;
         return true;
     }
 
@@ -214,26 +237,22 @@ export class DoublyLinkedList<T> {
      * Removes a node at the specified index and returns its value.
      * @param index Index at which the node has to be removed.
      */
-    remove(index: number): T | undefined {
-        if (index < 0 || index > this._length - 1) {
-            return undefined;
-        } else if (index === 0) {
-            return this.shift();
-        } else if (index === this._length - 1) {
-            return this.pop()?.value;
-        } else {
-            const prevNode = this.get(index - 1);
+    remove(index: number): T | null {
+        if (index < 0 || index > this._size - 1) return null;
+        else if (index === 0) return this.pollFirst();
+        else if (index === this._size - 1) return this.pollLast('node')?.val ?? null;
+        else {
+            const prevNode = this.get(index - 1, 'node');
             const removeNode = prevNode?.next;
             const nextNode = removeNode?.next;
-
-            if (prevNode) prevNode.next = nextNode;
-            if (nextNode) nextNode.previous = prevNode;
-
-            if (removeNode) removeNode.next = undefined;
-            if (removeNode) removeNode.previous = undefined;
-
-            this._length--;
-            return removeNode?.value;
+            if (prevNode) prevNode.next = nextNode ?? null;
+            if (nextNode) nextNode.prev = prevNode;
+            if (removeNode) removeNode.next = null;
+            if (removeNode) removeNode.prev = null;
+            this._size--;
+            return removeNode?.val ?? null;
         }
     }
+
+    // --- end extra methods ---
 }

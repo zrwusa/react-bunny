@@ -95,6 +95,14 @@ import {AnyFunction} from '../../types';
 // let time11 = timeStart();
 // let arr3 = JSON.parse(JSON.stringify(arr));
 // timeEnd(time11, 'JSON.parse(JSON.stringify(arr))')
+//
+// let time12 = timeStart();
+// let arr4 = arr.concat(arr1);
+// timeEnd(time12, 'arr4 = arr.concat(arr1)')
+//
+// let time13 = timeStart();
+// let arr5 = [...arr, ...arr1];
+// timeEnd(time13, 'arr5 = [...arr, ...arr1]')
 
 
 // Stack Exceed Size
@@ -179,7 +187,10 @@ export const runAlgorithm = async <T extends any[]>(algorithm: AnyFunction, outp
     }
 
     const timeSpent = (performance ? performance.now() : new Date().getTime()) - startTime;
-    bunnyConsole.log(algorithm.name, 'result -> ', output === 'stringify' ? JSON.stringify(result) : output ? result : '', 'time spent -> ', timeSpent.toFixed(2) + 'ms');
+    bunnyConsole.log(algorithm.name,
+        output ? 'result -> ' : '',
+        output === 'stringify' ? JSON.stringify(result) : output ? result : '',
+        'time spent -> ', timeSpent.toFixed(2) + 'ms');
     return result;
 };
 
@@ -414,3 +425,14 @@ export const nthSameBefore = (i: number, str: string) => {
     }
     return count;
 }
+
+export const factorial = (n: number) => {
+    let total = 1, i = 1;
+    while (i <= n) {
+        total *= i;
+        i++;
+    }
+    return total;
+}
+
+

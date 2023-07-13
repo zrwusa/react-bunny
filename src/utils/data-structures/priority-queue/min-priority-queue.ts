@@ -1,26 +1,12 @@
-/**
- * @copyright 2020 Eyas Ranjous <eyas.ranjous@gmail.com>
- * @license MIT
- */
-import {PriorityQueue, PriorityQueueItem, PriorityQueueOptions} from './priority-queue';
-import {Heap} from '../heap';
+import {PriorityQueue, PriorityQueueOptions} from './priority-queue';
 
-
-/**
- * @class MinPriorityQueue
- * @extends PriorityQueue
- */
-export class MinPriorityQueue<T> extends PriorityQueue<T> {
-    protected _heap: Heap<PriorityQueueItem<T>>;
-
+export class MinPriorityQueue<T = number> extends PriorityQueue<T> {
     constructor(options?: PriorityQueueOptions<T>) {
-        super(options);
-        this._heap = new Heap({
-            comparator: (a, b) => {
-                return a.priority - b.priority;
+        super({
+            nodes: options?.nodes, comparator: options?.comparator ? options.comparator : (a: T, b: T) => {
+                const aKey = a as unknown as number, bKey = b as unknown as number;
+                return aKey - bKey;
             }
         });
     }
 }
-
-

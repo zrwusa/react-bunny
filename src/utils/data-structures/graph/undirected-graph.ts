@@ -8,6 +8,11 @@ export class UndirectedVertex extends AbstractVertex {
 }
 
 export class UndirectedEdge extends AbstractEdge {
+    constructor(v1: VertexId, v2: VertexId, weight?: number) {
+        super(weight);
+        this._vertices = [v1, v2];
+    }
+
     private _vertices: [VertexId, VertexId];
 
     public get vertices() {
@@ -17,19 +22,14 @@ export class UndirectedEdge extends AbstractEdge {
     public set vertices(v: [VertexId, VertexId]) {
         this._vertices = v;
     }
-
-    constructor(v1: VertexId, v2: VertexId, weight?: number) {
-        super(weight);
-        this._vertices = [v1, v2];
-    }
 }
 
 export class UndirectedGraph<V extends UndirectedVertex, E extends UndirectedEdge> extends AbstractGraph<V, E> {
+    protected _edges: Map<V, E[]> = new Map();
+
     constructor() {
         super();
     }
-
-    protected _edges: Map<V, E[]> = new Map();
 
     getEdge(v1: V | null | VertexId, v2: V | null | VertexId): E | null {
         let edges: E[] | undefined = [];

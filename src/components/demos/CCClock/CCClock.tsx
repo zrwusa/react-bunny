@@ -6,16 +6,16 @@ type IStates = { time: Date, intervalID: ReturnType<typeof setInterval>, }
 class CCCLock extends Component<IProps, IStates> {
 
     tick(): void {
-        this.setState({
-            time: new Date()
+        this.setState((prevState) => {
+            return {...prevState, time: new Date()}
         });
     }
 
     go(): void {
         const intervalID: ReturnType<typeof setInterval> = setInterval(() => this.tick(), 1000);
-        this.setState({
-            intervalID: intervalID
-        });
+        this.setState((prevState) => {
+            return {...prevState,intervalID: intervalID
+        }});
     }
 
     handleGoClick(event: MouseEvent): void {

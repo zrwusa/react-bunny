@@ -1,45 +1,37 @@
-import {BST, BSTNode, I_BST} from './bst';
-import {BinaryTreeNodeId, BinaryTreeNodeParam} from './binary-tree';
+import {BST, BSTNode} from './bst';
+import {BinaryTreeNodeId} from './binary-tree';
 
-export type AVLTreeDeletedResult<T> = { deleted: AVLTreeNode<T> | null, needBalanced: AVLTreeNode<T> | null };
-
-export interface I_AVLTree<T> extends I_BST<T> {
-    balanceFactor(node: AVLTreeNode<T>): number;
-
-    updateHeight(node: AVLTreeNode<T>): void;
-
-    balancePath(node: AVLTreeNode<T>): void;
-
-    balanceLL(A: AVLTreeNode<T>): void;
-
-    balanceLR(A: AVLTreeNode<T>): void;
-
-    balanceRR(A: AVLTreeNode<T>): void;
-
-    balanceRL(A: AVLTreeNode<T>): void;
+export interface AVLTreeDeleted<T> {
+    deleted: AVLTreeNode<T> | null;
+    needBalanced: AVLTreeNode<T> | null;
 }
 
 export class AVLTreeNode<T> extends BSTNode<T> {
-    clone(): AVLTreeNode<T> {
-        return new AVLTreeNode<T>(this._id, this._val, this._count);
+    override clone(): AVLTreeNode<T> {
+        return new AVLTreeNode<T>(this.id, this.val, this.count);
     }
 }
 
-export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
-    constructor()
-    constructor(nodeOrData: T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean)
-    constructor(nodeOrData: AVLTreeNode<T>, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
-    constructor(nodeOrData: BinaryTreeNodeParam<T>, allowDuplicate?: boolean, autoAllLesserSum?: boolean)
-    constructor(nodeOrData?: AVLTreeNode<T> | BinaryTreeNodeParam<T> | T[], allowDuplicate?: boolean, autoAllLesserSum?: boolean) {
-        // super(nodeOrData); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
-        super();
-        if (nodeOrData !== undefined) {
-            if (Array.isArray(nodeOrData)) {
-                super(nodeOrData, allowDuplicate, autoAllLesserSum); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
-            } else {
-                super(nodeOrData, allowDuplicate, autoAllLesserSum); // Typescript requires code logic to judge the parameters and then call the parent class constructor.
+export class AVLTree<T> extends BST<T> {
+
+    override createNode(id: BinaryTreeNodeId, val: T, count?: number): AVLTreeNode<T> {
+        return new AVLTreeNode<T>(id, val, count);
+    }
+
+    override put(id: BinaryTreeNodeId, val: T | null, count?: number): AVLTreeNode<T> | null {
+        const inserted = super.put(id, val, count);
+        if (inserted) this.balancePath(inserted);
+        return inserted;
+    }
+
+    override remove(id: BinaryTreeNodeId, isUpdateAllLeftSum?: boolean): AVLTreeDeleted<T>[] {
+        const deletedResults = super.remove(id, isUpdateAllLeftSum);
+        for (const {needBalanced} of deletedResults) {
+            if (needBalanced) {
+                this.balancePath(needBalanced);
             }
         }
+        return deletedResults;
     }
 
     balanceFactor(node: AVLTreeNode<T>): number {
@@ -234,27 +226,6 @@ export class AVLTree<T> extends BST<T> implements I_AVLTree<T> {
         this.updateHeight(A); // Adjust heights
         B && this.updateHeight(B);
         C && this.updateHeight(C);
-    }
-
-    createNode(id: BinaryTreeNodeId, val: T, count?: number): AVLTreeNode<T> {
-        return new AVLTreeNode<T>(id, val, count);
-    }
-
-    insert(id: BinaryTreeNodeId, val: T | null, count?: number): AVLTreeNode<T> | null {
-        const inserted = super.insert(id, val, count);
-        console.log('---ids:', id, inserted?.id);
-        if (inserted) this.balancePath(inserted);
-        return inserted;
-    }
-
-    remove(id: BinaryTreeNodeId, isUpdateAllLeftSum?: boolean): AVLTreeDeletedResult<T>[] {
-        const deletedResults = super.remove(id, isUpdateAllLeftSum);
-        for (const {needBalanced} of deletedResults) {
-            if (needBalanced) {
-                this.balancePath(needBalanced);
-            }
-        }
-        return deletedResults;
     }
 }
 
