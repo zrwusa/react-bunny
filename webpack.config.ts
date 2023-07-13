@@ -18,11 +18,12 @@ function configFactory(): Configuration {
     }, buildPath = 'public';
     const isDev = process.env.NODE_ENV === 'development';
     const isProd = process.env.NODE_ENV === 'production';
+    const {DEV_PORT, DEV_API_PORT} = process.env;
 
     const devServer: DevServerConfiguration = isDev ? {
         static: path.join(__dirname, buildPath),
         compress: false,
-        port: 3006,
+        port: DEV_PORT,
         open: true,  // Open the default browser when there is no browser open
         historyApiFallback: true,
         client: {
@@ -31,7 +32,7 @@ function configFactory(): Configuration {
         },
         proxy: {  // Front-end and back-end separation
             '/api': {
-                target: 'http://localhost:8000',
+                target: `http://localhost:${DEV_API_PORT}`,
                 pathRewrite: {'^/api': ''}
             }
         }

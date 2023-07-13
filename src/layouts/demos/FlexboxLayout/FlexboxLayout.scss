@@ -17,7 +17,6 @@
   }
 }
 
-
 .flexbox-layout-panel {
   flex: 1 100%;
   padding: 10px;
@@ -25,13 +24,11 @@
   border: solid $number-thin-a $color-light-gray;
 }
 
-
 @mixin flexbox-layout-responsive-loose {
   .flexbox-layout__content {
     flex: 3;
     overflow-y: auto;
     order: 2;
-
   }
 
   .flexbox-layout {
@@ -61,6 +58,21 @@
       height: calc(#{$screen-height} - #{$header-height} - #{$footer-height} - #{6*$panel-gap});
     }
   }
+}
+
+/* Mobile phones */
+@media only screen and (max-width: 767px) {
+  /* Styles specific to mobile phones go here */
+}
+
+/* Tablets */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  /* Styles specific to tablets go here */
+}
+
+/* PCs */
+@media only screen and (min-width: 1024px) {
+  /* Styles specific to PCs go here */
 }
 
 //@include media('>=tablet') {
