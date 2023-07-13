@@ -15,7 +15,7 @@ function configFactory(): Configuration {
         ts: /\.(ts)x?$/,
         image: /\.(png|svg|jpg|jpeg|gif)$/i,
         sass: /\.s[ac]ss$/i,
-    }, buildPath = 'dist';
+    }, buildPath = 'public';
     const isDev = process.env.NODE_ENV === 'development';
     const isProd = process.env.NODE_ENV === 'production';
 
