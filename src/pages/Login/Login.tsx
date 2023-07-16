@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Input} from '@mui/material';
+import {Button, TextField} from '@mui/material';
 import {useLocation, useNavigate} from 'react-router';
 import {useDispatch, useSelector} from 'react-redux';
 import {IRootState} from '../../stores/models';
@@ -18,14 +18,6 @@ const Login: React.FC<ILoginProps> = ({title}) => {
     const access_token = useSelector((state: IRootState) => state.userState.user.access_token);
     const dispatch = useDispatch<IThunkDispatch>();
     const navigate = useNavigate();
-
-    const handleEmailChange = (value: string): void => {
-        setEmail(value);
-    };
-
-    const handlePasswordChange = (value: string): void => {
-        setPassword(value);
-    };
 
     const handleLogin = (): void => {
         dispatch(loginAction({email, password})).then(() => {
@@ -47,13 +39,29 @@ const Login: React.FC<ILoginProps> = ({title}) => {
     return (
         <div>
             <h1 className={'demo-home__title--des'}>{title || 'Login Page'}</h1>
-            <Input
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
                 value={email}
-                onChange={(e) => handleEmailChange(e.currentTarget.value)}
+                onChange={(e) => setEmail(e.currentTarget.value)}
             />
-            <Input
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
                 value={password}
-                onChange={(e) => handlePasswordChange(e.currentTarget.value)}
+                onChange={(e) => setPassword(e.currentTarget.value)}
             />
             <Button onClick={handleLogin}>Login</Button>
             <Button onClick={handleLogout}>Logout</Button>

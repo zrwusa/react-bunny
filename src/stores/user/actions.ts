@@ -31,7 +31,7 @@ const loginFailedAction: (payload: AxiosError) => ILoginFailedAction = (payload)
 };
 
 export const loginAction = (data: IReqLoginPayload): IThunkResult<Promise<void>> => (dispatch) => {
-    return api.post(`/auth/login`, data)
+    return api.post(`/sessions`, data)
         .then((res) => {
             dispatch(loginSuccessAction(res.data));
         })

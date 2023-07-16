@@ -19,7 +19,14 @@ export enum FamilyPosition {root, left, right}
 export enum LoopType { iterative = 1, recursive = 2}
 
 export class BinaryTreeNode<T> {
+    constructor(id: BinaryTreeNodeId, val: T, count?: number) {
+        this._id = id;
+        this._val = val;
+        this._count = count ?? 1;
+    }
+
     protected _id: BinaryTreeNodeId;
+
     get id(): BinaryTreeNodeId {
         return this._id;
     }
@@ -29,6 +36,7 @@ export class BinaryTreeNode<T> {
     }
 
     protected _val: T;
+
     get val(): T {
         return this._val;
     }
@@ -38,6 +46,7 @@ export class BinaryTreeNode<T> {
     }
 
     protected _left?: BinaryTreeNode<T> | null;
+
     get left(): BinaryTreeNode<T> | null | undefined {
         return this._left;
     }
@@ -51,6 +60,7 @@ export class BinaryTreeNode<T> {
     }
 
     protected _right?: BinaryTreeNode<T> | null;
+
     get right(): BinaryTreeNode<T> | null | undefined {
         return this._right;
     }
@@ -64,6 +74,7 @@ export class BinaryTreeNode<T> {
     }
 
     protected _parent: BinaryTreeNode<T> | null | undefined;
+
     get parent(): BinaryTreeNode<T> | null | undefined {
         return this._parent;
     }
@@ -73,6 +84,7 @@ export class BinaryTreeNode<T> {
     }
 
     protected _familyPosition: FamilyPosition = FamilyPosition.root;
+
     get familyPosition(): FamilyPosition {
         return this._familyPosition;
     }
@@ -82,6 +94,7 @@ export class BinaryTreeNode<T> {
     }
 
     protected _count = 1;
+
     get count(): number {
         return this._count;
     }
@@ -98,12 +111,6 @@ export class BinaryTreeNode<T> {
 
     set height(v: number) {
         this._height = v;
-    }
-
-    constructor(id: BinaryTreeNodeId, val: T, count?: number) {
-        this._id = id;
-        this._val = val;
-        this._count = count ?? 1;
     }
 
     swapLocation(swapNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
@@ -131,59 +138,15 @@ export class BinaryTreeNode<T> {
 }
 
 export class BinaryTree<T> {
-    protected _root: BinaryTreeNode<T> | null = null;
-    protected get root(): BinaryTreeNode<T> | null {
-        return this._root;
-    }
-
-    protected set root(v: BinaryTreeNode<T> | null) {
-        if (v) {
-            v.parent = null;
-            v.familyPosition = FamilyPosition.root;
-        }
-        this._root = v;
-    }
-
-    protected _size = 0;
-    protected get size(): number {
-        return this._size;
-    }
-
-    protected set size(v: number) {
-        this._size = v;
-    }
-
-    protected _count = 0;
-    protected get count(): number {
-        return this._count;
-    }
-
-    getCount(): number {
-        return this._count;
-    }
-
-    protected set count(v: number) {
-        this._count = v;
-    }
-
-    private readonly _autoIncrementId: boolean = false;
-    private _maxId: number = -1;
-    private readonly _isDuplicatedVal: boolean = false;
-
     protected _loopType: LoopType = LoopType.iterative;
     protected _visitedId: BinaryTreeNodeId[] = [];
     protected _visitedVal: Array<T> = [];
     protected _visitedNode: BinaryTreeNode<T>[] = [];
     protected _visitedCount: number[] = [];
     protected _visitedLeftSum: number[] = [];
-
-    protected _resetResults() {
-        this._visitedId = [];
-        this._visitedVal = [];
-        this._visitedNode = [];
-        this._visitedCount = [];
-        this._visitedLeftSum = [];
-    }
+    private readonly _autoIncrementId: boolean = false;
+    private _maxId: number = -1;
+    private readonly _isDuplicatedVal: boolean = false;
 
     constructor(options?: {
         loopType?: LoopType,
@@ -200,6 +163,44 @@ export class BinaryTree<T> {
             this._autoIncrementId = autoIncrementId;
             this._loopType = loopType;
         }
+    }
+
+    protected _root: BinaryTreeNode<T> | null = null;
+
+    protected get root(): BinaryTreeNode<T> | null {
+        return this._root;
+    }
+
+    protected set root(v: BinaryTreeNode<T> | null) {
+        if (v) {
+            v.parent = null;
+            v.familyPosition = FamilyPosition.root;
+        }
+        this._root = v;
+    }
+
+    protected _size = 0;
+
+    protected get size(): number {
+        return this._size;
+    }
+
+    protected set size(v: number) {
+        this._size = v;
+    }
+
+    protected _count = 0;
+
+    protected get count(): number {
+        return this._count;
+    }
+
+    protected set count(v: number) {
+        this._count = v;
+    }
+
+    getCount(): number {
+        return this._count;
     }
 
     createNode(id: BinaryTreeNodeId, val: T | null, count?: number): BinaryTreeNode<T> | null {
@@ -518,80 +519,14 @@ export class BinaryTree<T> {
         return result;
     }
 
-    protected _pushByPropertyNameStopOrNot(cur: BinaryTreeNode<T>, result: (BinaryTreeNode<T> | null | undefined)[], nodeProperty: BinaryTreeNodeId | T, propertyName ?: BinaryTreeNodePropertyName, onlyOne ?: boolean) {
-        switch (propertyName) {
-            case 'id':
-                if (cur.id === nodeProperty) {
-                    result.push(cur);
-                    return !!onlyOne;
-                }
-                break;
-            case 'count':
-                if (cur.count === nodeProperty) {
-                    result.push(cur);
-                    return !!onlyOne;
-                }
-                break;
-            case 'val':
-                if (cur.val === nodeProperty) {
-                    result.push(cur);
-                    return !!onlyOne;
-                }
-                break;
-            default:
-                if (cur.id === nodeProperty) {
-                    result.push(cur);
-                    return !!onlyOne;
-                }
-                break;
-        }
-    }
-
-    protected _accumulatedByPropertyName(node: BinaryTreeNode<T>, nodeOrPropertyName ?: NodeOrPropertyName) {
-        nodeOrPropertyName = nodeOrPropertyName ?? 'id';
-
-        switch (nodeOrPropertyName) {
-            case 'id':
-                this._visitedId.push(node.id);
-                break;
-            case 'val':
-                this._visitedVal.push(node.val);
-                break;
-            case 'node':
-                this._visitedNode.push(node);
-                break;
-            case 'count':
-                this._visitedCount.push(node.count);
-                break;
-            default:
-                this._visitedId.push(node.id);
-                break;
-        }
-    }
-
-    protected _getResultByPropertyName(nodeOrPropertyName ?: NodeOrPropertyName): ResultsByProperty<T> {
-        nodeOrPropertyName = nodeOrPropertyName ?? 'id';
-
-        switch (nodeOrPropertyName) {
-            case 'id':
-                return this._visitedId;
-            case 'val':
-                return this._visitedVal;
-            case 'node':
-                return this._visitedNode;
-            case 'count':
-                return this._visitedCount;
-            default:
-                return this._visitedId;
-        }
-    }
-
     getRoot(): BinaryTreeNode<T> | null {
         return this.root;
     }
 
     getLeftMost(): BinaryTreeNode<T> | null;
+
     getLeftMost(node: BinaryTreeNode<T>): BinaryTreeNode<T>;
+
     getLeftMost(node?: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
         node = node ?? this.root;
         if (!node) return node;
@@ -616,7 +551,9 @@ export class BinaryTree<T> {
     }
 
     getRightMost(): BinaryTreeNode<T> | null;
+
     getRightMost(node: BinaryTreeNode<T>): BinaryTreeNode<T>;
+
     getRightMost(node?: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
         node = node ?? this.root;
         if (!node) return node;
@@ -787,10 +724,15 @@ export class BinaryTree<T> {
     }
 
     BFS(): BinaryTreeNodeId[];
+
     BFS(nodeOrPropertyName: 'id'): BinaryTreeNodeId[];
+
     BFS(nodeOrPropertyName: 'val'): T[];
+
     BFS(nodeOrPropertyName: 'node'): BinaryTreeNode<T>[];
+
     BFS(nodeOrPropertyName: 'count'): number[];
+
     BFS(nodeOrPropertyName ?: NodeOrPropertyName): ResultsByProperty<T> {
         nodeOrPropertyName = nodeOrPropertyName ?? 'id';
         this._resetResults();
@@ -809,10 +751,15 @@ export class BinaryTree<T> {
     }
 
     DFS(): BinaryTreeNodeId[];
+
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
+
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
+
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
+
     DFS(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'count'): number[];
+
     DFS(pattern ?: 'in' | 'pre' | 'post', nodeOrPropertyName ?: NodeOrPropertyName): ResultsByProperty<T> {
         pattern = pattern ?? 'in';
         nodeOrPropertyName = nodeOrPropertyName ?? 'id';
@@ -842,9 +789,13 @@ export class BinaryTree<T> {
     }
 
     DFSIterative(): BinaryTreeNodeId[];
+
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
+
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
+
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
+
     DFSIterative(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'count'): number[];
 
     /**
@@ -897,10 +848,15 @@ export class BinaryTree<T> {
     }
 
     levelIterative(node: BinaryTreeNode<T> | null): BinaryTreeNodeId[];
+
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
+
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'val'): T[];
+
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
+
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'count'): number[];
+
     levelIterative(node: BinaryTreeNode<T> | null, nodeOrPropertyName ?: NodeOrPropertyName): ResultsByProperty<T> {
         nodeOrPropertyName = nodeOrPropertyName || 'id';
         node = node || this.root;
@@ -926,10 +882,15 @@ export class BinaryTree<T> {
     }
 
     listLevels(node: BinaryTreeNode<T> | null): BinaryTreeNodeId[][];
+
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[][];
+
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'val'): T[][];
+
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[][];
+
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: 'count'): number[][];
+
     listLevels(node: BinaryTreeNode<T> | null, nodeOrPropertyName?: NodeOrPropertyName): ResultByProperty<T>[][] {
         nodeOrPropertyName = nodeOrPropertyName || 'id';
         node = node || this.root;
@@ -998,10 +959,15 @@ export class BinaryTree<T> {
     }
 
     morris(): BinaryTreeNodeId[];
+
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'id'): BinaryTreeNodeId[];
+
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'val'): T[];
+
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'node'): BinaryTreeNode<T>[];
+
     morris(pattern?: DFSOrderPattern, nodeOrPropertyName?: 'count'): number[];
+
     /**
      * The time complexity of Morris traversal is O(n), it's may slower than others
      * The space complexity  Morris traversal is O(1) because no using stack
@@ -1092,6 +1058,82 @@ export class BinaryTree<T> {
         }
 
         return this._getResultByPropertyName(nodeOrPropertyName);
+    }
+
+    protected _resetResults() {
+        this._visitedId = [];
+        this._visitedVal = [];
+        this._visitedNode = [];
+        this._visitedCount = [];
+        this._visitedLeftSum = [];
+    }
+
+    protected _pushByPropertyNameStopOrNot(cur: BinaryTreeNode<T>, result: (BinaryTreeNode<T> | null | undefined)[], nodeProperty: BinaryTreeNodeId | T, propertyName ?: BinaryTreeNodePropertyName, onlyOne ?: boolean) {
+        switch (propertyName) {
+            case 'id':
+                if (cur.id === nodeProperty) {
+                    result.push(cur);
+                    return !!onlyOne;
+                }
+                break;
+            case 'count':
+                if (cur.count === nodeProperty) {
+                    result.push(cur);
+                    return !!onlyOne;
+                }
+                break;
+            case 'val':
+                if (cur.val === nodeProperty) {
+                    result.push(cur);
+                    return !!onlyOne;
+                }
+                break;
+            default:
+                if (cur.id === nodeProperty) {
+                    result.push(cur);
+                    return !!onlyOne;
+                }
+                break;
+        }
+    }
+
+    protected _accumulatedByPropertyName(node: BinaryTreeNode<T>, nodeOrPropertyName ?: NodeOrPropertyName) {
+        nodeOrPropertyName = nodeOrPropertyName ?? 'id';
+
+        switch (nodeOrPropertyName) {
+            case 'id':
+                this._visitedId.push(node.id);
+                break;
+            case 'val':
+                this._visitedVal.push(node.val);
+                break;
+            case 'node':
+                this._visitedNode.push(node);
+                break;
+            case 'count':
+                this._visitedCount.push(node.count);
+                break;
+            default:
+                this._visitedId.push(node.id);
+                break;
+        }
+    }
+
+    protected _getResultByPropertyName(nodeOrPropertyName ?: NodeOrPropertyName): ResultsByProperty<T> {
+        nodeOrPropertyName = nodeOrPropertyName ?? 'id';
+
+        switch (nodeOrPropertyName) {
+            case 'id':
+                return this._visitedId;
+            case 'val':
+                return this._visitedVal;
+            case 'node':
+                return this._visitedNode;
+            case 'count':
+                return this._visitedCount;
+            default:
+                return this._visitedId;
+        }
     }
 
     // --- end additional methods ---

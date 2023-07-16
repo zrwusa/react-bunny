@@ -104,6 +104,23 @@ export class SinglyLinkedListNode<NodeData = any> {
  */
 export class SinglyLinkedList<NodeData = any> {
 
+    /** The head of the list, the first node */
+    public head: SinglyLinkedListNode<NodeData> | null;
+    /** The tail of the list, the last node */
+    public tail: SinglyLinkedListNode<NodeData> | null;
+    /** Internal size reference */
+    private size: number;
+
+    constructor(...args: NodeData[]) {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+
+        for (let i = 0; i < arguments.length; i++) {
+            this.append(args[i]);
+        }
+    }
+
     /**
      * The length of the list
      */
@@ -121,25 +138,6 @@ export class SinglyLinkedList<NodeData = any> {
      */
     public static from<T>(iterable: Iterable<T>): SinglyLinkedList<T> {
         return new SinglyLinkedList(...iterable);
-    }
-
-    /** The head of the list, the first node */
-    public head: SinglyLinkedListNode<NodeData> | null;
-
-    /** The tail of the list, the last node */
-    public tail: SinglyLinkedListNode<NodeData> | null;
-
-    /** Internal size reference */
-    private size: number;
-
-    constructor(...args: NodeData[]) {
-        this.head = null;
-        this.tail = null;
-        this.size = 0;
-
-        for (let i = 0; i < arguments.length; i++) {
-            this.append(args[i]);
-        }
     }
 
     /**

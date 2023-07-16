@@ -1,12 +1,12 @@
-export const THUNK_SYMBOL = Symbol("thunk")
+export const THUNK_SYMBOL = Symbol('thunk')
 
 export const isThunk = (fnOrValue: any) => {
-    return typeof fnOrValue === "function" && fnOrValue.__THUNK__ === THUNK_SYMBOL
+    return typeof fnOrValue === 'function' && fnOrValue.__THUNK__ === THUNK_SYMBOL
 }
 
 type ToThunkFn = () => ReturnType<TrlFn>;
 
-type Thunk = () => ReturnType<ToThunkFn> & {__THUNK__: typeof THUNK_SYMBOL};
+type Thunk = () => ReturnType<ToThunkFn> & { __THUNK__: typeof THUNK_SYMBOL };
 
 export const toThunk = (fn: ToThunkFn): Thunk => {
     const thunk = () => fn()
@@ -22,30 +22,30 @@ export const trampoline = (fn: TrlFn) => {
         (...args: [...Parameters<TrlFn>]) => {
             let result = fn(...args)
 
-            while (isThunk(result) && typeof result === "function") {
+            while (isThunk(result) && typeof result === 'function') {
                 result = result()
             }
 
             return result
         },
-        { cont }
+        {cont}
     )
 }
 
 type TrlAsyncFn = (...args: any[]) => any;
 export const trampolineAsync = (fn: TrlAsyncFn) => {
-    const cont = (...args:[...Parameters<TrlAsyncFn>]) => toThunk(() => fn(...args))
+    const cont = (...args: [...Parameters<TrlAsyncFn>]) => toThunk(() => fn(...args))
 
     return Object.assign(
-        async (...args:[...Parameters<TrlAsyncFn>]) => {
+        async (...args: [...Parameters<TrlAsyncFn>]) => {
             let result = await fn(...args)
 
-            while (isThunk(result) && typeof result === "function") {
+            while (isThunk(result) && typeof result === 'function') {
                 result = await result()
             }
 
             return result
         },
-        { cont }
+        {cont}
     )
 }

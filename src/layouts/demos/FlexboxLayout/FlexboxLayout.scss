@@ -1,64 +1,56 @@
 @import "../../../helpers/variables";
 
 .flexbox-layout {
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: $panel-gap;
+  }
+
+  &__header {
+    height: $header-height;
+    display: flex;
+    justify-items: center;
+    justify-content: space-between;
+    border: $border-thin-gray;
+  }
+
+  &__content-wrap {
+    min-height: calc(100vh - #{$header-height} - #{$footer-height});
+    display: flex;
+    flex: 1;
+    gap: $panel-gap;
+  }
+
+  &__content {
+    flex: 1;
+    border: $border-thin-gray;
+  }
+
+  &__nav {
+    width: 180px;
+    border: $border-thin-gray;
+  }
+
+  &__footer {
+    height: $footer-height;
+    border: solid 1px #aaaaaa;
+  }
+
   &__title--des {
     color: $color-title-font;
     margin: $number-thin-e 0;
   }
-
-  &__container {
-    display: flex;
-    flex-flow: row wrap;
-    font-weight: bold;
-  }
-
-  &__sidebar {
-    flex: 1 0 0;
-  }
 }
 
-.flexbox-layout-panel {
-  flex: 1 100%;
-  padding: 10px;
-  margin: $panel-gap;
-  border: solid $number-thin-a $color-light-gray;
-}
+//.flexbox-layout-panel {
+//  flex: 1 100%;
+//  padding: 10px;
+//  margin: $panel-gap;
+//  border: solid $number-thin-a $color-light-gray;
+//}
 
-@mixin flexbox-layout-responsive-loose {
-  .flexbox-layout__content {
-    flex: 3;
-    overflow-y: auto;
-    order: 2;
-  }
-
-  .flexbox-layout {
-    &__nav {
-      order: 1;
-      overflow-y: auto;
-    }
-
-    &__ad {
-      order: 3;
-    }
-
-    &__footer {
-      order: 4;
-      height: $footer-height;
-
-    }
-
-    &__header {
-      height: $header-height;
-      display: flex;
-      justify-items: center;
-      justify-content: space-between;
-    }
-
-    &__nav, &__content, &__ad {
-      height: calc(#{$screen-height} - #{$header-height} - #{$footer-height} - #{6*$panel-gap});
-    }
-  }
-}
 
 /* Mobile phones */
 @media only screen and (max-width: 767px) {

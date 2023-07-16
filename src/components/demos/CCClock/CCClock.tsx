@@ -14,8 +14,10 @@ class CCCLock extends Component<IProps, IStates> {
     go(): void {
         const intervalID: ReturnType<typeof setInterval> = setInterval(() => this.tick(), 1000);
         this.setState((prevState) => {
-            return {...prevState,intervalID: intervalID
-        }});
+            return {
+                ...prevState, intervalID: intervalID
+            }
+        });
     }
 
     handleGoClick(event: MouseEvent): void {

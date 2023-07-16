@@ -31,9 +31,8 @@ function configFactory(): Configuration {
             logging: 'warn' // Want to set this to 'warn' or 'error'
         },
         proxy: {  // Front-end and back-end separation
-            '/api': {
+            '/api/v1': {
                 target: `http://localhost:${DEV_API_PORT}`,
-                pathRewrite: {'^/api': ''}
             }
         }
     } : {};

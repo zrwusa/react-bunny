@@ -21,7 +21,7 @@ const Protected: React.FC<IProps> = ({children}) => {
         //                   return null;
         //               }}/>;
 
-        return <Navigate to="/" replace/>
+        return <Navigate to="/login" replace/>
     }
     return children;
 }
