@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '../stores';
+import store from '../stores/root';
 
 const isDevServerProxy = false;
 
@@ -28,7 +28,7 @@ api.interceptors.request.use(
 
 // Response interceptor for API calls
 api.interceptors.response.use(
-    (response) => {
+    response => {
         console.log(response.headers);
         return response;
     },
@@ -36,15 +36,20 @@ api.interceptors.response.use(
         if (error.response === undefined) {
             console.warn(`[React Bunny Warn]Request failed,first do not forget to run the mock server in another terminal with command 'yarn mock'`);
         }
-        const originalRequest = error.config;
-        const {status} = error.response;
-        if (status === 403 && !originalRequest._retry) {
-            originalRequest._retry = true;
+        const originalRequestConfig = error.config;
+        debugger
+        const {response} = error;
+        if (!response) return Promise.reject(error);
+        const {status} = response;
+        if (!status) return Promise.reject(error);
+
+        if (status === 403 && !originalRequestConfig._retry) {
+            originalRequestConfig._retry = true;
             // const access_token = await refreshAccessToken();
 
             const access_token = '';
             axios.defaults.headers.common['Authorization'] = `Bearer ` + access_token;
-            return api(originalRequest);
+            return api(originalRequestConfig);
         } else if (status === 401) {
             // window.location.href = '/login';
         }

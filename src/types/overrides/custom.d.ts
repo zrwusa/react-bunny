@@ -1,5 +1,5 @@
-declare const module: {
-    hot: {
-        accept: (path?: string, callback?: () => void) => void;
-    };
-};
+// declare const module: {
+//     hot: {
+//         accept: (path?: string, callback?: () => void) => void;
+//     };
+// };

@@ -1,0 +1,19 @@
+.chat-session {
+  position: relative;
+  .message {
+    box-sizing: border-box;
+    margin: 10px;
+  }
+
+  .btn-to-last {
+    width: 60px;
+    height: 30px;
+    opacity: .5;
+    color: #ffffff;
+    background-color: #000000;
+    border-radius: 15px;
+    position: fixed;
+    bottom: calc(60px + 20px);
+    right: 20px;
+  }
+}

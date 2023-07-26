@@ -1,0 +1,35 @@
+@import "../../../helpers/variables";
+
+.demo-home-image {
+  display: flex;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 100px;
+  height: 100px;
+  background-image: url('./demo-ts-react-webpack.png');
+  border: dashed $number-thin-a $color-light-gray;
+}
+
+@media (min-width: 500px) {
+  .demo-home-image {
+    background-image: url('./demo-autoprefix1.svg');
+  }
+}
+
+.demo-autoprefixer {
+  user-select: none;
+  color: $color-title-font;
+  transition: transform 1s
+}
+
+.demo-home__title--des {
+  color: $color-title-font;
+}
+
+.demo-home__component--panel {
+  margin: 3px;
+}
+
+
+

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import App from './App';
 import {Provider} from 'react-redux';
-import store from './stores';
+import store from './stores/root';
 import {createRoot} from 'react-dom/client';
 import {BrowserRouter as Router} from 'react-router-dom';
 

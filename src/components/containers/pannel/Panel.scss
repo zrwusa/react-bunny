@@ -1,0 +1,6 @@
+@import '../../../helpers/variables.scss';
+
+.bn-panel {
+  padding: $panel-padding;
+  border: $number-thin-a solid $color-light-gray;
+}

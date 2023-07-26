@@ -96,7 +96,7 @@ function configFactory(): Configuration {
         resolve: {
             modules: ['node_modules', 'react'],
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
-            alias: {'data-structure-typed': path.resolve(__dirname, './src/utils/data-structures')}
+            alias: {'data-structure-typed': path.resolve(__dirname, 'src/packages/data-structures')}
         },
         output: {
             path: path.resolve(__dirname, buildPath),

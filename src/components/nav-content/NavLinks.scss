@@ -1,0 +1,97 @@
+@import "../../helpers/variables";
+
+.grid-layout__title--des {
+  color: $color-title-font;
+  margin: $number-thin-e 0;
+}
+
+.grid-layout__container {
+  display: grid;
+  grid-template-columns: repeat(12, [col-start] 1fr);
+  gap: $panel-gap;
+  margin: 0 auto;
+}
+
+.grid-layout__panel {
+  grid-column: col-start / span 12;
+  background-color: $panel-background-color;
+  padding: $panel-padding;
+  border: $number-thin-a solid $color-light-gray;
+}
+
+@mixin grid-layout-responsive-loose {
+  .grid-layout__header {
+    height: $header-height;
+  }
+
+  .grid-layout__footer {
+    height: $footer-height;
+    grid-column: col-start / span 12;
+  }
+
+  .grid-layout__nav, .grid-layout__content {
+    height: calc(#{$screen-height} - #{$header-height} - #{$footer-height} - #{2*($panel-gap)});
+    overflow-y: auto;
+  }
+
+  .grid-layout__nav {
+    grid-column: col-start / span 3;
+    grid-row: 2 / 4;
+  }
+
+  .grid-layout__nav .grid-layout__nav-root {
+    flex-direction: column;
+  }
+
+  .grid-layout__content {
+    grid-column: col-start 4 / span 9;
+    grid-row: 2 / 4;
+  }
+}
+
+@mixin grid-layout-responsive-compact {
+  .grid-layout__content, .grid-layout__footer {
+    grid-column: col-start 0 / span 12;
+  }
+
+  .grid-layout__nav .grid-layout__nav-root {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@mixin grid-layout-responsive-loose-with-side {
+  .grid-layout__nav {
+    grid-column: col-start / span 2;
+    grid-row: 2 / 4;
+  }
+  .grid-layout__content {
+    grid-column: col-start 3 / span 8;
+    grid-row: 2 / 4;
+  }
+  .grid-layout__sidebar {
+    grid-column: col-start 11 / span 2;
+    grid-row: 2;
+  }
+  .grid-layout__ad {
+    grid-column: col-start 11 / span 2;
+    grid-row: 3;
+  }
+  .grid-layout__footer {
+    grid-column: col-start / span 12;
+  }
+}
+
+@mixin grid-layout-responsive-compact-with-side {
+  .grid-layout__sidebar {
+    grid-column: col-start / span 3;
+    grid-row: 3;
+  }
+  .grid-layout__ad {
+    grid-column: col-start / span 3;
+    grid-row: 4;
+  }
+  .grid-layout__content, .grid-layout__footer {
+    grid-column: col-start 4 / span 9;
+  }
+}
