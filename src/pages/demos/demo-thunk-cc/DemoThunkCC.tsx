@@ -20,8 +20,7 @@ export class DemoThunkCC extends React.Component<IProps, {}> {
 
     handleThunk(): void {
         this.props.demoThunkAction({
-            'text': 'text1',
-            'id': 0
+            'content': 'content1',
         }).then(value => {
             console.log('hello world, got', value);
         }).catch(err => {

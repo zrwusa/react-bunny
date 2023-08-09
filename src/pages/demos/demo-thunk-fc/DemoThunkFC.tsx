@@ -10,8 +10,7 @@ const DemoThunkFC = () => {
 
     const handleThunk = async () => {
         const nothing = await dispatch(demoThunkAction({
-            'text': 'text1',
-            'id': 0
+            'content': 'content1',
         }));
         console.log(nothing);
     };

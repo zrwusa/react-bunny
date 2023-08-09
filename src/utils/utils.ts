@@ -60,25 +60,15 @@ export function incrementId(prefix?: string) {
     };
 }
 
-export const getValue = <T, K extends keyof T>(obj: T, names: K[]): Array<T[K]> => {
-    return names.map(i => obj[i]);
-};
+export const getValue = <T, K extends keyof T>(obj: T, names: K[]): Array<T[K]> => names.map(i => obj[i]);
 
-export const isObject = (object: string | JSONObject | boolean | AnyFunction | number) => {
-    return object != null && typeof object === 'object';
-};
+export const isObject = (object: string | JSONObject | boolean | AnyFunction | number) => object != null && typeof object === 'object';
 
-export const looseEqual = (a: any, b: any): boolean => {
-    return a == b;
-};
+export const looseEqual = (a: any, b: any): boolean => a == b;
 
-export const strictEqual = (a: any, b: any): boolean => {
-    return a === b;
-};
+export const strictEqual = (a: any, b: any): boolean => a === b;
 
-export const strictObjectIsEqual = (a: any, b: any): boolean => {
-    return Object.is(a, b);
-};
+export const strictObjectIsEqual = (a: any, b: any): boolean => Object.is(a, b);
 
 export const deepObjectStrictEqual = (object1: JSONSerializable, object2: JSONSerializable) => {
     const keys1 = Object.keys(object1);
@@ -98,10 +88,6 @@ export const deepObjectStrictEqual = (object1: JSONSerializable, object2: JSONSe
         }
     }
     return true;
-};
-
-export const isTypeEqual = <T>(obj: unknown) => {
-    const m = obj as unknown as T;
 };
 
 export function reverseColor(oldColor: string) {
@@ -226,78 +212,6 @@ export const wait = async (ms: number, resolveValue?: any) => {
     });
 };
 
-export class AuthAPIError extends Error {
-    protected serverErrorStack;
-    protected serverErrorCode;
-
-    constructor(serverErrorMessage: string, serverErrorCode?: string, serverErrorStack?: string) {
-        super(serverErrorMessage);
-        if (serverErrorStack) {
-            this.serverErrorStack = serverErrorStack;
-        }
-        if (serverErrorCode) {
-            this.serverErrorCode = serverErrorCode;
-        }
-        this.name = new.target.name;
-        if (typeof (Error as any).captureStackTrace === 'function') {
-            (Error as any).captureStackTrace(this, new.target);
-        }
-        if (typeof Object.setPrototypeOf === 'function') {
-            Object.setPrototypeOf(this, new.target.prototype);
-        } else {
-            (this as any).__proto__ = new.target.prototype;
-        }
-    }
-}
-
-export class BunnyAPIError extends Error {
-    protected serverErrorStack;
-    protected serverErrorCode;
-
-    constructor(serverErrorMessage: string, serverErrorCode?: string, serverErrorStack?: string) {
-        super(serverErrorMessage);
-        if (serverErrorStack) {
-            this.serverErrorStack = serverErrorStack;
-        }
-        if (serverErrorCode) {
-            this.serverErrorCode = serverErrorCode;
-        }
-        this.name = new.target.name;
-        if (typeof (Error as any).captureStackTrace === 'function') {
-            (Error as any).captureStackTrace(this, new.target);
-        }
-        if (typeof Object.setPrototypeOf === 'function') {
-            Object.setPrototypeOf(this, new.target.prototype);
-        } else {
-            (this as any).__proto__ = new.target.prototype;
-        }
-    }
-}
-
-export class NomicsAPIError extends Error {
-    protected serverErrorStack;
-    protected serverErrorCode;
-
-    constructor(serverErrorMessage: string, serverErrorCode?: string, serverErrorStack?: string) {
-        super(serverErrorMessage);
-        if (serverErrorStack) {
-            this.serverErrorStack = serverErrorStack;
-        }
-        if (serverErrorCode) {
-            this.serverErrorCode = serverErrorCode;
-        }
-        this.name = new.target.name;
-        if (typeof (Error as any).captureStackTrace === 'function') {
-            (Error as any).captureStackTrace(this, new.target);
-        }
-        if (typeof Object.setPrototypeOf === 'function') {
-            Object.setPrototypeOf(this, new.target.prototype);
-        } else {
-            (this as any).__proto__ = new.target.prototype;
-        }
-    }
-}
-
 export function extractValue<Item>(data: { key: string, value: Item }[]) {
     let result: Item[] = [];
     if (data && data.length > 0) {
@@ -335,14 +249,9 @@ export function randomDate(start?: Date, end?: Date, specificProbabilityStart?: 
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
+export const capitalizeWords = (str: string) => str.replace(/(?:^|\s)\S/g, (a: string) => a.toUpperCase());
 
-export const capitalizeWords = (str: string) => {
-    return str.replace(/(?:^|\s)\S/g, (a: string) => a.toUpperCase());
-};
-
-export const capitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-};
+export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
 export const comparerArray = <T>(otherArray: T[], limitKeys?: string[]) => {
     return function (current: T) {
@@ -356,17 +265,11 @@ export const comparerArray = <T>(otherArray: T[], limitKeys?: string[]) => {
     };
 };
 
-export const onlyInA = <T>(a: T[], b: T[]) => {
-    return a.filter(comparerArray(b));
-};
+export const onlyInA = <T>(a: T[], b: T[]) => a.filter(comparerArray(b));
 
-export const onlyInB = <T>(a: T[], b: T[]) => {
-    return b.filter(comparerArray(a));
-};
+export const onlyInB = <T>(a: T[], b: T[]) => b.filter(comparerArray(a));
 
-export const diffAB = <T>(a: T[], b: T[]) => {
-    return onlyInA(a, b).concat(onlyInB(a, b));
-};
+export const diffAB = <T>(a: T[], b: T[]) => onlyInA(a, b).concat(onlyInB(a, b));
 
 export class StringUtil {
     // camelCase
@@ -420,8 +323,8 @@ export class StringUtil {
     }
 }
 
-type ToCase = 'camel' | 'snake' | 'pascal' | 'constant' | 'kebab' | 'lower' | 'title' | 'sentence' | 'path' | 'dot';
-export const deepKeysConvert = (obj: any, toType?: ToCase): any => {
+export type CaseType = 'camel' | 'snake' | 'pascal' | 'constant' | 'kebab' | 'lower' | 'title' | 'sentence' | 'path' | 'dot';
+export const deepKeysConvert = (obj: any, toType?: CaseType): any => {
     const _toType = toType || 'snake';
     if (Array.isArray(obj)) {
         return obj.map(v => deepKeysConvert(v, _toType));
@@ -508,13 +411,6 @@ export const deepReplaceValues = (obj: JSONSerializable, keyReducerMap: { [key i
     return newObject;
 };
 
-// function getCallStackSize() {
-//     let count = 0, fn = arguments.callee;
-//     while ( (fn = fn.caller) ) {
-//         count++;
-//     }
-//     return count;
-// }
 // TODO determine depth and pass root node as a param through callback
 export const deepAdd = (obj: JSONSerializable, keyReducerMap: { [key in string]: (item: JSONSerializable) => any }, isItemRootParent?: boolean) => {
     const newObject = _.clone(obj) as JSONObject | [];
@@ -536,7 +432,6 @@ export const deepAdd = (obj: JSONSerializable, keyReducerMap: { [key in string]:
 
 const styleString = (color: string) => `color: ${color}; font-weight: bold`;
 
-
 const styleHeader = (header: string) => `%c[${header}]`;
 
 export const bunnyConsole = {
@@ -550,7 +445,6 @@ export const bunnyConsole = {
         return console.error(styleHeader(headerLog), styleString('red'), ...args);
     }
 };
-
 
 export const timeStart = () => {
     return performance ? performance.now() : new Date().getTime();
@@ -609,4 +503,3 @@ export function zip<T = number, T1 = number>(array1: T[], array2: T1[], options?
     }
     return isToObj ? zippedObjCoords : zipped;
 }
-

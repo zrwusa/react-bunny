@@ -10,9 +10,10 @@ export const demoThunkSuccessAction: (payload: DemoThunkSuccessPayload) => DemoT
         payload: payload,
     };
 };
+
 export const demoThunkAction = (data: DemoThunkReqPayload): ThunkResult<Promise<void>> =>
     async (dispatch) => {
-        const axiosConfig = {method: 'POST', data, url: `/demo_thunks`};
+        const axiosConfig = {method: 'POST', data, url: `/demo-thunks`};
         dispatch(bunnyRequestAction(axiosConfig));
         try {
             const response = await api.request(axiosConfig);

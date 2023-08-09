@@ -1,8 +1,7 @@
 import type {AxiosRequestConfig} from 'axios';
 
 export interface DemoThunkReqPayload {
-    text: string;
-    id: number;
+    content: string;
 }
 
 export interface DemoThunkSuccessPayload {
